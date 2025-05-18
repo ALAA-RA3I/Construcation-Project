@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProjectContainer extends Model
+class ProjectContainer extends BaseModel
 {
     protected $fillable = [
-        'quantity-avaliable',
+        'quantity-available',
         'expected-quantity',
         'consumed-quantity',
         'remaining-quantity',

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProjectBillDetail extends Model
+class ProjectBillDetail extends BaseModel
 {
     protected $fillable = [
         'item',

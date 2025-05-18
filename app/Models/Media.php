@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Domain\Enums\MediaTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Media extends Model
+class Media extends BaseModel
 {
     protected $fillable = [
         'path',
@@ -14,6 +15,14 @@ class Media extends Model
         'type',
         'project_id',
     ];
+    protected function casts(): array
+    {
+        return [
+            'type' => MediaTypeEnum::class,
+            'is_main' => 'boolean',
+            // other casts...
+        ];
+    }
 
     public function project() : BelongsTo
     {

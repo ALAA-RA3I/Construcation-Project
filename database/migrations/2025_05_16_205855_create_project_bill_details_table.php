@@ -1,11 +1,13 @@
 <?php
 
+use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
@@ -18,7 +20,7 @@ return new class extends Migration
             $table->integer('cost');
             $table->integer('project-bills-id');
             $table->foreign('project-bills-id')->references('id')->on('project_bills')->cascadeOnDelete();
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
     }
 

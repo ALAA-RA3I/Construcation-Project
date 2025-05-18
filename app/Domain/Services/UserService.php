@@ -4,8 +4,9 @@ namespace App\Domain\Services;
 
 use App\Criteria\AdvancedDynamicFilterSearchCriteria;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
+use App\Domain\Services\Contracts\UserServiceInterface;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     protected $userRepo;
 
@@ -14,16 +15,20 @@ class UserService
         $this->userRepo = $userRepo;
     }
 
-    public function getAllUsers($filters = [], $search = null)
+    public function getAll(array $filters = [], $search = null)
     {
-        $searchColumns = ['name', 'email', 'employee.position', 'employee.visits.reason'];
-
-        $this->userRepo->pushCriteria(
-            new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns)
-        );
-
-        return $this->userRepo->with(['employee.visits'])->all();
+        $searchColumns = ['name'];
+        $this->userRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
+        return $this->userRepo->all();
     }
+
+    public function paginate(array $filters = [], $search = null, $perPage = 10)
+    {
+        $searchColumns = ['name'];
+        $this->userRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
+        return $this->userRepo->paginate($perPage);
+    }
+
     public function create(array $data)
     {
         return $this->userRepo->create($data);

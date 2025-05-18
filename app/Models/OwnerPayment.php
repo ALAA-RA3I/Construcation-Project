@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OwnerPayment extends Model
+class OwnerPayment extends BaseModel
 {
     protected $fillable = [
         'cost',
@@ -14,7 +14,7 @@ class OwnerPayment extends Model
     ];
 
 
-    public function owner() :BelongsTo 
+    public function owner() :BelongsTo
     {
         return $this->belongsTo(Owner::class,'owner_id');
     }

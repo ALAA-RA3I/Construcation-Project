@@ -1,11 +1,13 @@
 <?php
 
+use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
@@ -14,7 +16,7 @@ return new class extends Migration
         Schema::create('engineer_specializations', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('name_of_major');
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
     }
 

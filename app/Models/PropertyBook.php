@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyBook extends Model
+class PropertyBook extends BaseModel
 {
     protected $fillable = [
         'area',

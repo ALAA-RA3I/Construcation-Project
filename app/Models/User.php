@@ -3,14 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Domain\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +20,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'phone_number',
+        'status'
     ];
 
     /**
@@ -43,6 +48,24 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status' => UserStatusEnum::class,
         ];
+    }
+    public function engineer()
+    {
+        return $this->hasOne(Engineer::class);
+    }
+
+    public function realEstateManager()
+    {
+        return $this->hasOne(RealStateManager::class);
+    }
+    public function owner()
+    {
+        return $this->hasOne(Owner::class);
+    }
+    public function consulting_engineers()
+    {
+        return $this->hasOne(ConsultingEngineer::class);
     }
 }

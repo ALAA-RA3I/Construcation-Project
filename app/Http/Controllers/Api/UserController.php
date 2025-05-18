@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Domain\Services\UserService;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected  $userService;
 
     public function __construct(UserService $service)
     {
@@ -17,12 +18,9 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->input('filters', []);
-        $search = $request->input('search');
-
-        $users = $this->userService->getAllUsers($filters, $search);
-
-        return response()->json($users);
+        $data =  getRequestFilters($request);
+        $users = $this->userService->getAllUsers($data['filters'], $data['search'],$data['perPage']);
+        return ApiResponse::success($users);
     }
 
     public function store(Request $request)
@@ -33,7 +31,9 @@ class UserController extends Controller
 
     public function show($id)
     {
-        return response()->json($this->userService->show($id));
+        $user = $this->userService->show($id);
+         return ApiResponse::error('user not found');
+
     }
 
     public function update(Request $request, $id)

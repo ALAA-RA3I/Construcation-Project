@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ProjectFile extends Model
+class ProjectFile extends BaseModel
 {
     protected $fillable = [
         'file_path',
@@ -15,9 +15,9 @@ class ProjectFile extends Model
         'project_participant_id',
     ];
 
-    public function project() : BelongsTo 
+    public function project() : BelongsTo
     {
-        return $this->belongsTo(Project::class,'project_id');    
+        return $this->belongsTo(Project::class,'project_id');
     }
 
     public function projectParticipant() : BelongsTo

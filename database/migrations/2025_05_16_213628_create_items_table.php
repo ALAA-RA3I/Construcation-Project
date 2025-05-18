@@ -1,11 +1,13 @@
 <?php
 
+use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
@@ -16,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('category');
             $table->integer('price');
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
     }
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 
-class ProjectParticipant extends Model
+class ProjectParticipant extends BaseModel
 {
     protected $fillable = [
         'project_id',

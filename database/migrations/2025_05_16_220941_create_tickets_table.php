@@ -1,11 +1,14 @@
 <?php
 
+use App\Domain\Enums\TicketStatusEnum;
+use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
@@ -14,10 +17,10 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('description');
-            $table->enum('status',['Open','Closed'])->default('Open');
+            $table->enum('status', TicketStatusEnum::getValues())->default(TicketStatusEnum::Open);
             $table->integer('task_id');
             $table->foreign('task_id')->references('id')->on('tasks')->cascadeOnDelete();
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
     }
 

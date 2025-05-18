@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Domain\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Task extends Model
+class Task extends BaseModel
 {
     protected $fillable = [
         'dead_line',
@@ -19,8 +20,17 @@ class Task extends Model
         'employee_assignded',
         'supervisor_id',
     ];
+    protected function casts(): array
+    {
+        return [
+            'status' => TaskStatusEnum::class,
+            'status_of_approval' => 'boolean',
+            'dead_line' => 'date',
+            'actual_date_of_closed' => 'date',
+        ];
+    }
 
-    public function stage() : BelongsTo 
+    public function stage() : BelongsTo
     {
         return $this->belongsTo(ProjectStage::class,'stage_id');
     }
