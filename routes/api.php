@@ -13,17 +13,14 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
-//    Route::post('/', [EngineerSpecializationController::class, 'store']);
-//    Route::get('/{id}', [EngineerSpecializationController::class, 'show']);
-//    Route::put('/{id}', [EngineerSpecializationController::class, 'update']);
-//    Route::delete('/{id}', [EngineerSpecializationController::class, 'destroy']);
 });
 
 Route::prefix('engineers')->group(function () {
-    Route::get('/', [EngineerController::class, 'index']);
-//    Route::post('/', [EngineerController::class, 'store']);
-//    Route::get('/{id}', [EngineerController::class, 'show']);
-//    Route::put('/{id}', [EngineerController::class, 'update']);
-//    Route::delete('/{id}', [EngineerController::class, 'destroy']);
+    Route::post('/', [EngineerController::class, 'index']);
+    Route::post('/all', [EngineerController::class, 'getEngineers']);
+    Route::post('/create', [EngineerController::class, 'create']);
+    Route::get('/{id}', [EngineerController::class, 'show']);
+    Route::put('update/{id}', [EngineerController::class, 'update']);
+    Route::delete('delete/{id}', [EngineerController::class, 'delete']);
 });
 

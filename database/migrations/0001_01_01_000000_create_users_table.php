@@ -1,12 +1,15 @@
 <?php
 
 use App\Domain\Enums\UserStatusEnum;
+use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
@@ -20,7 +23,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone_number');
             $table->enum('status', UserStatusEnum::getValues())->default(UserStatusEnum::Active);
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -2,31 +2,53 @@
 
 namespace App\Helpers;
 
+ use Illuminate\Http\Resources\Json\ResourceCollection;
  use Illuminate\Pagination\LengthAwarePaginator;
 
  class ApiResponse
 {
-     public static function success($data = null, $message = 'succes',  $status = 200)
+     public static function success($data = null, $message = 'success', $status = 200)
      {
-         if ($data instanceof LengthAwarePaginator) {
-             return response()->json([
-                 'status'  => true,
-                 'message' => $message,
-                 'data'    => $data->items(),
-                 'meta'    => [
-                     'current_page' => $data->currentPage(),
-                     'last_page'    => $data->lastPage(),
-                     'per_page'     => $data->perPage(),
-                     'total'        => $data->total(),
-                 ],
-             ], $status);
+         $meta = null;
+
+         // Check if this is a ResourceCollection wrapping a paginator
+         if ($data instanceof ResourceCollection && $data->resource instanceof LengthAwarePaginator) {
+             $paginator = $data->resource;
+
+             $meta = [
+                 'current_page' => $paginator->currentPage(),
+                 'last_page'    => $paginator->lastPage(),
+                 'per_page'     => $paginator->perPage(),
+                 'total'        => $paginator->total(),
+             ];
+
+             // Replace $data with resolved collection to get the actual transformed items
+             $data = $data->resolve();
          }
 
-         return response()->json([
+         // Handle pure paginator (not wrapped in ResourceCollection)
+         if ($data instanceof LengthAwarePaginator) {
+             $meta = [
+                 'current_page' => $data->currentPage(),
+                 'last_page'    => $data->lastPage(),
+                 'per_page'     => $data->perPage(),
+                 'total'        => $data->total(),
+             ];
+
+             $data = $data->items(); // Return only the paginated items
+         }
+
+         $response = [
              'status'  => true,
              'message' => $message,
              'data'    => $data,
-         ], $status);
+         ];
+
+         if ($meta) {
+             $response['meta'] = $meta;
+         }
+
+         return response()->json($response, $status);
      }
 
      public static function error( $message = 'Something went wrong', $errors = [],  $status = 400)

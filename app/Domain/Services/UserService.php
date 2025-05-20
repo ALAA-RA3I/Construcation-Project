@@ -17,14 +17,14 @@ class UserService implements UserServiceInterface
 
     public function getAll(array $filters = [], $search = null)
     {
-        $searchColumns = ['name'];
+        $searchColumns = ['first_name'];
         $this->userRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
         return $this->userRepo->all();
     }
 
     public function paginate(array $filters = [], $search = null, $perPage = 10)
     {
-        $searchColumns = ['name'];
+        $searchColumns = ['first_name'];
         $this->userRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
         return $this->userRepo->paginate($perPage);
     }

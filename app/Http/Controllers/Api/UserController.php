@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data =  getRequestFilters($request);
-        $users = $this->userService->getAllUsers($data['filters'], $data['search'],$data['perPage']);
+        $users = $this->userService->paginate($data['filters'], $data['search'],$data['perPage']);
         return ApiResponse::success($users);
     }
 

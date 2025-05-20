@@ -28,7 +28,7 @@ class AdvancedDynamicFilterSearchCriteria implements CriteriaInterface
     public function apply($model, RepositoryInterface $repository)
     {
         /** @var Builder $query */
-        $query = $model;
+        $query = $model->newQuery(); // <-- this is the fix
 
         // Apply filters
         foreach ($this->filters as $filter) {
