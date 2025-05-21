@@ -6,8 +6,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface EngineerServiceInterface
 {
-    public function getAll(array $filters = [],  $search = null);
-    public function paginate(array $filters = [],  $search = null, $perPage = 10) : LengthAwarePaginator;
+    public function getAll();
+    public function paginate() : LengthAwarePaginator;
     public function create(array $data);
     public function show($id);
     public function update($id, array $data);

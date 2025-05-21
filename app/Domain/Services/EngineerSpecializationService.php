@@ -15,18 +15,14 @@ class EngineerSpecializationService implements EngineerSpecializationServiceInte
         $this->engineerSpecializationRepo = $engineerSpecializationRepo;
     }
 
-    public function getAll(array $filters = [], $search = null)
+    public function getAll()
     {
-        $searchColumns = ['name_of_major'];
-        $this->engineerSpecializationRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
         return $this->engineerSpecializationRepo->all();
     }
 
-    public function paginate(array $filters = [], $search = null, $perPage = 10)
+    public function paginate()
     {
-        $searchColumns = ['name_of_major'];
-        $this->engineerSpecializationRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
-        return $this->engineerSpecializationRepo->paginate($perPage);
+        return $this->engineerSpecializationRepo->paginate();
     }
 
     public function create(array $data)

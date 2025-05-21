@@ -51,8 +51,10 @@ namespace App\Domain\Services\Contracts;
 
 interface {$serviceName}ServiceInterface
 {
-    public function getAll(array \$filters = [],  \$search = null);
-    public function paginate(array \$filters = [],  \$search = null, \$perPage = 10);
+//    public function getAll(array \$filters = [],  \$search = null);
+//    public function paginate(array \$filters = [],  \$search = null, \$perPage = 10);
+    public function getAll();
+    public function paginate();
     public function create(array \$data);
     public function show(\$id);
     public function update(\$id, array \$data);
@@ -83,18 +85,14 @@ class {$serviceName}Service implements {$serviceName}ServiceInterface
         \$this->{$variableName}Repo = \${$variableName}Repo;
     }
 
-    public function getAll(array \$filters = [], \$search = null)
+    public function getAll()
     {
-        \$searchColumns = ['name'];
-        \$this->{$variableName}Repo->pushCriteria(new AdvancedDynamicFilterSearchCriteria(\$filters, \$search, \$searchColumns));
         return \$this->{$variableName}Repo->all();
     }
 
-    public function paginate(array \$filters = [], \$search = null, \$perPage = 10)
+    public function paginate()
     {
-        \$searchColumns = ['name'];
-        \$this->{$variableName}Repo->pushCriteria(new AdvancedDynamicFilterSearchCriteria(\$filters, \$search, \$searchColumns));
-        return \$this->{$variableName}Repo->paginate(\$perPage);
+        return \$this->{$variableName}Repo->paginate();
     }
 
     public function create(array \$data)

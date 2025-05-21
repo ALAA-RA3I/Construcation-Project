@@ -25,20 +25,18 @@ class EngineerService implements EngineerServiceInterface
         $this->userRepo = $userRepo;
     }
 
-    public function getAll(array $filters = [], $search = null)
+    public function getAll()
     {
-        $searchColumns = ['user.first_name','user.last_name','user.email','user.phone_number','years_of_experience','specialization.name_of_major'];
-        $this->engineerRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
+//        $searchColumns = ['user.first_name','user.last_name','user.email','user.phone_number','years_of_experience','specialization.name_of_major'];
+//        $this->engineerRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
         $this->engineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization']));
         return $this->engineerRepo->all();
     }
 
-    public function paginate(array $filters = [], $search = null, $perPage = 10) : LengthAwarePaginator
+    public function paginate() : LengthAwarePaginator
     {
-        $searchColumns = ['user.first_name','user.last_name','user.email','user.phone_number','years_of_experience','specialization.name_of_major'];
-        $this->engineerRepo->pushCriteria(new AdvancedDynamicFilterSearchCriteria($filters, $search, $searchColumns));
         $this->engineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization']));
-        return $this->engineerRepo->paginate($perPage);
+        return $this->engineerRepo->paginate();
     }
 
     public function create(array $data)
@@ -52,7 +50,6 @@ class EngineerService implements EngineerServiceInterface
                 'phone_number',
             ]);
             $userData['password'] = Hash::make($data['password']);
-
             $user = $this->userRepo->create($userData);
             $user->assignRole('engineer');
 

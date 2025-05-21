@@ -16,10 +16,9 @@ class EngineerSpecializationController extends Controller
     {
         $this->engineerSpecializationService = $service;
     }
-    public function index(Request $request)
+    public function index()
     {
-        $data =  getRequestFilters($request);
-        $users = $this->engineerSpecializationService->paginate($data['filters'], $data['search']);
+        $users = $this->engineerSpecializationService->paginate();
         return ApiResponse::success(EngineerSpecializationResource::collection($users));
     }
 }

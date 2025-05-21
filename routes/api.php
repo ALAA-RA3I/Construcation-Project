@@ -16,8 +16,8 @@ Route::prefix('specializations')->group(function () {
 });
 
 Route::prefix('engineers')->group(function () {
-    Route::post('/', [EngineerController::class, 'index']);
-    Route::post('/all', [EngineerController::class, 'getEngineers']);
+    Route::get('/', [EngineerController::class, 'index']);
+    Route::get('/all', [EngineerController::class, 'getEngineers']);
     Route::post('/create', [EngineerController::class, 'create']);
     Route::get('/{id}', [EngineerController::class, 'show']);
     Route::put('update/{id}', [EngineerController::class, 'update']);

@@ -19,16 +19,16 @@ class EngineerController extends Controller
     {
         $this->engineerService = $service;
     }
-    public function index(Request $request)
+    public function index()
     {
-        $data =  getRequestFilters($request);
-        $engineers = $this->engineerService->paginate($data['filters'], $data['search'],$data['perPage']);
+//        $data =  getRequestFilters($request);
+//        $engineers = $this->engineerService->paginate($data['filters'], $data['search'],$data['perPage']);
+        $engineers = $this->engineerService->paginate();
         return ApiResponse::success(EngineerResource::collection($engineers));
     }
     public function getEngineers(Request $request)
     {
-        $data = getRequestFilters($request);
-        $engineers = $this->engineerService->getAll($data['filters'] ,$data['search']);
+        $engineers = $this->engineerService->getAll();
         return ApiResponse::success(EngineerResource::collection($engineers));
     }
     public function create(CreateEngineerRequest $request)
@@ -50,7 +50,6 @@ class EngineerController extends Controller
         if (!$updated) {
             return ApiResponse::error('Engineer not updated', 404);
         }
-
         return ApiResponse::success(null, 'Engineer updated successfully');
     }
     public function delete($id)

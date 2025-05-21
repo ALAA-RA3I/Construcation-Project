@@ -12,9 +12,11 @@ use App\Infrastructure\Repositories\BaseRepository;
 use App\Infrastructure\Repositories\Contracts\BaseRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ProjectRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
 use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
+use App\Infrastructure\Repositories\ProjectRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
