@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id')->autoIncrement();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('address');
-            $table->string('national_id');
+            $table->string('national_id')->unique();
             $this->addBaseColumns($table);
         });
     }

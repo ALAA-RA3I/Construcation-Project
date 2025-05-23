@@ -18,7 +18,7 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
     protected $consultingEngineerRepo;
     protected $userRepo;
 
-    public function __construct(ConsultingEngineerRepositoryInterface $consultingEngineerRepo,UserRepositoryInterface $userRepo)
+    public function __construct(ConsultingEngineerRepositoryInterface $consultingEngineerRepo, UserRepositoryInterface $userRepo)
     {
         $this->consultingEngineerRepo = $consultingEngineerRepo;
         $this->userRepo = $userRepo;
@@ -26,13 +26,13 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
 
     public function getAll()
     {
-        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization','consultingCompany']));
+        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user', 'specialization', 'consultingCompany']));
         return $this->consultingEngineerRepo->all();
     }
 
     public function paginate()
     {
-        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization','consultingCompany']));
+        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user', 'specialization', 'consultingCompany']));
         return $this->consultingEngineerRepo->paginate();
     }
 
@@ -57,7 +57,7 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
             ]);
             $engineerData['user_id'] = $user->id;
 
-            return $this->consultingEngineerRepo->create($engineerData)->load(['user', 'specialization','consultingCompany']);
+            return $this->consultingEngineerRepo->create($engineerData)->load(['user', 'specialization', 'consultingCompany']);
         });
     }
 
@@ -65,13 +65,14 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
     {
         try {
             $engineer = $this->consultingEngineerRepo
-                ->pushCriteria(new WithRelationsCriteria(['user', 'specialization','consultingCompany']))
+                ->pushCriteria(new WithRelationsCriteria(['user', 'specialization', 'consultingCompany']))
                 ->find($id);
         } catch (ModelNotFoundException $e) {
             throw new EntityNotFoundException('Engineer not found');
         }
 
-        return $engineer;    }
+        return $engineer;
+    }
 
     public function update($id, array $data)
     {
@@ -109,5 +110,6 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
             $engineer->delete();
 
             return true;
-        });    }
+        });
+    }
 }

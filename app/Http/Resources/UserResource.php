@@ -21,6 +21,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone_number' => $this->phone_number,
             'status' => $this->status,
+            'owner'=>new OwnerResource($this->whenLoaded('owner'))
+
         ];
     }
 }

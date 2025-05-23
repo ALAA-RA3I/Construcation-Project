@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\ActivationController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\Owner\OwnerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,4 +38,11 @@ Route::prefix('consultingEngineers')->group(function () {
     Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
     Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
 });
-
+Route::prefix('owner')->group(function () {
+    Route::get('/', [OwnerController::class, 'index']);
+    Route::get('/all', [OwnerController::class, 'getAll']);
+    Route::post('/create', [OwnerController::class, 'create']);
+    Route::get('/{id}', [OwnerController::class, 'show']);
+    Route::put('update/{id}', [OwnerController::class, 'update']);
+    Route::delete('delete/{id}', [OwnerController::class, 'delete']);
+});

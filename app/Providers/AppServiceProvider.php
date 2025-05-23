@@ -8,9 +8,11 @@ use App\Domain\Services\ConsultingEngineerService;
 use App\Domain\Services\Contracts\ConsultingEngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerSpecializationServiceInterface;
+use App\Domain\Services\Contracts\Owner\OwnerServiceInterface;
 use App\Domain\Services\Contracts\UserServiceInterface;
 use App\Domain\Services\EngineerService;
 use App\Domain\Services\EngineerSpecializationService;
+use App\Domain\Services\Owner\OwnerService;
 use App\Domain\Services\UserService;
 use App\Infrastructure\Repositories\BaseRepository;
 use App\Infrastructure\Repositories\ConsultingEngineerRepository;
@@ -18,10 +20,12 @@ use App\Infrastructure\Repositories\Contracts\BaseRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ConsultingEngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\OwnerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
 use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
+use App\Infrastructure\Repositories\OwnerRepository;
 use App\Infrastructure\Repositories\ProjectRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
@@ -48,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EngineerSpecializationRepositoryInterface::class, EngineerSpecializationRepository::class);
 
         $this->app->bind(ConsultingEngineerRepositoryInterface::class, ConsultingEngineerRepository::class);
+        $this->app->bind(OwnerRepositoryInterface::class, OwnerRepository::class);
 
     }
 
@@ -61,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EngineerServiceInterface::class, EngineerService::class);
         $this->app->bind(EngineerSpecializationServiceInterface::class, EngineerSpecializationService::class);
         $this->app->bind(ConsultingEngineerServiceInterface::class, ConsultingEngineerService::class);
+        $this->app->bind(OwnerServiceInterface::class, OwnerService::class);
 
     }
 
