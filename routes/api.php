@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ActivationController;
+use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
@@ -45,4 +46,12 @@ Route::prefix('owner')->group(function () {
     Route::get('/{id}', [OwnerController::class, 'show']);
     Route::put('update/{id}', [OwnerController::class, 'update']);
     Route::delete('delete/{id}', [OwnerController::class, 'delete']);
+});
+Route::prefix('consultingCompany')->group(function () {
+    Route::get('/all', [ConsultingCompanyController::class, 'getAll']);
+    Route::get('/',[ConsultingCompanyController::class, 'index']);
+    Route::get('/{id}',[ConsultingCompanyController::class, 'show']);
+    Route::post('/create' ,[ConsultingCompanyController::class, 'create']);
+    Route::put('update/{id}', [ConsultingCompanyController::class, 'update']);
+    Route::delete('delete/{id}', [ConsultingCompanyController::class, 'delete']);
 });
