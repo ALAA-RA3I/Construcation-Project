@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ActivationController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\UserController;
@@ -14,6 +15,11 @@ Route::get('/user', function (Request $request) {
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });
+
+///// activation api /////
+Route::put('users/activate', [ActivationController::class, 'activate']);
+Route::put('users/deactivate', [ActivationController::class, 'deactivate']);
+///// activation api /////
 
 Route::prefix('engineers')->group(function () {
     Route::get('/', [EngineerController::class, 'index']);

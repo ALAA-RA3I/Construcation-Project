@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone_number');
-            $table->enum('status', UserStatusEnum::getValues())->default(UserStatusEnum::Active);
+            $table->boolean('is_active')->default(1);
             $this->addBaseColumns($table);
         });
 

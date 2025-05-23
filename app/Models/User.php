@@ -26,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone_number',
-        'status'
+        'is_active'
     ];
 
     /**
@@ -49,7 +49,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'status' => UserStatusEnum::class,
         ];
     }
     public function engineer()

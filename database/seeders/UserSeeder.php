@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
             'phone_number' => '1234567890',
-            'status' => 'active',
+            'is_active' => 1,
         ]);
         $admin->assignRole('admin');
 
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
                 'email' => "engineer{$i}@example.com",
                 'password' => Hash::make('password'),
                 'phone_number' => '050000000' . $i,
-                'status' => UserStatusEnum::Active,
+                'is_active' => 1,
             ]);
             $user->assignRole('engineer');
 

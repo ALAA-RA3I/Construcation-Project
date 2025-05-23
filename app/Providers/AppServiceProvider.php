@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Services\BaseServices\ActivationService;
+use App\Domain\Services\BaseServices\Contracts\ActivationServiceInterface;
 use App\Domain\Services\Contracts\EngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerSpecializationServiceInterface;
 use App\Domain\Services\Contracts\UserServiceInterface;
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
      */
     private function bindServices(): void
     {
+        $this->app->bind(ActivationServiceInterface::class, ActivationService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(EngineerServiceInterface::class, EngineerService::class);
         $this->app->bind(EngineerSpecializationServiceInterface::class, EngineerSpecializationService::class);
