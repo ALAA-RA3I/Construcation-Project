@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ActivationController;
+use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\UserController;
@@ -23,10 +24,18 @@ Route::put('users/deactivate', [ActivationController::class, 'deactivate']);
 
 Route::prefix('engineers')->group(function () {
     Route::get('/', [EngineerController::class, 'index']);
-    Route::get('/all', [EngineerController::class, 'getEngineers']);
+    Route::get('/all', [EngineerController::class, 'getAll']);
     Route::post('/create', [EngineerController::class, 'create']);
     Route::get('/{id}', [EngineerController::class, 'show']);
     Route::put('update/{id}', [EngineerController::class, 'update']);
     Route::delete('delete/{id}', [EngineerController::class, 'delete']);
+});
+Route::prefix('consultingEngineers')->group(function () {
+    Route::get('/', [ConsultingEngineerController::class, 'index']);
+    Route::get('/all', [ConsultingEngineerController::class, 'getAll']);
+    Route::post('/create', [ConsultingEngineerController::class, 'create']);
+    Route::get('/{id}', [ConsultingEngineerController::class, 'show']);
+    Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
+    Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
 });
 

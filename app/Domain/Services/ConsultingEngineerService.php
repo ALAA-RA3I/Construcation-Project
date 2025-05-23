@@ -5,36 +5,35 @@ namespace App\Domain\Services;
 use App\Criteria\AdvancedDynamicFilterSearchCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Exceptions\EntityNotFoundException;
-use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
-use App\Domain\Services\Contracts\EngineerServiceInterface;
+use App\Infrastructure\Repositories\Contracts\ConsultingEngineerRepositoryInterface;
+use App\Domain\Services\Contracts\ConsultingEngineerServiceInterface;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class EngineerService implements EngineerServiceInterface
+class ConsultingEngineerService implements ConsultingEngineerServiceInterface
 {
-    protected $engineerRepo;
+    protected $consultingEngineerRepo;
     protected $userRepo;
 
-    public function __construct(EngineerRepositoryInterface $engineerRepo,UserRepositoryInterface $userRepo )
+    public function __construct(ConsultingEngineerRepositoryInterface $consultingEngineerRepo,UserRepositoryInterface $userRepo)
     {
-        $this->engineerRepo = $engineerRepo;
+        $this->consultingEngineerRepo = $consultingEngineerRepo;
         $this->userRepo = $userRepo;
     }
 
     public function getAll()
     {
-        $this->engineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization']));
-        return $this->engineerRepo->all();
+        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization','consultingCompany']));
+        return $this->consultingEngineerRepo->all();
     }
 
-    public function paginate() : LengthAwarePaginator
+    public function paginate()
     {
-        $this->engineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization']));
-        return $this->engineerRepo->paginate();
+        $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user','specialization','consultingCompany']));
+        return $this->consultingEngineerRepo->paginate();
     }
 
     public function create(array $data)
@@ -49,37 +48,36 @@ class EngineerService implements EngineerServiceInterface
             ]);
             $userData['password'] = Hash::make($data['password']);
             $user = $this->userRepo->create($userData);
-            $user->assignRole('engineer');
+            $user->assignRole('consultingEngineer');
 
             // Extract engineer fields
             $engineerData = Arr::only($data, [
                 'engineer_specialization_id',
-                'years_of_experience',
+                'consulting_company_id',
             ]);
             $engineerData['user_id'] = $user->id;
 
-            return $this->engineerRepo->create($engineerData)->load(['user', 'specialization']);
+            return $this->consultingEngineerRepo->create($engineerData)->load(['user', 'specialization','consultingCompany']);
         });
     }
 
     public function show($id)
     {
         try {
-            $engineer = $this->engineerRepo
-                ->pushCriteria(new WithRelationsCriteria(['user', 'specialization']))
+            $engineer = $this->consultingEngineerRepo
+                ->pushCriteria(new WithRelationsCriteria(['user', 'specialization','consultingCompany']))
                 ->find($id);
         } catch (ModelNotFoundException $e) {
             throw new EntityNotFoundException('Engineer not found');
         }
 
-        return $engineer;
-    }
+        return $engineer;    }
 
-    public function update($id, array $data): bool
+    public function update($id, array $data)
     {
         return DB::transaction(function () use ($id, $data) {
             try {
-                $engineer = $this->engineerRepo->find($id);
+                $engineer = $this->consultingEngineerRepo->find($id);
             } catch (ModelNotFoundException $e) {
                 throw new EntityNotFoundException('Engineer not found');
             }
@@ -92,9 +90,8 @@ class EngineerService implements EngineerServiceInterface
             $engineer->user->update($userData);
 
             // Update engineer
-            $engineerData = Arr::only($data, ['engineer_specialization_id', 'years_of_experience']);
+            $engineerData = Arr::only($data, ['engineer_specialization_id', 'consulting_company_id']);
             $engineer->update($engineerData);
-
             return true;
         });
     }
@@ -103,7 +100,7 @@ class EngineerService implements EngineerServiceInterface
     {
         return DB::transaction(function () use ($id) {
             try {
-                $engineer = $this->engineerRepo->find($id);
+                $engineer = $this->consultingEngineerRepo->find($id);
             } catch (ModelNotFoundException $e) {
                 throw new EntityNotFoundException('Engineer not found');
             }
@@ -112,6 +109,5 @@ class EngineerService implements EngineerServiceInterface
             $engineer->delete();
 
             return true;
-        });
-    }
+        });    }
 }

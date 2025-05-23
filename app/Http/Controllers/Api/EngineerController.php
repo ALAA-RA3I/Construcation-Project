@@ -26,7 +26,7 @@ class EngineerController extends Controller
         $engineers = $this->engineerService->paginate();
         return ApiResponse::success(EngineerResource::collection($engineers));
     }
-    public function getEngineers(Request $request)
+    public function getAll(Request $request)
     {
         $engineers = $this->engineerService->getAll();
         return ApiResponse::success(EngineerResource::collection($engineers));
