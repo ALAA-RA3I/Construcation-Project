@@ -28,7 +28,7 @@ class EngineerSpecializationSeeder extends Seeder
         ];
 
         foreach ($specializations as $name) {
-            DB::table('engineer_specializations')->insert([
+            DB::table('engineer_specializations')->updateOrInsert([
                 'name_of_major' => $name,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

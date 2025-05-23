@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('focal_point_first_name');
             $table->string('focal_point_last_name');
             $table->string('address');
-            $table->integer('phone_number');
-            $table->integer('land_line');
-            $table->integer('license_number');
+            $table->string('phone_number');
+            $table->string('land_line');
+            $table->string('license_number');
             $this->addBaseColumns($table);
         });
     }
