@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Domain\Services\BaseServices\ActivationService;
 use App\Domain\Services\BaseServices\Contracts\ActivationServiceInterface;
+use App\Domain\Services\ConsultingCompanyService;
 use App\Domain\Services\ConsultingEngineerService;
+use App\Domain\Services\Contracts\ConsultingCompanyServiceInterface;
 use App\Domain\Services\Contracts\ConsultingEngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerSpecializationServiceInterface;
@@ -13,8 +15,10 @@ use App\Domain\Services\EngineerService;
 use App\Domain\Services\EngineerSpecializationService;
 use App\Domain\Services\UserService;
 use App\Infrastructure\Repositories\BaseRepository;
+use App\Infrastructure\Repositories\ConsultingCompanyRepository;
 use App\Infrastructure\Repositories\ConsultingEngineerRepository;
 use App\Infrastructure\Repositories\Contracts\BaseRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ConsultingCompanyRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ConsultingEngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
@@ -48,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EngineerSpecializationRepositoryInterface::class, EngineerSpecializationRepository::class);
 
         $this->app->bind(ConsultingEngineerRepositoryInterface::class, ConsultingEngineerRepository::class);
+        $this->app->bind(ConsultingCompanyRepositoryInterface::class, ConsultingCompanyRepository::class);
 
     }
 
@@ -61,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EngineerServiceInterface::class, EngineerService::class);
         $this->app->bind(EngineerSpecializationServiceInterface::class, EngineerSpecializationService::class);
         $this->app->bind(ConsultingEngineerServiceInterface::class, ConsultingEngineerService::class);
+        $this->app->bind(ConsultingCompanyServiceInterface::class, ConsultingCompanyService::class);
 
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ActivationController;
+use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
@@ -38,4 +39,11 @@ Route::prefix('consultingEngineers')->group(function () {
     Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
     Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
 });
-
+Route::prefix('consultingCompany')->group(function () {
+    Route::get('/all', [ConsultingCompanyController::class, 'getAll']);
+    Route::get('/',[ConsultingCompanyController::class, 'index']);
+    Route::get('/{id}',[ConsultingCompanyController::class, 'show']);
+    Route::post('/create' ,[ConsultingCompanyController::class, 'create']);
+    Route::put('update/{id}', [ConsultingCompanyController::class, 'update']);
+    Route::delete('delete/{id}', [ConsultingCompanyController::class, 'delete']);
+});
