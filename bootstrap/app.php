@@ -45,6 +45,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Fallback for unexpected exceptions
         $exceptions->renderable(function (\Throwable $e, Request $request) {
-            return ApiResponse::error('Internal server error.', [], 500);
+            return ApiResponse::error($e->getMessage(), [], 500);
         });
     })->create();
