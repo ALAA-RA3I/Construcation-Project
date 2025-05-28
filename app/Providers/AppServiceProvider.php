@@ -11,10 +11,12 @@ use App\Domain\Services\Contracts\ConsultingEngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerSpecializationServiceInterface;
 use App\Domain\Services\Contracts\Owner\OwnerServiceInterface;
+use App\Domain\Services\Contracts\RealStateManagerServiceInterface;
 use App\Domain\Services\Contracts\UserServiceInterface;
 use App\Domain\Services\EngineerService;
 use App\Domain\Services\EngineerSpecializationService;
 use App\Domain\Services\Owner\OwnerService;
+use App\Domain\Services\RealStateManagerService;
 use App\Domain\Services\UserService;
 use App\Infrastructure\Repositories\BaseRepository;
 use App\Infrastructure\Repositories\ConsultingCompanyRepository;
@@ -26,11 +28,13 @@ use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\OwnerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\RealStateManagerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
 use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
 use App\Infrastructure\Repositories\OwnerRepository;
 use App\Infrastructure\Repositories\ProjectRepository;
+use App\Infrastructure\Repositories\RealStateManagerRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -58,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ConsultingEngineerRepositoryInterface::class, ConsultingEngineerRepository::class);
         $this->app->bind(OwnerRepositoryInterface::class, OwnerRepository::class);
         $this->app->bind(ConsultingCompanyRepositoryInterface::class, ConsultingCompanyRepository::class);
+        $this->app->bind(RealStateManagerRepositoryInterface::class,RealStateManagerRepository::class);
 
     }
 
@@ -73,6 +78,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ConsultingEngineerServiceInterface::class, ConsultingEngineerService::class);
         $this->app->bind(ConsultingCompanyServiceInterface::class, ConsultingCompanyService::class);
         $this->app->bind(OwnerServiceInterface::class, OwnerService::class);
+        $this->app->bind(RealStateManagerServiceInterface::class, RealStateManagerService::class);
 
 
     }

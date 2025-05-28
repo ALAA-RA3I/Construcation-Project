@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\Owner\OwnerController;
+use App\Http\Controllers\Api\RealStateManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,4 +55,12 @@ Route::prefix('consultingCompany')->group(function () {
     Route::post('/create' ,[ConsultingCompanyController::class, 'create']);
     Route::put('update/{id}', [ConsultingCompanyController::class, 'update']);
     Route::delete('delete/{id}', [ConsultingCompanyController::class, 'delete']);
+});
+Route::prefix('realStateManager')->group(function() {
+    Route::get('/all', [RealStateManagerController::class, 'getAll']);
+    Route::get('/',[RealStateManagerController::class, 'index']);
+    Route::get('/{id}',[RealStateManagerController::class, 'show']);
+    Route::post('/create',[RealStateManagerController::class,'create']);
+    Route::put('update/{id}' ,[RealStateManagerController::class,'update']);
+    Route::delete('delete/{id}',[RealStateManagerController::class,'delete']);
 });
