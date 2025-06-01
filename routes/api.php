@@ -5,8 +5,12 @@ use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
+use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\Owner\OwnerController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProjectStageController;
 use App\Http\Controllers\Api\RealStateManagerController;
+use App\Http\Controllers\Api\TaskContainerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +67,36 @@ Route::prefix('realStateManager')->group(function() {
     Route::post('/create',[RealStateManagerController::class,'create']);
     Route::put('update/{id}' ,[RealStateManagerController::class,'update']);
     Route::delete('delete/{id}',[RealStateManagerController::class,'delete']);
+});
+Route::prefix('project')->group(function() {
+    Route::get('/all', [ProjectController::class, 'getAll']);
+    Route::get('/',[ProjectController::class, 'index']);
+    Route::get('/{id}',[ProjectController::class, 'show']);
+    Route::post('/create',[ProjectController::class,'create']);
+    Route::put('update/{id}' ,[ProjectController::class,'update']);
+    Route::delete('delete/{id}',[ProjectController::class,'delete']);
+});
+Route::prefix('projectStage')->group(function() {
+    Route::get('/all', [ProjectStageController::class, 'getAll']);
+    Route::get('/',[ProjectStageController::class, 'index']);
+    Route::get('/{id}',[ProjectStageController::class, 'show']);
+    Route::post('/create',[ProjectStageController::class,'create']);
+    Route::put('update/{id}' ,[ProjectStageController::class,'update']);
+    Route::delete('delete/{id}',[ProjectStageController::class,'delete']);
+});
+Route::prefix('taskContainer')->group(function() {
+    Route::get('/all', [TaskContainerController::class, 'getAll']);
+    Route::get('/',[TaskContainerController::class, 'index']);
+    Route::get('/{id}',[TaskContainerController::class, 'show']);
+    Route::post('/create',[TaskContainerController::class,'create']);
+    Route::put('update/{id}' ,[TaskContainerController::class,'update']);
+    Route::delete('delete/{id}',[TaskContainerController::class,'delete']);
+});
+Route::prefix('item')->group(function() {
+    Route::get('/all', [ItemController::class, 'getAll']);
+    Route::get('/',[ItemController::class, 'index']);
+    Route::get('/{id}',[ItemController::class, 'show']);
+    Route::post('/create',[ItemController::class,'create']);
+    Route::put('update/{id}' ,[ItemController::class,'update']);
+    Route::delete('delete/{id}',[ItemController::class,'delete']);
 });
