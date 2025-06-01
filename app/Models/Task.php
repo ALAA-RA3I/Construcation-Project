@@ -17,7 +17,7 @@ class Task extends BaseModel
         'note',
         'actual_date_of_closed',
         'stage_id',
-        'employee_assignded',
+        'employee_assigned',
         'supervisor_id',
     ];
     protected function casts(): array

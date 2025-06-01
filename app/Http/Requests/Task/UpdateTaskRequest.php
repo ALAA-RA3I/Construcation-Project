@@ -29,7 +29,7 @@ class UpdateTaskRequest extends FormRequest
             'note' => ['required', 'string'],
             'actual_date_of_closed' => ['nullable', 'date'],
             'stage_id' => ['required', 'integer', 'exists:project_stages,id'],
-            'employee_assignded' => ['required', 'integer', 'exists:project_participants,id'],
+            'employee_assigned' => ['required', 'integer', 'exists:project_participants,id'],
             'supervisor_id' => ['required', 'integer', 'exists:project_participants,id'],
         ];
     }

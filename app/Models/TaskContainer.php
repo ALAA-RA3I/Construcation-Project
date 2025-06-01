@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TaskContainer extends BaseModel
 {
-    protected $fillables = [
+    protected $fillable = [
         'quantity',
         'task_id',
         'items_id',

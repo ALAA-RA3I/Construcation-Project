@@ -13,7 +13,7 @@ class TaskDTO {
             'note' => $data['note'],
             'actual_date_of_closed' => $data['actual_date_of_closed'] ?? null,
             'stage_id' => $data['stage_id'],
-            'employee_assignded' => $data['employee_assignded'],
+            'employee_assigned' => $data['employee_assigned'],
             'supervisor_id' => $data['supervisor_id'],
         ];
     }
@@ -27,7 +27,7 @@ class TaskDTO {
             'note' => $data['note'],
             'actual_date_of_closed' => $data['actual_date_of_closed'] ?? null,
             'stage_id' => $data['stage_id'],
-            'employee_assignded' => $data['employee_assignded'],
+            'employee_assigned' => $data['employee_assigned'],
             'supervisor_id' => $data['supervisor_id'],
         ];
     }

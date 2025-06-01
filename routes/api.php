@@ -9,8 +9,11 @@ use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\Owner\OwnerController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectStageController;
+use App\Http\Controllers\Api\ProjectParticipantController;
 use App\Http\Controllers\Api\RealStateManagerController;
 use App\Http\Controllers\Api\TaskContainerController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,49 +57,77 @@ Route::prefix('owner')->group(function () {
 });
 Route::prefix('consultingCompany')->group(function () {
     Route::get('/all', [ConsultingCompanyController::class, 'getAll']);
-    Route::get('/',[ConsultingCompanyController::class, 'index']);
-    Route::get('/{id}',[ConsultingCompanyController::class, 'show']);
-    Route::post('/create' ,[ConsultingCompanyController::class, 'create']);
+    Route::get('/', [ConsultingCompanyController::class, 'index']);
+    Route::get('/{id}', [ConsultingCompanyController::class, 'show']);
+    Route::post('/create', [ConsultingCompanyController::class, 'create']);
     Route::put('update/{id}', [ConsultingCompanyController::class, 'update']);
     Route::delete('delete/{id}', [ConsultingCompanyController::class, 'delete']);
 });
-Route::prefix('realStateManager')->group(function() {
+Route::prefix('realStateManager')->group(function () {
     Route::get('/all', [RealStateManagerController::class, 'getAll']);
-    Route::get('/',[RealStateManagerController::class, 'index']);
-    Route::get('/{id}',[RealStateManagerController::class, 'show']);
-    Route::post('/create',[RealStateManagerController::class,'create']);
-    Route::put('update/{id}' ,[RealStateManagerController::class,'update']);
-    Route::delete('delete/{id}',[RealStateManagerController::class,'delete']);
+    Route::get('/', [RealStateManagerController::class, 'index']);
+    Route::get('/{id}', [RealStateManagerController::class, 'show']);
+    Route::post('/create', [RealStateManagerController::class, 'create']);
+    Route::put('update/{id}', [RealStateManagerController::class, 'update']);
+    Route::delete('delete/{id}', [RealStateManagerController::class, 'delete']);
 });
-Route::prefix('project')->group(function() {
+Route::prefix('project')->group(function () {
     Route::get('/all', [ProjectController::class, 'getAll']);
-    Route::get('/',[ProjectController::class, 'index']);
-    Route::get('/{id}',[ProjectController::class, 'show']);
-    Route::post('/create',[ProjectController::class,'create']);
-    Route::put('update/{id}' ,[ProjectController::class,'update']);
-    Route::delete('delete/{id}',[ProjectController::class,'delete']);
+    Route::get('/', [ProjectController::class, 'index']);
+    Route::get('/{id}', [ProjectController::class, 'show']);
+    Route::post('/create', [ProjectController::class, 'create']);
+    Route::put('update/{id}', [ProjectController::class, 'update']);
+    Route::delete('delete/{id}', [ProjectController::class, 'delete']);
 });
-Route::prefix('projectStage')->group(function() {
+Route::prefix('projectStage')->group(function () {
     Route::get('/all', [ProjectStageController::class, 'getAll']);
-    Route::get('/',[ProjectStageController::class, 'index']);
-    Route::get('/{id}',[ProjectStageController::class, 'show']);
-    Route::post('/create',[ProjectStageController::class,'create']);
-    Route::put('update/{id}' ,[ProjectStageController::class,'update']);
-    Route::delete('delete/{id}',[ProjectStageController::class,'delete']);
+    Route::get('/', [ProjectStageController::class, 'index']);
+    Route::get('/{id}', [ProjectStageController::class, 'show']);
+    Route::post('/create', [ProjectStageController::class, 'create']);
+    Route::put('update/{id}', [ProjectStageController::class, 'update']);
+    Route::delete('delete/{id}', [ProjectStageController::class, 'delete']);
 });
-Route::prefix('taskContainer')->group(function() {
+
+Route::prefix('task')->group(function () {
+    Route::get('/all', [TaskController::class, 'getAll']);
+    Route::get('/', [TaskController::class, 'index']);
+    Route::get('/{id}', [TaskController::class, 'show']);
+    Route::post('/create', [TaskController::class, 'create']);
+    Route::put('update/{id}', [TaskController::class, 'update']);
+    Route::delete('delete/{id}', [TaskController::class, 'delete']);
+});
+
+Route::prefix('taskContainer')->group(function () {
     Route::get('/all', [TaskContainerController::class, 'getAll']);
-    Route::get('/',[TaskContainerController::class, 'index']);
-    Route::get('/{id}',[TaskContainerController::class, 'show']);
-    Route::post('/create',[TaskContainerController::class,'create']);
-    Route::put('update/{id}' ,[TaskContainerController::class,'update']);
-    Route::delete('delete/{id}',[TaskContainerController::class,'delete']);
+    Route::get('/', [TaskContainerController::class, 'index']);
+    Route::get('/{id}', [TaskContainerController::class, 'show']);
+    Route::post('/create', [TaskContainerController::class, 'create']);
+    Route::put('update/{id}', [TaskContainerController::class, 'update']);
+    Route::delete('delete/{id}', [TaskContainerController::class, 'delete']);
 });
-Route::prefix('item')->group(function() {
+Route::prefix('item')->group(function () {
     Route::get('/all', [ItemController::class, 'getAll']);
-    Route::get('/',[ItemController::class, 'index']);
-    Route::get('/{id}',[ItemController::class, 'show']);
-    Route::post('/create',[ItemController::class,'create']);
-    Route::put('update/{id}' ,[ItemController::class,'update']);
-    Route::delete('delete/{id}',[ItemController::class,'delete']);
+    Route::get('/', [ItemController::class, 'index']);
+    Route::get('/{id}', [ItemController::class, 'show']);
+    Route::post('/create', [ItemController::class, 'create']);
+    Route::put('update/{id}', [ItemController::class, 'update']);
+    Route::delete('delete/{id}', [ItemController::class, 'delete']);
+});
+
+Route::prefix('projectParticipant')->group(function () {
+    Route::get('/all', [ProjectParticipantController::class, 'getAll']);
+    Route::get('/', [ProjectParticipantController::class, 'index']);
+    Route::get('/{id}', [ProjectParticipantController::class, 'show']);
+    Route::post('/create', [ProjectParticipantController::class, 'create']);
+    Route::put('update/{id}', [ProjectParticipantController::class, 'update']);
+    Route::delete('delete/{id}', [ProjectParticipantController::class, 'delete']);
+});
+
+ Route::prefix('ticket')->group(function () {
+    Route::get('/all', [TicketController::class, 'getAll']);
+    Route::get('/', [TicketController::class, 'index']);
+    Route::get('/{id}', [TicketController::class, 'show']);
+    Route::post('/create', [TicketController::class, 'create']);
+    Route::put('update/{id}', [TicketController::class, 'update']);
+    Route::delete('delete/{id}', [TicketController::class, 'delete']);
 });
