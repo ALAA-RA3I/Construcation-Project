@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\ActivationController;
+use App\Http\Controllers\Api\BackupFilesController;
 use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\Owner\OwnerController;
+use App\Http\Controllers\Api\ProjectFilesController;
 use App\Http\Controllers\Api\RealStateManagerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -63,4 +65,16 @@ Route::prefix('realStateManager')->group(function() {
     Route::post('/create',[RealStateManagerController::class,'create']);
     Route::put('update/{id}' ,[RealStateManagerController::class,'update']);
     Route::delete('delete/{id}',[RealStateManagerController::class,'delete']);
+});
+Route::prefix('projectFiles')->group(function() {
+    Route::get('/{id}/all', [ProjectFilesController::class,'getAllProjectFiles']);
+    Route::get('/paginated/{id}',[ProjectFilesController::class,'paginate']);
+    Route::get('/{id}',[ProjectFilesController::class,'show']);
+    Route::post('/{id}/create', [ProjectFilesController::class,'create']);
+    Route::delete('delete/{id}', [ProjectFilesController::class,'delete']);
+});
+Route::prefix('BackupFiles')->group(function() {
+    Route::get('{id}/all',[BackupFilesController::class,'getAll']);
+    Route::get('{id}',[BackupFilesController::class,'show']);
+    Route::post('/create/{id}',[BackupFilesController::class,'create']);
 });

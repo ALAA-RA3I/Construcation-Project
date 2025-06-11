@@ -9,6 +9,8 @@ class BackupFile extends BaseModel
 {
     protected $fillable = [
         'project_file_id',
+        'path',
+        'version'
     ];
 
     public function projectFile()

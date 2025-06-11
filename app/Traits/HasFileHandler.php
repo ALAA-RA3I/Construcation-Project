@@ -12,7 +12,7 @@ trait HasFileHandler
 {
     public function storeFile(UploadedFile $file,  $directory = 'uploads',  $disk = 'public')
     {
-        if (!!$file->isValid()) {
+        if (!$file->isValid()) {
             Log::warning('Invalid file upload.');
             return null;
         }
