@@ -18,7 +18,6 @@ class OwnerResource extends JsonResource
             'id' => $this->id,
             'address' => $this->address,
             'national_id' => $this->national_id,
-
             'user' => new UserResource($this->whenLoaded('user'))
         ];
     }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Domain\Enums\UserStatusEnum;
 use App\Models\ConsultingEngineer;
 use App\Models\Engineer;
+use App\Models\ProjectManager;
 use App\Models\RealStateManager;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -91,7 +92,29 @@ class UserSeeder extends Seeder
             $user->assignRole('realStateManager');
 
             RealStateManager::updateOrCreate(
+                ['user_id' => $user->id]
+            );
+        }
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::updateOrCreate(
+                ['email' => "projectManager{$i}@example.com"],
+                [
+                    'first_name' => "projectManager{$i}",
+                    'last_name' => "Lastname{$i}",
+                    'password' => Hash::make('password'),
+                    'phone_number' => '050000002' . $i,
+                    'is_active' => 1,
+                ]
+            );
+            $user->assignRole('projectManager');
+
+
+            ProjectManager::updateOrCreate(
                 ['user_id' => $user->id],
+                [
+                    'years_of_experience' => rand(1, 10),
+                    'bio' => "bio{$i}",
+                ]
             );
         }
     }

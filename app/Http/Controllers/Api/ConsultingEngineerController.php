@@ -19,9 +19,14 @@ class ConsultingEngineerController extends Controller
     {
         $this->engineerService = $service;
     }
-    public function index()
+    public function index($companyId = null )
     {
-        $engineers = $this->engineerService->paginate();
+        $filters = [];
+
+        if ($companyId) {
+            $filters['consulting_company_id'] = $companyId;
+        }
+        $engineers = $this->engineerService->paginate($filters);
         return ApiResponse::success(ConsultingEngineerResource::collection($engineers));
     }
     public function getAll(Request $request)
