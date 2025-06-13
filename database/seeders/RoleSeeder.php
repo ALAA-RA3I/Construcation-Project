@@ -20,6 +20,7 @@ class RoleSeeder extends Seeder
             'owner',
             'admin',
             'realStateManager',
+            'projectManager'
         ];
 
         foreach ($roles as $name) {
