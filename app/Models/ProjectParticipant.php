@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Domain\Enums\ProjectRoleEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +15,11 @@ class ProjectParticipant extends BaseModel
         'project_id',
         'participant_id',
         'participant_type',
+        'role',
+    ];
+
+    protected $casts = [
+        'role' => ProjectRoleEnum::class,
     ];
 
     public function project() : BelongsTo
