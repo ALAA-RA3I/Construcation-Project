@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Enums\ProjectRoleEnum;
 use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->integer('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->cascadeOnDelete();
             $table->integer('participant_id');
+            $table->enum('role', ProjectRoleEnum::getValues());
             $this->addBaseColumns($table);
         });
     }
