@@ -57,3 +57,10 @@ class TaskController extends Controller
         return ApiResponse::success(null, 'Task deleted successfully');
     }
 }
+//https://mainnet.infura.io/v3/bf6cb3ab832641f8856dd37ed9a2cc9f
+//bf6cb3ab832641f8856dd37ed9a2cc9f
+
+// curl --url https://mainnet.infura.io/v3/bf6cb3ab832641f8856dd37ed9a2cc9f \
+//   -X POST \
+//   -H "Content-Type: application/json" \
+//   -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'

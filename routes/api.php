@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\RealStateManagerController;
 use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
+use App\Http\Controllers\DocumentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -131,3 +132,5 @@ Route::prefix('projectParticipant')->group(function () {
     Route::put('update/{id}', [TicketController::class, 'update']);
     Route::delete('delete/{id}', [TicketController::class, 'delete']);
 });
+Route::post('/documents/notarize', [DocumentController::class, 'upload']);
+Route::post('/documents/verify', [DocumentController::class, 'verify']);
