@@ -37,42 +37,46 @@ class Project extends BaseModel
     }
     public function owners(): BelongsTo
     {
-        return $this->belongsTo(Owner::class,'owner_id');
+        return $this->belongsTo(Owner::class, 'owner_id');
     }
 
     public function consultingCompany(): BelongsTo
     {
-        return $this->belongsTo(ConsultingCompany::class,'consulting_company_id');
+        return $this->belongsTo(ConsultingCompany::class, 'consulting_company_id');
     }
 
-    public function projectStage() : HasMany
+    public function projectStage(): HasMany
     {
-        return $this->hasMany(ProjectStage::class,'project_id');
+        return $this->hasMany(ProjectStage::class, 'project_id');
     }
 
-    public function projectBills() : HasMany
+    public function projectBills(): HasMany
     {
-        return $this->hasMany(ProjectBill::class,'project_id');
+        return $this->hasMany(ProjectBill::class, 'project_id');
     }
 
-    public function projectFiles() : HasMany
+    public function projectFiles(): HasMany
     {
-        return $this->hasMany(ProjectFile::class,'project_id');
+        return $this->hasMany(ProjectFile::class, 'project_id');
     }
 
-    public function projectContainer() : HasMany
+    public function projectContainer(): HasMany
     {
-        return $this->hasMany(ProjectContainer::class,'project_id');
+        return $this->hasMany(ProjectContainer::class, 'project_id');
     }
 
-    public function media() : HasMany
+    public function media(): HasMany
     {
-        return $this->hasMany(Media::class,'project_id');
+        return $this->hasMany(Media::class, 'project_id');
     }
 
-    public function propertyBook() : HasMany
+    public function projectParticipant(): HasMany
     {
-        return $this->hasMany(PropertyBook::class,'project_id');
+        return $this->hasMany(ProjectParticipant::class, 'project_id');
     }
 
+    public function propertyBook(): HasMany
+    {
+        return $this->hasMany(PropertyBook::class, 'project_id');
+    }
 }

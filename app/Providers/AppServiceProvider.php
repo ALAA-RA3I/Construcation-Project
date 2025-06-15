@@ -77,6 +77,7 @@ use App\Infrastructure\Repositories\TaskContainerRepository;
 use App\Infrastructure\Repositories\TaskRepository;
 use App\Infrastructure\Repositories\TicketRepository;
 use App\Infrastructure\Repositories\UserRepository;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -114,10 +115,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ItemRepositoryInterface::class, ItemRepository::class);
         // In the bindRepositories method
         $this->app->bind(TicketRepositoryInterface::class, TicketRepository::class);
-        $this->app->bind(ProjectParticipantRepositoryInterface::class, ProjectParticipantRepository::class);        $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
+        $this->app->bind(ProjectParticipantRepositoryInterface::class, ProjectParticipantRepository::class);
+        $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
         $this->app->bind(BackupFileRepositoryInterface::class, BackupFileRepository::class);
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
-
     }
 
     /**
@@ -137,7 +138,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectManagerServiceInterface::class, ProjectManagerService::class);
 
         $this->app->bind(ProjectFileServiceInterface::class, ProjectFileService::class);
-        $this->app->bind(BackupFileServiceInterface::class,BackupFileService::class);
+        $this->app->bind(BackupFileServiceInterface::class, BackupFileService::class);
 
         $this->app->bind(ProjectServiceInterface::class, ProjectService::class);
         $this->app->bind(ProjectStageServiceInterface::class, ProjectStageService::class);
@@ -155,7 +156,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Relation::morphMap([
+            'consulting_engineer' => \App\Models\ConsultingEngineer::class,
+            'engineer' => \App\Models\Engineer::class,
+            'owner' => \App\Models\Owner::class,
+        ]);
     }
-
 }
