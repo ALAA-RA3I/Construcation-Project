@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectParticipantResource extends JsonResource
 {
-    /**
+    /** 
      * Transform the resource into an array.
      *
      * @return array<string, mixed>

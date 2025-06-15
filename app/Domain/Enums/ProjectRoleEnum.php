@@ -9,8 +9,10 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class UserStatusEnum extends Enum
+final class ProjectRoleEnum extends Enum
 {
-    const Active = 'active';
-    const Inactive = 'inactive';
+    const ProjectManager = 'project_manager';
+    const ExecutionEngineer = 'execution_engineer';
+    const StudyEngineer = 'study_engineer';
+
 }

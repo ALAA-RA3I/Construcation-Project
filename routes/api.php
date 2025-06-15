@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ActivationController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BackupFilesController;
 use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\Owner\OwnerController;
 use App\Http\Controllers\Api\ProjectFilesController;
 
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProjectManagerController;
 use App\Http\Controllers\Api\ProjectStageController;
 use App\Http\Controllers\Api\ProjectParticipantController;
 use App\Http\Controllers\Api\RealStateManagerController;
@@ -24,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('login', [AuthController::class, 'login']);
 
 
 Route::prefix('specializations')->group(function () {
@@ -44,7 +48,7 @@ Route::prefix('engineers')->group(function () {
     Route::delete('delete/{id}', [EngineerController::class, 'delete']);
 });
 Route::prefix('consultingEngineers')->group(function () {
-    Route::get('/', [ConsultingEngineerController::class, 'index']);
+    Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);
     Route::get('/all', [ConsultingEngineerController::class, 'getAll']);
     Route::post('/create', [ConsultingEngineerController::class, 'create']);
     Route::get('/{id}', [ConsultingEngineerController::class, 'show']);
@@ -74,6 +78,14 @@ Route::prefix('realStateManager')->group(function () {
     Route::post('/create', [RealStateManagerController::class, 'create']);
     Route::put('update/{id}', [RealStateManagerController::class, 'update']);
     Route::delete('delete/{id}', [RealStateManagerController::class, 'delete']);
+});
+Route::prefix('projectManagers')->group(function () {
+    Route::get('/', [ProjectManagerController::class, 'index']);
+    Route::get('/all', [ProjectManagerController::class, 'getAll']);
+    Route::post('/create', [ProjectManagerController::class, 'create']);
+    Route::get('/{id}', [ProjectManagerController::class, 'show']);
+    Route::put('update/{id}', [ProjectManagerController::class, 'update']);
+    Route::delete('delete/{id}', [ProjectManagerController::class, 'delete']);
 });
 Route::prefix('project')->group(function () {
     Route::get('/all', [ProjectController::class, 'getAll']);

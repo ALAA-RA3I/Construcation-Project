@@ -20,8 +20,7 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
-            'status' => $this->status,
-            'owner'=>new OwnerResource($this->whenLoaded('owner'))
+            'is_active' => $this->is_active,
 
         ];
     }
