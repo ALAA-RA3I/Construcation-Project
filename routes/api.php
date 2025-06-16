@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BackupFilesController;
 use App\Http\Controllers\Api\ConsultingCompanyController;
 use App\Http\Controllers\Api\ConsultingEngineerController;
+use App\Http\Controllers\Api\DocumentController as ApiDocumentController;
 use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\ItemController;
@@ -19,7 +20,9 @@ use App\Http\Controllers\Api\RealStateManagerController;
 use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\VerifyDocumentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -171,5 +174,12 @@ Route::prefix('BackupFiles')->group(function() {
     Route::get('{id}',[BackupFilesController::class,'show']);
     Route::post('/create/{id}',[BackupFilesController::class,'create']);
 });
-Route::post('/documents/notarize', [DocumentController::class, 'upload']);
-Route::post('/documents/verify', [DocumentController::class, 'verify']);
+ 
+
+Route::post('/uploadd', [ContractController::class, 'store']);
+Route::post('/verify/{id}', [VerifyDocumentController::class, 'verify']);
+Route::get('/document/{id}', [VerifyDocumentController::class, 'show']);
+
+Route::get('/contracts', [ContractController::class, 'index']);
+Route::post('/contracts', [ContractController::class, 'store']);
+Route::get('/contracts/{id}', [ContractController::class, 'show']);

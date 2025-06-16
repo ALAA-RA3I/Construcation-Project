@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "bensampo/laravel-enum": "^6.12",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "*",
         "laravel/tinker": "^2.10.1",
@@ -82,6 +83,12 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/nftstorage/nft.storage-php"
+    }
+  ]
 }

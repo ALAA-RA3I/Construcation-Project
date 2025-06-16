@@ -1,87 +1,81 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Document;
+use App\Services\BlockchainService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Web3\Web3;
-use Web3\Contract;
 
 class DocumentController extends Controller
 {
-    protected $web3;
-    protected $contract;
-
-    public function __construct()
+    protected $blockchainService;
+    
+    public function __construct(BlockchainService $blockchainService)
     {
-        $provider = env('WEB3_PROVIDER');
-        $this->web3 = new Web3($provider);
-
-        $abi = json_decode(Storage::get('abi/contract_abi.json'), true);
-        $this->contract = new Contract($provider, $abi);
-        $this->contract->at(env('CONTRACT_ADDRESS'));
+        $this->blockchainService = $blockchainService;
     }
-
-    public function notarize(Request $request)
+    
+    public function index()
+    {
+        $documents = Document::all();
+        return view('documents.index', compact('documents'));
+    }
+    
+    public function create()
+    {
+        return view('documents.create');
+    }
+    
+    public function store(Request $request)
     {
         $request->validate([
-            'document' => 'required|file|mimes:pdf|max:5120',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'document' => 'required|file|mimes:pdf,doc,docx,txt|max:10240',
         ]);
-
-        // 🧾 1. احفظ الملف مؤقتاً
+        
+        // Store the file locally
         $file = $request->file('document');
-        $path = $file->store('contracts');
-
-        // 🔐 2. احسب الـ Hash
-        $hash = hash_file('sha256', storage_path('app/' . $path));
-
-        // 📤 3. أرسل الـ Hash إلى البلوكتشين
-        $from = env('WALLET_ADDRESS'); // محفظتك اللي فيها Sepolia ETH
-
-        $this->contract->send('storeDocumentHash', $hash, [
-            'from' => $from,
-            'gas' => '0x76c0',          // 30400
-            'gasPrice' => '0x9184e72a000' // 10000000000000
-        ], function ($err, $tx) use (&$response) {
-            if ($err !== null) {
-                $response = response()->json(['error' => $err->getMessage()], 500);
-                return;
-            }
-            $response = response()->json([
-                'message' => 'Document hash stored on blockchain',
-                'tx' => $tx
-            ]);
-        });
-
-        return $response;
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('documents', $fileName, 'public');
+        
+        // Upload to IPFS
+        $fullPath = Storage::disk('public')->path($filePath);
+        $ipfsHash = $this->blockchainService->uploadToIPFS($fullPath);
+        
+        // Store hash on blockchain
+        $txHash = $this->blockchainService->storeDocumentHash($ipfsHash);
+        
+        // Create document record
+        Document::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'file_name' => $fileName,
+            'file_path' => $filePath,
+            'ipfs_hash' => $ipfsHash,
+            'blockchain_tx_hash' => $txHash,
+            'is_verified' => true,
+        ]);
+        
+        return redirect()->route('documents.index')
+            ->with('success', 'Document uploaded and verified successfully!');
     }
-
-    public function verify(Request $request)
+    
+    public function show(Document $document)
     {
-        $request->validate([
-            'document' => 'required|file|mimes:pdf|max:5120',
-        ]);
-
-        // 🧾 1. احفظ الملف مؤقتاً
-        $file = $request->file('document');
-        $path = $file->store('temp');
-
-        // 🔐 2. احسب الـ Hash
-        $hash = hash_file('sha256', storage_path('app/' . $path));
-
-        // 🔍 3. تحقق من وجود الـ Hash في العقد
-        $exists = null;
-
-        $this->contract->call('isDocumentHashStored', $hash, function ($err, $res) use (&$exists) {
-            if ($err !== null) {
-                $exists = response()->json(['error' => $err->getMessage()], 500);
-                return;
-            }
-            $exists = response()->json([
-                'exists' => $res[0],
-                'hash' => $res[0] ? '✅ hash found on blockchain' : '❌ hash not found',
-            ]);
-        });
-
-        return $exists;
+        return view('documents.show', compact('document'));
+    }
+    
+    public function verify(Document $document)
+    {
+        $isVerified = $this->blockchainService->verifyDocument(
+            $document->ipfs_hash,
+            $document->blockchain_tx_hash
+        );
+        
+        $document->update(['is_verified' => $isVerified]);
+        
+        return redirect()->route('documents.show', $document)
+            ->with('success', $isVerified ? 'Document verified successfully!' : 'Document verification failed!');
     }
 }
