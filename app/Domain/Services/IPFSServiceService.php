@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 
 class IPFSServiceService
 {
-   protected $client;
+    protected $client;
     protected $jwt;
 
     public function __construct()
@@ -37,6 +37,25 @@ class IPFSServiceService
         $data = json_decode($response->getBody(), true);
         return $data['IpfsHash'];
     }
+  public function getFileCID($filePath, $fileName)
+{
+    if (!file_exists($filePath)) {
+        throw new \Exception("File does not exist: " . $filePath);
+    }
 
+  $response = $this->client->post('pinning/pinFileToIPFS', [
+    'headers'   => [
+        'Authorization' => 'Bearer ' . $this->jwt,
+        'Accept'        => 'application/json',
+    ],
+    'multipart' => [[
+        'name'     => 'file',
+        'contents' => fopen($filePath, 'r'),
+        'filename' => $fileName,
+    ]],
+]);
+    $data = json_decode($response->getBody(), true);
+    return $data['IpfsHash'];
+}
 
 }

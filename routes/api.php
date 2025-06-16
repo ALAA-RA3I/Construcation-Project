@@ -183,3 +183,5 @@ Route::get('/document/{id}', [VerifyDocumentController::class, 'show']);
 Route::get('/contracts', [ContractController::class, 'index']);
 Route::post('/contracts', [ContractController::class, 'store']);
 Route::get('/contracts/{id}', [ContractController::class, 'show']);
+
+Route::post('/contracts/{id}/verify', [ContractController::class, 'verifyContract']);
