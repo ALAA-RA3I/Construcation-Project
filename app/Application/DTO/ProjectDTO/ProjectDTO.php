@@ -5,7 +5,7 @@ namespace App\Application\DTO\ProjectDTO;
 class ProjectDTO {
 
     public static function fromCreateRequest(array $data) {
-        return [
+        return   [
             'title' => $data['title'],
             'project_code' => $data['project_code'],
             'description' => $data['description'],
@@ -19,6 +19,7 @@ class ProjectDTO {
             'expected_cost' => $data['expected_cost'],
             'owner_id' => $data['owner_id'],
             'consulting_company_id' => $data['consulting_company_id'],
+            'project_manager_id' => $data['project_manager_id'],
         ];
     }
 
@@ -36,7 +37,6 @@ class ProjectDTO {
             'progress_status' => $data['progress_status'],
             'expected_cost' => $data['expected_cost'],
             'owner_id' => $data['owner_id'],
-            'consulting_company_id' => $data['consulting_company_id'],
         ];
     }
 }

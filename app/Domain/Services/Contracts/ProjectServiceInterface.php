@@ -10,4 +10,6 @@ interface ProjectServiceInterface
     public function show($id);
     public function update($id, array $data);
     public function delete($id);
+    function assignParticipant( $projectId,  $type,  $id, $role);
+
 }
