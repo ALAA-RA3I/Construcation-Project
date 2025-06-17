@@ -159,7 +159,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'consulting_engineer' => \App\Models\ConsultingEngineer::class,
             'engineer' => \App\Models\Engineer::class,
-            'owner' => \App\Models\Owner::class,
+            'project_manager' => \App\Models\ProjectManager::class,
         ]);
     }
 }

@@ -12,7 +12,7 @@ use BenSampo\Enum\Enum;
 final class ProjectRoleEnum extends Enum
 {
     const ProjectManager = 'project_manager';
-    const ExecutionEngineer = 'execution_engineer';
+    const Engineer = 'engineer';
     const StudyEngineer = 'study_engineer';
 
 }

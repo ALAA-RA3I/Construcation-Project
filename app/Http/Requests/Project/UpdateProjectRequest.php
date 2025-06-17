@@ -35,7 +35,6 @@ class UpdateProjectRequest extends FormRequest
             'progress_status' => ['required', 'string', 'in:Initial,InProgress,Done'],
             'expected_cost' => ['required', 'integer'],
             'owner_id' => ['required', 'integer', 'exists:owners,id'],
-            'consulting_company_id' => ['required', 'integer', 'exists:consulting_companies,id'],
         ];
     }
 }

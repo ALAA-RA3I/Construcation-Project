@@ -28,8 +28,9 @@ class ProjectResource extends JsonResource
             'progress_status' => $this->progress_status,
             'expected_cost' => $this->expected_cost,
             'owner' => new OwnerResource($this->whenLoaded('owners')),
-            'participants' => ProjectParticipantResource::collection($this->whenLoaded('projectParticipant')),
-            'created_at' => $this->created_at, 
+//            'participants' => ProjectParticipantResource::collection($this->whenLoaded('projectParticipant')),
+            'consultingCompany' => new ConsultingCompanyResource($this->whenLoaded('consultingCompany')),
+            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
     }

@@ -27,8 +27,8 @@ class Owner extends BaseModel
     {
         return $this->hasMany(Project::class,'owner_id');
     }
-    public function participant()
-    {
-        return $this->morphMany(ProjectParticipant::class, 'participant');
-    }
+//    public function participant()
+//    {
+//        return $this->morphMany(ProjectParticipant::class, 'participant');
+//    }
 }

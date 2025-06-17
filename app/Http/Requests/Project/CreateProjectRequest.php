@@ -35,6 +35,7 @@ class CreateProjectRequest extends FormRequest
             'expected_cost' => ['required', 'integer'],
             'owner_id' => ['required', 'integer', 'exists:owners,id'],
             'consulting_company_id' => ['required', 'integer', 'exists:consulting_companies,id'],
+            'project_manager_id' => ['required', 'integer', 'exists:project_managers,id'],
         ];
     }
 }

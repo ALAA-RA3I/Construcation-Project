@@ -118,4 +118,15 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
             return true;
         });
     }
+    public function getEngineersByCompany($companyId)
+    {
+        $engineers = $this->consultingEngineerRepo
+            ->findByField('consulting_company_id', $companyId);
+
+        if ($engineers->isEmpty()) {
+            throw new EntityNotFoundException('No engineers found for this company.');
+        }
+
+        return $engineers;
+    }
 }
