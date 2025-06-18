@@ -31,14 +31,16 @@ class ProjectService implements ProjectServiceInterface
 
     public function getAll()
     {
-        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany']));
-        return $this->projectRepo->all();
+        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']));
+
+         return $this->projectRepo->all();
     }
 
     public function paginate()
     {
-          $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany']));
-        return $this->projectRepo->paginate();
+        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']));
+
+         return $this->projectRepo->paginate();
     }
 
     public function create(array $data)
@@ -69,7 +71,8 @@ class ProjectService implements ProjectServiceInterface
 
     public function show($id)
     {
-        $project = $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany']))->find($id);
+ 
+        $project = $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']))->find($id);
         return $project;
     }
 
