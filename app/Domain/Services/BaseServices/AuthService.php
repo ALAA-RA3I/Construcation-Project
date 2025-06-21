@@ -28,4 +28,11 @@ class AuthService implements AuthServiceInterface
             'token' => $token,
         ];
     }
+    public function getAuthenticatedUserPermissions(User $user): array
+    {
+        return [
+            'role' => $user->getRoleNames()->first(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
+        ];
+    }
 }

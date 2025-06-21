@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\LoginResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -28,5 +29,11 @@ class AuthController extends Controller
             'token' => $data['token'],
             'user'  => new LoginResource($data['user']),
         ]);
+    }
+    public function myPermissions(Request $request)
+    {
+        $user = Auth::user();
+        $data = $this->authService->getAuthenticatedUserPermissions($user);
+        return ApiResponse::success($data);
     }
 }

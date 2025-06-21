@@ -28,6 +28,7 @@ Route::get('/user', function (Request $request) {
 
 Route::post('login', [AuthController::class, 'login']);
 
+Route::middleware('auth:sanctum')->get('my-permissions', [AuthController::class, 'myPermissions']);
 
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
