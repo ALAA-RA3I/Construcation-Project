@@ -306,9 +306,9 @@ class RoleSeeder extends Seeder
                 ////////// tasks ///////////////
                 'view tasks',
             ],
-//            'realStateManager' => [
-//                'manage real estate operations',
-//            ],
+            'realStateManager' => [
+            'view projects',
+            ],
 
         ];
 

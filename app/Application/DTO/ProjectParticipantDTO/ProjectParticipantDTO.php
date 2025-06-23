@@ -2,6 +2,8 @@
 
 namespace App\Application\DTO\ProjectParticipantDTO;
 
+use App\Domain\Enums\ProjectRoleEnum;
+
 class ProjectParticipantDTO {
 
     public static function fromCreateRequest(array $data) {
@@ -9,6 +11,7 @@ class ProjectParticipantDTO {
             'project_id' => $data['project_id'],
             'participant_id' => $data['participant_id'],
             'participant_type' => $data['participant_type'],
+            'role' => ProjectRoleEnum::Engineer
         ];
     }
 
@@ -17,6 +20,7 @@ class ProjectParticipantDTO {
             'project_id' => $data['project_id'],
             'participant_id' => $data['participant_id'],
             'participant_type' => $data['participant_type'],
+            'role' => ProjectRoleEnum::Engineer
         ];
     }
 }
