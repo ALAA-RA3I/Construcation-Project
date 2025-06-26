@@ -31,16 +31,17 @@ class ProjectService implements ProjectServiceInterface
 
     public function getAll()
     {
-        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']));
-
-         return $this->projectRepo->all();
+        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user']));
+        $projects = $this->projectRepo->all();
+        return loadSpecializationsForProjects($projects);
     }
 
     public function paginate()
     {
-        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']));
+        $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user']));
 
-         return $this->projectRepo->paginate();
+        $projects = $this->projectRepo->paginate();
+        return loadSpecializationsForProjects($projects);
     }
 
     public function create(array $data)
@@ -71,9 +72,10 @@ class ProjectService implements ProjectServiceInterface
 
     public function show($id)
     {
- 
-        $project = $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user','projectParticipant.participant.specialization']))->find($id);
-        return $project;
+
+        $project = $this->projectRepo->pushCriteria(new WithRelationsCriteria(['owners', 'consultingCompany','projectParticipant.participant.user']))->find($id);
+
+        return loadSpecializationsForProjects($project);
     }
 
     public function update($id, array $data)
