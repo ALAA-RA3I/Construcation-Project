@@ -94,8 +94,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectController::class, 'delete']);
     });
     Route::prefix('projectStage')->group(function () {
-        Route::get('/all', [ProjectStageController::class, 'getAll']);
-        Route::get('/', [ProjectStageController::class, 'index']);
+        Route::get('/all/{projectId}', [ProjectStageController::class, 'getAll']);
+        Route::get('/{projectId}', [ProjectStageController::class, 'index']);
         Route::get('/{id}', [ProjectStageController::class, 'show']);
         Route::post('/create', [ProjectStageController::class, 'create']);
         Route::put('update/{id}', [ProjectStageController::class, 'update']);
@@ -103,8 +103,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('task')->group(function () {
-        Route::get('/all', [TaskController::class, 'getAll']);
-        Route::get('/', [TaskController::class, 'index']);
+        Route::get('/all/{stageId}', [TaskController::class, 'getAll']);
+        Route::get('/{stageId}', [TaskController::class, 'index']);
         Route::get('/{id}', [TaskController::class, 'show']);
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);

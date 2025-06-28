@@ -2,9 +2,11 @@
 
 namespace App\Application\DTO\TaskDTO;
 
-class TaskDTO {
+class TaskDTO
+{
 
-    public static function fromCreateRequest(array $data) {
+    public static function fromCreateRequest(array $data)
+    {
         return [
             'dead_line' => $data['dead_line'],
             'status' => $data['status'],
@@ -14,11 +16,15 @@ class TaskDTO {
             'actual_date_of_closed' => $data['actual_date_of_closed'] ?? null,
             'stage_id' => $data['stage_id'],
             'employee_assigned' => $data['employee_assigned'],
+            'start_date' => $data['start_date'],
+            'priority' => $data['priority'],
+
             'supervisor_id' => $data['supervisor_id'],
         ];
     }
 
-    public static function fromUpdateRequest(array $data) {
+    public static function fromUpdateRequest(array $data)
+    {
         return [
             'dead_line' => $data['dead_line'],
             'status' => $data['status'],

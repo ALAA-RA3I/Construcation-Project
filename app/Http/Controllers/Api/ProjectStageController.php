@@ -20,13 +20,13 @@ class ProjectStageController extends Controller
         $this->projectStageService = $projectStageService;
     }
 
-    public function index() {
-        $projectStages = $this->projectStageService->paginate();
+    public function index($projectId) {
+        $projectStages = $this->projectStageService->paginate($projectId);
         return ApiResponse::success(ProjectStageResource::collection($projectStages));
     }
 
-    public function getAll() {
-        $projectStages = $this->projectStageService->getAll();
+    public function getAll($projectId) {
+        $projectStages = $this->projectStageService->getAll($projectId);
         return ApiResponse::success(ProjectStageResource::collection($projectStages));
     }
 

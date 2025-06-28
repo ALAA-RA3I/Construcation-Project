@@ -21,6 +21,8 @@ class TaskResource extends JsonResource
             'status_of_approval' => $this->status_of_approval,
             'type_of_task' => $this->type_of_task,
             'note' => $this->note,
+            'start_date' => $this->start_date,
+            'priority' => $this->priority,
             'actual_date_of_closed' => $this->actual_date_of_closed,
             'stage_id' => $this->stage_id,
             'employee_assignded' => $this->employee_assignded,

@@ -17,15 +17,19 @@ class TaskService implements TaskServiceInterface
         $this->taskRepo = $taskRepo;
     }
 
-    public function getAll()
+    public function getAll($stageId)
     {
         $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
+    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
+
         return $this->taskRepo->all();
     }
 
-    public function paginate()
+    public function paginate($stageId)
     {
         $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
+    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
+
         return $this->taskRepo->paginate();
     }
 

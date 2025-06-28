@@ -20,13 +20,13 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index() {
-        $tasks = $this->taskService->paginate();
+    public function index($stageId) {
+        $tasks = $this->taskService->paginate($stageId);
         return ApiResponse::success(TaskResource::collection($tasks));
     }
 
-    public function getAll() {
-        $tasks = $this->taskService->getAll();
+    public function getAll($stageId) {
+        $tasks = $this->taskService->getAll($stageId);
         return ApiResponse::success(TaskResource::collection($tasks));
     }
 

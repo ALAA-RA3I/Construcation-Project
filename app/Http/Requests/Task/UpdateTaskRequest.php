@@ -31,6 +31,9 @@ class UpdateTaskRequest extends FormRequest
             'stage_id' => ['required', 'integer', 'exists:project_stages,id'],
             'employee_assigned' => ['required', 'integer', 'exists:project_participants,id'],
             'supervisor_id' => ['required', 'integer', 'exists:project_participants,id'],
+            'start_date' => ['required', 'date'],
+            'priority' => ['required', 'integer'],
+
         ];
     }
 }

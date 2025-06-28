@@ -26,6 +26,9 @@ class UpdateProjectStageRequest extends FormRequest
             'description' => ['required', 'string'],
             'expected_closed_date' => ['required', 'date'],
             'project_id' => ['required', 'integer', 'exists:projects,id'],
+            'start_date' => ['required', 'date'],
+            'priority' => ['required', 'integer'],
+
         ];
     }
 }
