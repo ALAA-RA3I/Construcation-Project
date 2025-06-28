@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Criteria\WithRelationsCriteria;
+use App\Domain\Enums\TicketStatusEnum;
 use App\Infrastructure\Repositories\Contracts\TicketRepositoryInterface;
 use App\Domain\Services\Contracts\TicketServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -60,5 +61,17 @@ class TicketService implements TicketServiceInterface
         } catch (ModelNotFoundException $exception) {
             throw new EntityNotFoundException();
         }
+    }
+
+    public function closingTicket($id) {
+        $ticket = $this->ticketRepo->findOrFail($id);
+        if(!$ticket) {
+            throw new ModelNotFoundException('Ticket not found');
+        }
+        $updatedData = [
+            'status' => TicketStatusEnum::Closed,
+        ];
+
+        return $this->ticketRepo->update($updatedData,$id);
     }
 }

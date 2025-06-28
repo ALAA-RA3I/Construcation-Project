@@ -24,7 +24,7 @@ class CreateTaskRequest extends FormRequest
         return [
             'dead_line' => ['required', 'date'],
             'status' => ['required', 'string', 'in:ToDo,Doing,pendingApproval,Done'],
-            'status_of_approval' => ['required', 'boolean'],
+            'status_of_approval' => ['required'],
             'type_of_task' => ['required', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'note' => ['required', 'string'],

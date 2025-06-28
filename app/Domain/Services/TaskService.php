@@ -8,14 +8,20 @@ use App\Infrastructure\Repositories\Contracts\TaskRepositoryInterface;
 use App\Domain\Services\Contracts\TaskServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
+use App\Domain\Enums\ApproveTaskEnum;
+use App\Infrastructure\Repositories\Contracts\TicketRepositoryInterface;
 
 class TaskService implements TaskServiceInterface
 {
     protected $taskRepo;
+    protected $ticketRepo;
 
-    public function __construct(TaskRepositoryInterface $taskRepo)
+    public function __construct(
+        TaskRepositoryInterface $taskRepo,
+        TicketRepositoryInterface $ticketRepo)
     {
         $this->taskRepo = $taskRepo;
+        $this->ticketRepo = $ticketRepo;
     }
 
     public function getAll($stageId)
@@ -65,4 +71,28 @@ class TaskService implements TaskServiceInterface
     {
         return $this->taskRepo->delete($id);
     }
+    public function markTaskAsDone($id) {
+        $task = $this->taskRepo->findOrFail($id);
+        if (!$task) {
+            return new ModelNotFoundException('Not Found');
+        }
+        $updatedData = [
+            'status_of_approval' => ApproveTaskEnum::Done,
+        ];      
+        return $this->taskRepo->update($updatedData,$id);
+    }
+
+    public function markTaskAsRefuse(array $data ,$id) {
+        $task = $this->taskRepo->findOrFail($id);
+        if (!$task) {
+            return new ModelNotFoundException('Not Found');
+        }
+        $updatedData = [
+            'status_of_approval' => ApproveTaskEnum::WaitingForTicket,
+        ];      
+        $this->taskRepo->update($updatedData,$id);
+        $data['task_id'] = $id;
+        return $this->ticketRepo->create($data);
+    }
+
 }

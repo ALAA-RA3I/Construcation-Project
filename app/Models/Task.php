@@ -6,6 +6,7 @@ use App\Domain\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Domain\Enums\ApproveTaskEnum;
 
 class Task extends BaseModel
 {
@@ -28,7 +29,7 @@ class Task extends BaseModel
     {
         return [
             'status' => TaskStatusEnum::class,
-            'status_of_approval' => 'boolean',
+            'status_of_approval' => ApproveTaskEnum::class,
             'dead_line' => 'date',
             'actual_date_of_closed' => 'date',
         ];
