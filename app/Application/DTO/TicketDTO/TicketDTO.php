@@ -8,7 +8,6 @@ class TicketDTO {
         return [
             'description' => $data['description'],
             'status' => $data['status'],
-            'task_id' => $data['task_id'],
         ];
     }
 
@@ -16,7 +15,6 @@ class TicketDTO {
         return [
             'description' => $data['description'],
             'status' => $data['status'],
-            'task_id' => $data['task_id'],
         ];
     }
 }

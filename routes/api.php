@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\RealStateManagerController;
 use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ProjectContainer;
 use Illuminate\Support\Facades\Route;
 
 
@@ -109,6 +109,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
+        Route::patch('updateStatusOfTask/{id}',[TaskController::class,'markTaskAsDone']);
+        Route::patch('refuseTask/{id}' , [TaskController::class,'refuseTask']);
     });
 
     Route::prefix('taskContainer')->group(function () {
@@ -144,6 +146,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [TicketController::class, 'create']);
         Route::put('update/{id}', [TicketController::class, 'update']);
         Route::delete('delete/{id}', [TicketController::class, 'delete']);
+        Route::patch('closingTicket/{id}',[TicketController::class,'changeTicketStatus']);
     });
     Route::prefix('projectFiles')->group(function() {
         Route::get('/{id}/all', [ProjectFilesController::class,'getAllProjectFiles']);
@@ -169,6 +172,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}',[BackupFilesController::class,'show']);
         Route::post('/create/{id}',[BackupFilesController::class,'create']);
     });
+});
+
+Route::prefix('ProjectContainer')->group(function() {
+    Route::post('/createNewItems/{id}',[ProjectContainer::class,'createIfNotExisit']);
+    Route::post('/create/{id1}/{id2}',[ProjectContainer::class,'createIfExisit']);
+    Route::get('/{id}/all',[ProjectContainer::class,'getAll']);
+    Route::get('/{id}',[ProjectContainer::class,'show']);
+    Route::delete('delete/{id}',[ProjectContainer::class,'delete']);
 });
 
 

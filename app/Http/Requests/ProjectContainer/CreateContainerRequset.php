@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Ticket;
+namespace App\Http\Requests\ProjectContainer;
 
-use App\Domain\Enums\TicketStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateTicketRequest extends FormRequest
+class CreateContainerRequset extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +22,11 @@ class CreateTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'required|string',
-            'status' => ['required', Rule::in(TicketStatusEnum::getValues())],
+            'quantity-available' => 'required|numeric|min:0',
+            'expected-quantity' => 'nullable|numeric|min:0',
+            'consumed-quantity' => 'nullable|numeric|min:0',
+            'required-quantity' => 'nullable|numeric|min:0',
+            'remaining-quantity' => 'nullable|numeric|min:0',
         ];
     }
 }

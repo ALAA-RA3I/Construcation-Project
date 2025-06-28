@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application\DTO\TaskDTO\TaskDTO;
+use App\Application\DTO\TicketDTO\TicketDTO;
 use App\Domain\Services\Contracts\TaskServiceInterface;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
+use App\Http\Requests\Ticket\CreateTicketRequest;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\TicketResource;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -55,5 +58,16 @@ class TaskController extends Controller
             return ApiResponse::error('Deletion failed', 400);
 
         return ApiResponse::success(null, 'Task deleted successfully');
+    }
+
+    public function markTaskAsDone($id) {
+        $this->taskService->markTaskAsDone($id);
+        return ApiResponse::success(null, 'Status of task has been changed successfully');
+    }
+
+    public function refuseTask(CreateTicketRequest $request,$id) {
+        $validatedData = TicketDTO::fromCreateRequest($request->validated());
+        $ticket = $this->taskService->markTaskAsRefuse($validatedData,$id);
+        return ApiResponse::success(TicketResource::make($ticket),'Ticket Status has been updated successfully');
     }
 }

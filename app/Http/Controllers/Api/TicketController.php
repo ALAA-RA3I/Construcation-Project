@@ -60,4 +60,9 @@ class TicketController extends Controller
             return ApiResponse::error('Something went wrong :(', 400);
         return ApiResponse::success(null, 'Ticket deleted successfully');
     }
+
+    public function changeTicketStatus($id) {
+        $ticket = $this->ticketService->closingTicket($id);
+        return ApiResponse::success(TicketResource::make($ticket));
+    }
 }

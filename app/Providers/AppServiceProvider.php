@@ -36,9 +36,11 @@ use App\Domain\Services\TaskContainerService;
 use App\Domain\Services\TaskService;
 use App\Domain\Services\UserService;
 use App\Domain\Services\Contracts\ItemServiceInterface;
+use App\Domain\Services\Contracts\ProjectContainerServiceInterface;
 use App\Domain\Services\Contracts\ProjectParticipantServiceInterface;
 use App\Domain\Services\Contracts\TicketServiceInterface;
 use App\Domain\Services\ItemService;
+use App\Domain\Services\ProjectContainerService;
 use App\Domain\Services\ProjectParticipantService;
 use App\Domain\Services\TicketService;
 use App\Infrastructure\Repositories\BackupFileRepository;
@@ -53,6 +55,7 @@ use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ItemRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\OwnerRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ProjectContainerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectFileRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectManagerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectParticipantRepositoryInterface;
@@ -67,6 +70,7 @@ use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
 use App\Infrastructure\Repositories\ItemRepository;
 use App\Infrastructure\Repositories\OwnerRepository;
+use App\Infrastructure\Repositories\ProjectContainerRepository;
 use App\Infrastructure\Repositories\ProjectManagerRepository;
 use App\Infrastructure\Repositories\ProjectParticipantRepository;
 use App\Infrastructure\Repositories\ProjectFileRepository;
@@ -119,6 +123,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
         $this->app->bind(BackupFileRepositoryInterface::class, BackupFileRepository::class);
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
+        $this->app->bind(ProjectContainerRepositoryInterface::class, ProjectContainerRepository::class);
     }
 
     /**
@@ -148,6 +153,7 @@ class AppServiceProvider extends ServiceProvider
         // In the bindServices method
         $this->app->bind(TicketServiceInterface::class, TicketService::class);
         $this->app->bind(ProjectParticipantServiceInterface::class, ProjectParticipantService::class);
+        $this->app->bind(ProjectContainerServiceInterface::class, ProjectContainerService::class);
     }
 
 
