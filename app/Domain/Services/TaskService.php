@@ -20,9 +20,9 @@ class TaskService implements TaskServiceInterface
 
     public function getAll($stageId)
     {
-        $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
-    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
-    $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
+        $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']));
+        $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId));
+        $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
 
 
         return $this->taskRepo->all();
@@ -30,22 +30,22 @@ class TaskService implements TaskServiceInterface
 
     public function paginate($stageId)
     {
-     $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
-    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
-    $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
-    return $this->taskRepo->paginate();
+        $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']));
+        $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId));
+        $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
+        return $this->taskRepo->paginate();
     }
 
     public function create(array $data)
     {
 
         $task = $this->taskRepo->create($data);
-        return $task->load(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']);
+        return $task->load(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']);
     }
 
     public function show($id)
     {
-        $task = $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']))->find($id);
+        $task = $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']))->find($id);
         return $task;
     }
 
@@ -58,7 +58,7 @@ class TaskService implements TaskServiceInterface
         }
 
         $this->taskRepo->update($data, $id);
-        return $task->fresh()->load(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']);
+        return $task->fresh()->load(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']);
     }
 
     public function delete($id)

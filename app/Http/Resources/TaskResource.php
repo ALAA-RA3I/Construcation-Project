@@ -17,7 +17,7 @@ class TaskResource extends JsonResource
         return [
             'id' => $this->id,
             'dead_line' => date('Y-m-d', strtotime($this->dead_line)),
-            'expected_period_to_complete' => date('d', strtotime($this->dead_line))-date('d', strtotime($this->start_date)) . ' days',
+            'expected_period_to_complete' => date('d', strtotime($this->dead_line)) - date('d', strtotime($this->start_date)) . ' days',
             'status' => $this->status,
             'status_of_approval' => $this->status_of_approval,
             'description' => $this->description,
@@ -27,10 +27,24 @@ class TaskResource extends JsonResource
             'priority' => $this->priority,
             'actual_date_of_closed' => $this->actual_date_of_closed,
             'stage_id' => $this->stage_id,
-            'employee_assignded' => $this->employee_assignded,
+            'title' => $this->title,
+            // 'employee_assigned' => $this->employee_assigned,
+            // 'employee_assigned_name' => $this->employeeAssigned->user,
             'supervisor_id' => $this->supervisor_id,
-            'stage' => new ProjectStageResource($this->whenLoaded('stage')),
-            // 'employeeAssigned' => new ProjectParticipantResource($this->whenLoaded('employeeAssigned')),
+            // 'stage' => new ProjectStageResource($this->whenLoaded('stage')),
+            'employeeAssigned' => $this->whenLoaded('employeeAssigned', function () {
+                if (!$this->employeeAssigned) {
+                    return null;
+                }
+                return [
+                    'id' => $this->employeeAssigned->id,
+                    'name' => optional(optional($this->employeeAssigned->participant)->user)->first_name
+                        . ' ' . optional(optional($this->employeeAssigned->participant)->user)->last_name,
+                    'email' => optional($this->employeeAssigned->participant)->user->email ?? null,
+                ];
+            }),
+            
+
             // 'supervisor' => new ProjectParticipantResource($this->whenLoaded('supervisor')),
             'taskContainer' => TaskContainerResource::collection($this->whenLoaded('taskContainer')),
             // 'ticket' => TicketResource::collection($this->whenLoaded('ticket')),

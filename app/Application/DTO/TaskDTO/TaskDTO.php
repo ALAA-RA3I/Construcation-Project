@@ -19,7 +19,7 @@ class TaskDTO
             'start_date' => $data['start_date'],
             'priority' => $data['priority'],
             'description' => $data['description'] ?? null,
-
+            'title' => $data['title'],
             'supervisor_id' => $data['supervisor_id'],
         ];
     }

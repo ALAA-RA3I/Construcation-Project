@@ -22,9 +22,9 @@ class ProjectParticipant extends BaseModel
         'role' => ProjectRoleEnum::class,
     ];
 
-    public function project() : BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function participant(): MorphTo
@@ -32,18 +32,18 @@ class ProjectParticipant extends BaseModel
         return $this->morphTo();
     }
 
-    public function projectFiles() : HasMany
+    public function projectFiles(): HasMany
     {
-        return $this->hasMany(ProjectFile::class,'project_participant_id');
+        return $this->hasMany(ProjectFile::class, 'project_participant_id');
     }
 
-    public function task() : HasMany
+    public function task(): HasMany
     {
-        return $this->hasMany(Task::class,'employee_assignded');
+        return $this->hasMany(Task::class, 'employee_assigned');
     }
 
-    public function taskSupervisor() : HasMany
+    public function taskSupervisor(): HasMany
     {
-        return $this->hasMany(Task::class,'supervisor_id');
+        return $this->hasMany(Task::class, 'supervisor_id');
     }
 }

@@ -26,6 +26,7 @@ class CreateTaskRequest extends FormRequest
             'status' => ['required', 'string', 'in:ToDo,Doing,pendingApproval,Done'],
             'status_of_approval' => ['required', 'boolean'],
             'type_of_task' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'note' => ['required', 'string'],
             'actual_date_of_closed' => ['nullable', 'date'],
             'description' => ['nullable', 'string'],

@@ -21,6 +21,7 @@ class Task extends BaseModel
         'supervisor_id',
         'priority',
         'start_date',
+        'title',
         'description'
     ];
     protected function casts(): array
@@ -40,7 +41,7 @@ class Task extends BaseModel
 
     public function employeeAssigned(): BelongsTo
     {
-        return $this->belongsTo(ProjectParticipant::class, 'employee_assignded');
+        return $this->belongsTo(ProjectParticipant::class, 'employee_assigned');
     }
 
     public function supervisor(): BelongsTo
