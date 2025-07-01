@@ -26,14 +26,26 @@ if (!function_exists('loadSpecializationsForProjects')) {
             : ($projects instanceof \Illuminate\Support\Collection ? $projects : collect([$projects]));
 
         $projectsCollection->each(function ($project) {
-            foreach ($project->projectParticipant ?? [] as $participant) {
-                if (
-                    $participant->participant &&
-                    method_exists($participant->participant, 'specialization')
-                ) {
-                    $participant->participant->load('specialization');
+            $filteredParticipants = $project->projectParticipant->filter(function ($participant) {
+                // Only allow 'project_manager' and 'engineer'
+                return in_array($participant->role, [
+                    \App\Domain\Enums\ProjectRoleEnum::ProjectManager,
+                    \App\Domain\Enums\ProjectRoleEnum::Engineer,
+                ]);
+            });
+
+            // Eager load specializations only for 'engineer' role
+            $filteredParticipants->each(function ($participant) {
+                if ($participant->role !== \App\Domain\Enums\ProjectRoleEnum::ProjectManager) {
+                    // Check if participant is an object and supports 'specializations' relationship
+                    if ($participant->participant && method_exists($participant->participant, 'specializations')) {
+                        $participant->participant->load('specializations');
+                    }
                 }
-            }
+            });
+
+            // Overwrite original relation with filtered participants
+            $project->setRelation('projectParticipant', $filteredParticipants->values());
         });
 
         return $projects;
