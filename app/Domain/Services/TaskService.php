@@ -22,13 +22,15 @@ class TaskService implements TaskServiceInterface
     {
         $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
     $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
+    $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
+
 
         return $this->taskRepo->all();
     }
 
     public function paginate($stageId)
     {
-      $data = $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
+     $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
     $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
     $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
     return $this->taskRepo->paginate();
