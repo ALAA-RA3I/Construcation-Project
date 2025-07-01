@@ -26,14 +26,22 @@ if (!function_exists('loadSpecializationsForProjects')) {
             : ($projects instanceof \Illuminate\Support\Collection ? $projects : collect([$projects]));
 
         $projectsCollection->each(function ($project) {
-            foreach ($project->projectParticipant ?? [] as $participant) {
-                if (
-                    $participant->participant &&
-                    method_exists($participant->participant, 'specialization')
-                ) {
-                    $participant->participant->load('specialization');
+            $filteredParticipants = $project->projectParticipant->filter(function ($participant) {
+                return in_array($participant->role, [
+                    \App\Domain\Enums\ProjectRoleEnum::ProjectManager,
+                    \App\Domain\Enums\ProjectRoleEnum::Engineer,
+                ]);
+            });
+
+            $filteredParticipants->each(function ($participant) {
+                if ($participant->role !== \App\Domain\Enums\ProjectRoleEnum::ProjectManager) {
+                    if ($participant->participant && method_exists($participant->participant, 'specialization')) {
+                        $participant->participant->load('specialization');
+                    }
                 }
-            }
+            });
+
+            $project->setRelation('projectParticipant', $filteredParticipants->values());
         });
 
         return $projects;
