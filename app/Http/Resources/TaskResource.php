@@ -16,9 +16,11 @@ class TaskResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'dead_line' => $this->dead_line,
+            'dead_line' => date('Y-m-d', strtotime($this->dead_line)),
+            'expected_period_to_complete' => date('d', strtotime($this->dead_line))-date('d', strtotime($this->start_date)) . ' days',
             'status' => $this->status,
             'status_of_approval' => $this->status_of_approval,
+            'description' => $this->description,
             'type_of_task' => $this->type_of_task,
             'note' => $this->note,
             'start_date' => $this->start_date,

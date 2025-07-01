@@ -36,8 +36,7 @@ class TaskController extends Controller
     }
 
     public function create(CreateTaskRequest $data) {
- 
-        $validatedData = TaskDTO::fromCreateRequest($data->validated());
+         $validatedData = TaskDTO::fromCreateRequest($data->validated());
         $task = $this->taskService->create($validatedData);
         return ApiResponse::success(new TaskResource($task));
     }

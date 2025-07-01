@@ -21,7 +21,8 @@ class Task extends BaseModel
         'supervisor_id',
         'priority',
         'start_date',
-     ];
+        'description'
+    ];
     protected function casts(): array
     {
         return [

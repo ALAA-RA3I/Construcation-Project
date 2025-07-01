@@ -28,7 +28,7 @@ class CreateTaskRequest extends FormRequest
             'type_of_task' => ['required', 'string', 'max:255'],
             'note' => ['required', 'string'],
             'actual_date_of_closed' => ['nullable', 'date'],
- 
+            'description' => ['nullable', 'string'],
             'stage_id' => ['required', 'integer', 'exists:project_stages,id'],
             'employee_assigned' => ['required', 'integer', 'exists:project_participants,id'],
             'supervisor_id' => ['required', 'integer', 'exists:project_participants,id'],

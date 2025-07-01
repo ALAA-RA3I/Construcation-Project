@@ -18,6 +18,7 @@ class TaskDTO
             'employee_assigned' => $data['employee_assigned'],
             'start_date' => $data['start_date'],
             'priority' => $data['priority'],
+            'description' => $data['description'] ?? null,
 
             'supervisor_id' => $data['supervisor_id'],
         ];
