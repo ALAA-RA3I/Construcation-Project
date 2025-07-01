@@ -4,8 +4,8 @@ namespace App\Domain\Services\Contracts;
 
 interface TaskServiceInterface
 {
-    public function getAll();
-    public function paginate();
+    public function getAll($stageId);
+    public function paginate($stageId);
     public function create(array $data);
     public function show($id);
     public function update($id, array $data);

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->integer('id')->autoIncrement();
             $table->string('name');
             $table->string('description');
+            // $table->date('start_date');added in new migration
+            // $table->integer('priority'); added in new migration
+
             $table->date('expected_closed_date');
             $table->integer('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->cascadeOnDelete();

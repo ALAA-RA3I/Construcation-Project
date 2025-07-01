@@ -25,7 +25,10 @@ class CreateProjectStageRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'expected_closed_date' => ['required', 'date'],
+            'start_date' => ['required', 'date'],
+            'priority' => ['required', 'integer'],
             'project_id' => ['required', 'integer', 'exists:projects,id'],
+
         ];
     }
 }

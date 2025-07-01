@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\SortByStartDateCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\TaskRepositoryInterface;
 use App\Domain\Services\Contracts\TaskServiceInterface;
@@ -23,20 +24,27 @@ class TaskService implements TaskServiceInterface
         $this->ticketRepo = $ticketRepo;
     }
 
-    public function getAll()
+    public function getAll($stageId)
     {
         $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
+    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
+    $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
+
+
         return $this->taskRepo->all();
     }
 
-    public function paginate()
+    public function paginate($stageId)
     {
-        $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
-        return $this->taskRepo->paginate();
+     $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']));
+    $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId)); 
+    $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
+    return $this->taskRepo->paginate();
     }
 
     public function create(array $data)
     {
+
         $task = $this->taskRepo->create($data);
         return $task->load(['stage', 'employeeAssigned', 'supervisor', 'taskContainer', 'ticket']);
     }

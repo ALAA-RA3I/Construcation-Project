@@ -20,6 +20,8 @@ class ProjectStageResource extends JsonResource
             'description' => $this->description,
             'expected_closed_date' => $this->expected_closed_date,
             'project_id' => $this->project_id,
+            'start_date' => $this->start_date,
+            'priority' => $this->priority,
             'project' => new ProjectResource($this->whenLoaded('project')),
             'tasks' => TaskResource::collection($this->whenLoaded('task')),
             'created_at' => $this->created_at,
