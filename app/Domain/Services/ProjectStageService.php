@@ -19,14 +19,14 @@ class ProjectStageService implements ProjectStageServiceInterface
 
     public function getAll($projectId)
     {
-        $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task']));
+        $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task.employeeAssigned.participant.user']));
     $this->projectStageRepo->pushCriteria(new \App\Criteria\ProjectCriteria($projectId)); 
         return $this->projectStageRepo->all();
     }
 
     public function paginate($projectId)
     {
-        $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task']));
+        $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task.employeeAssigned.participant.user']));
     $this->projectStageRepo->pushCriteria(new \App\Criteria\ProjectCriteria($projectId)); 
 
         return $this->projectStageRepo->paginate();
@@ -35,12 +35,12 @@ class ProjectStageService implements ProjectStageServiceInterface
     public function create(array $data)
     {
         $projectStage = $this->projectStageRepo->create($data);
-        return $projectStage->load(['project', 'task']);
+        return $projectStage->load(['project', 'task.employeeAssigned.participant.user']);
     }
 
     public function show($id)
     {
-        $projectStage = $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task']))->find($id);
+        $projectStage = $this->projectStageRepo->pushCriteria(new WithRelationsCriteria([ 'task.employeeAssigned.participant.user']))->find($id);
         return $projectStage;
     }
 
@@ -53,7 +53,7 @@ class ProjectStageService implements ProjectStageServiceInterface
         }
 
         $this->projectStageRepo->update($data, $id);
-        return $projectStage->fresh()->load([ 'task']);
+        return $projectStage->fresh()->load([ 'task.employeeAssigned.participant.user']);
     }
 
     public function delete($id)

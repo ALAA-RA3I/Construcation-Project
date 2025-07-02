@@ -2,6 +2,10 @@
 
 namespace App\Http\Requests\Task;
 
+use App\Domain\Enums\ApproveTaskEnum;
+use App\Domain\Enums\TaskStatusEnum;
+use BenSampo\Enum\Rules\Enum;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateTaskRequest extends FormRequest
@@ -23,7 +27,7 @@ class CreateTaskRequest extends FormRequest
     {
         return [
             'dead_line' => ['required', 'date'],
-            'status' => ['required', 'string', 'in:ToDo,Doing,pendingApproval,Done'],
+            'status' => ['required', new EnumValue(TaskStatusEnum::class)],
             'status_of_approval' => ['required'],
             'type_of_task' => ['required', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],

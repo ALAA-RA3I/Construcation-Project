@@ -28,8 +28,8 @@ class Task extends BaseModel
     protected function casts(): array
     {
         return [
-            'status' => TaskStatusEnum::class,
-            'status_of_approval' => ApproveTaskEnum::class,
+            // 'status' => TaskStatusEnum::class,
+            // 'status_of_approval' => ApproveTaskEnum::class,
             'dead_line' => 'date',
             'actual_date_of_closed' => 'date',
         ];
