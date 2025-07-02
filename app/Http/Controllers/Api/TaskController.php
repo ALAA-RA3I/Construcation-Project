@@ -64,6 +64,11 @@ class TaskController extends Controller
         return ApiResponse::success(null, 'Status of task has been changed successfully');
     }
 
+    public function markTaskAsDoneByExecutionEngineer($id) {
+        $this->taskService->markTaskAsDoneByExecutionEngineer($id);
+        return ApiResponse::success(null, 'Status of task has been changed successfully');
+    }
+
     public function refuseTask(CreateTicketRequest $request,$id) {
         $validatedData = TicketDTO::fromCreateRequest($request->validated());
         $ticket = $this->taskService->markTaskAsRefuse($validatedData,$id);

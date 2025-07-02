@@ -9,6 +9,7 @@ use BenSampo\Enum\Enum;
  * @method static static InProgress()
  * @method static static Done()
  * @method static static WaitingForTicket()
+ * @method static static WaitingApproval()
  */
 final class ApproveTaskEnum extends Enum
 {
@@ -16,4 +17,5 @@ final class ApproveTaskEnum extends Enum
     const InProgress = 'in_progress';
     const Done = 'done';
     const WaitingForTicket = 'waiting_for_ticket';
+    const WaitingApproval = 'waiting_for_approval';
 }

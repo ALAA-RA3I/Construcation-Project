@@ -95,4 +95,16 @@ class TaskService implements TaskServiceInterface
         return $this->ticketRepo->create($data);
     }
 
+    public function markTaskAsDoneByExecutionEngineer($id) {
+        $task = $this->taskRepo->findOrFail($id);
+        if (!$task) {
+            return new ModelNotFoundException('Not Found');
+        }
+        $updatedData = [
+            'status_of_approval' => ApproveTaskEnum::WaitingApproval()->value,
+        ];      
+        return $this->taskRepo->update($updatedData,$id);
+    }
+
+
 }

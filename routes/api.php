@@ -111,6 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
         Route::patch('updateStatusOfTask/{id}',[TaskController::class,'markTaskAsDone']);
         Route::patch('refuseTask/{id}' , [TaskController::class,'refuseTask']);
+        Route::patch('makeTaskAsDone/{id}' , [TaskController::class,'markTaskAsDoneByExecutionEngineer']);
     });
 
     Route::prefix('taskContainer')->group(function () {

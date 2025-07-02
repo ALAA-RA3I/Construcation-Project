@@ -12,4 +12,5 @@ interface TaskServiceInterface
     public function delete($id);
     public function markTaskAsDone($id);
     public function markTaskAsRefuse(array $data ,$id);
+    public function markTaskAsDoneByExecutionEngineer($id);
 }
