@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Domain\Services\BackupFileService;
 use App\Domain\Services\BaseServices\ActivationService;
 use App\Domain\Services\BaseServices\AuthService;
+use App\Domain\Services\BaseServices\ClientAuthService;
 use App\Domain\Services\BaseServices\Contracts\ActivationServiceInterface;
 use App\Domain\Services\BaseServices\Contracts\AuthServiceInterface;
+use App\Domain\Services\BaseServices\Contracts\ClientAuthServiceInterface;
 use App\Domain\Services\ConsultingCompanyService;
 use App\Domain\Services\ConsultingEngineerService;
 use App\Domain\Services\Contracts\BackupFileServiceInterface;
@@ -45,10 +47,12 @@ use App\Domain\Services\ProjectParticipantService;
 use App\Domain\Services\TicketService;
 use App\Infrastructure\Repositories\BackupFileRepository;
 use App\Infrastructure\Repositories\BaseRepository;
+use App\Infrastructure\Repositories\ClientRepository;
 use App\Infrastructure\Repositories\ConsultingCompanyRepository;
 use App\Infrastructure\Repositories\ConsultingEngineerRepository;
 use App\Infrastructure\Repositories\Contracts\BackupFileRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\BaseRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ClientRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ConsultingCompanyRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ConsultingEngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
@@ -124,6 +128,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BackupFileRepositoryInterface::class, BackupFileRepository::class);
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
         $this->app->bind(ProjectContainerRepositoryInterface::class, ProjectContainerRepository::class);
+        $this->app->bind(ClientRepositoryInterface::class, ClientRepository::class);
     }
 
     /**
@@ -154,6 +159,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TicketServiceInterface::class, TicketService::class);
         $this->app->bind(ProjectParticipantServiceInterface::class, ProjectParticipantService::class);
         $this->app->bind(ProjectContainerServiceInterface::class, ProjectContainerService::class);
+        $this->app->bind(ClientAuthServiceInterface::class, ClientAuthService::class);
     }
 
 
