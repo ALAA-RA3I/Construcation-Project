@@ -16,14 +16,9 @@ class ProjectSalesDetails extends BaseModel
         'video_url',
         'main_image',
         'diagram_image',
-        'type',
-        'progress_status',
-        'expected_cost',
-        'owner_id',
-        'consulting_company_id',
     ];
-    public function project() : BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

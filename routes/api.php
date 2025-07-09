@@ -21,6 +21,8 @@ use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\ProjectContainerController;
+use App\Http\Controllers\Api\ProjectSalesDetailsController;
+use App\Http\Controllers\Api\PropertyBookController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///// activation api /////
     Route::put('users/activate', [ActivationController::class, 'activate']);
     Route::put('users/deactivate', [ActivationController::class, 'deactivate']);
-///// activation api /////
+    ///// activation api /////
 
     Route::prefix('engineers')->group(function () {
         Route::get('/', [EngineerController::class, 'index']);
@@ -72,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix('realStateManager')->group(function () {
         Route::get('/all', [RealStateManagerController::class, 'getAll']);
-        Route::get('/',[RealStateManagerController::class, 'index']);
+        Route::get('/', [RealStateManagerController::class, 'index']);
         Route::get('/{id}', [RealStateManagerController::class, 'show']);
         Route::post('/create', [RealStateManagerController::class, 'create']);
         Route::put('update/{id}', [RealStateManagerController::class, 'update']);
@@ -110,9 +112,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
-        Route::patch('updateStatusOfTask/{id}',[TaskController::class,'markTaskAsDone']);
-        Route::patch('refuseTask/{id}' , [TaskController::class,'refuseTask']);
-        Route::patch('makeTaskAsDone/{id}' , [TaskController::class,'markTaskAsDoneByExecutionEngineer']);
+        Route::patch('updateStatusOfTask/{id}', [TaskController::class, 'markTaskAsDone']);
+        Route::patch('refuseTask/{id}', [TaskController::class, 'refuseTask']);
+        Route::patch('makeTaskAsDone/{id}', [TaskController::class, 'markTaskAsDoneByExecutionEngineer']);
     });
 
     Route::prefix('taskContainer')->group(function () {
@@ -148,50 +150,62 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [TicketController::class, 'create']);
         Route::put('update/{id}', [TicketController::class, 'update']);
         Route::delete('delete/{id}', [TicketController::class, 'delete']);
-        Route::patch('closingTicket/{id}',[TicketController::class,'changeTicketStatus']);
+        Route::patch('closingTicket/{id}', [TicketController::class, 'changeTicketStatus']);
     });
-    Route::prefix('projectFiles')->group(function() {
-        Route::get('/{id}/all', [ProjectFilesController::class,'getAllProjectFiles']);
-        Route::get('/paginated/{id}',[ProjectFilesController::class,'paginate']);
-        Route::get('/{id}',[ProjectFilesController::class,'show']);
-        Route::post('/{id}/create', [ProjectFilesController::class,'create']);
-        Route::delete('delete/{id}', [ProjectFilesController::class,'delete']);
+    Route::prefix('projectFiles')->group(function () {
+        Route::get('/{id}/all', [ProjectFilesController::class, 'getAllProjectFiles']);
+        Route::get('/paginated/{id}', [ProjectFilesController::class, 'paginate']);
+        Route::get('/{id}', [ProjectFilesController::class, 'show']);
+        Route::post('/{id}/create', [ProjectFilesController::class, 'create']);
+        Route::delete('delete/{id}', [ProjectFilesController::class, 'delete']);
     });
-    Route::prefix('BackupFiles')->group(function() {
-        Route::get('{id}/all',[BackupFilesController::class,'getAll']);
-        Route::get('{id}',[BackupFilesController::class,'show']);
-        Route::post('/create/{id}',[BackupFilesController::class,'create']);
+    Route::prefix('BackupFiles')->group(function () {
+        Route::get('{id}/all', [BackupFilesController::class, 'getAll']);
+        Route::get('{id}', [BackupFilesController::class, 'show']);
+        Route::post('/create/{id}', [BackupFilesController::class, 'create']);
     });
-    Route::prefix('projectFiles')->group(function() {
-        Route::get('/{id}/all', [ProjectFilesController::class,'getAllProjectFiles']);
-        Route::get('/paginated/{id}',[ProjectFilesController::class,'paginate']);
-        Route::get('/{id}',[ProjectFilesController::class,'show']);
-        Route::post('/{id}/create', [ProjectFilesController::class,'create']);
-        Route::delete('delete/{id}', [ProjectFilesController::class,'delete']);
+    Route::prefix('projectFiles')->group(function () {
+        Route::get('/{id}/all', [ProjectFilesController::class, 'getAllProjectFiles']);
+        Route::get('/paginated/{id}', [ProjectFilesController::class, 'paginate']);
+        Route::get('/{id}', [ProjectFilesController::class, 'show']);
+        Route::post('/{id}/create', [ProjectFilesController::class, 'create']);
+        Route::delete('delete/{id}', [ProjectFilesController::class, 'delete']);
     });
-    Route::prefix('BackupFiles')->group(function() {
-        Route::get('{id}/all',[BackupFilesController::class,'getAll']);
-        Route::get('{id}',[BackupFilesController::class,'show']);
-        Route::post('/create/{id}',[BackupFilesController::class,'create']);
+    Route::prefix('BackupFiles')->group(function () {
+        Route::get('{id}/all', [BackupFilesController::class, 'getAll']);
+        Route::get('{id}', [BackupFilesController::class, 'show']);
+        Route::post('/create/{id}', [BackupFilesController::class, 'create']);
     });
-    Route::prefix('projectContainer')->group(function() {
-        Route::post('/createNewItems/{id}',[ProjectContainerController::class,'createIfNotExisit']);
-        Route::post('/create/{id}',[ProjectContainerController::class,'createIfExisit']);
-        Route::get('/{id}/all',[ProjectContainerController::class,'getAll']);
-        Route::get('/{id}',[ProjectContainerController::class,'show']);
-        Route::delete('delete/{id}',[ProjectContainerController::class,'delete']);
-        Route::get('{id}/reports',[ProjectContainerController::class,'getProjectContainerAsReports']);
-        Route::get('{id}/warehouse',[ProjectContainerController::class,'getProjectWareHouseContent']);
+    Route::prefix('projectContainer')->group(function () {
+        Route::post('/createNewItems/{id}', [ProjectContainerController::class, 'createIfNotExisit']);
+        Route::post('/create/{id}', [ProjectContainerController::class, 'createIfExisit']);
+        Route::get('/{id}/all', [ProjectContainerController::class, 'getAll']);
+        Route::get('/{id}', [ProjectContainerController::class, 'show']);
+        Route::delete('delete/{id}', [ProjectContainerController::class, 'delete']);
+        Route::get('{id}/reports', [ProjectContainerController::class, 'getProjectContainerAsReports']);
+        Route::get('{id}/warehouse', [ProjectContainerController::class, 'getProjectWareHouseContent']);
         Route::post('{id}/addItemsToWarehouse', [ProjectContainerController::class, 'addItemsToWarehouse']);
-
     });
     Route::prefix('projectBills')->group(function () {
         Route::get('{projectId}', [ProjectBillsController::class, 'getBillsOfProject']);
         Route::get('DetailsOfBill/{billId}', [ProjectBillsController::class, 'getBillDetails']);
         Route::post('create', [ProjectBillsController::class, 'create']);
     });
+
+    Route::prefix('projectSalesDetails')->group(function () {
+        Route::get('/all', [ProjectSalesDetailsController::class, 'getAll']);
+        Route::get('/', [ProjectSalesDetailsController::class, 'index']);
+        Route::get('/{id}', [ProjectSalesDetailsController::class, 'show']);
+        Route::post('/create', [ProjectSalesDetailsController::class, 'create']);
+        Route::put('update/{id}', [ProjectSalesDetailsController::class, 'update']);
+        Route::delete('delete/{id}', [ProjectSalesDetailsController::class, 'delete']);
+    });
+    Route::prefix('propertyBook')->group(function () {
+        Route::get('/all', [PropertyBookController::class, 'getAll']);
+        Route::get('/', [PropertyBookController::class, 'index']);
+        Route::get('/{id}', [PropertyBookController::class, 'show']);
+        Route::post('/create', [PropertyBookController::class, 'create']);
+        Route::put('update/{id}', [PropertyBookController::class, 'update']);
+        Route::delete('delete/{id}', [PropertyBookController::class, 'delete']);
+    });
 });
-
-
-
-
