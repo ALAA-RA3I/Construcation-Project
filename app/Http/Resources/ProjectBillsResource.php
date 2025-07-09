@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Resources\ProjectContainer;
+namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\ItemResource;
 
-class ProjectContainerResource extends JsonResource
+class ProjectBillsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +16,11 @@ class ProjectContainerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'expected_quantity' => $this->expected_quantity,
+            'description' => $this->description,
+            'date_of_payment' => $this->date_of_payment,
             'project_id' => $this->project_id,
-            'items_id' => new ItemResource($this->whenLoaded('items')),
+            'total_cost' => $this->total_cost,
+            'details' => ProjectBillDetailsResource::collection($this->whenLoaded('billsDetails'))
         ];
     }
 }

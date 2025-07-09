@@ -8,7 +8,7 @@ class ItemDTO {
         return [
             'name' => $data['name'],
             'category' => $data['category'],
-            'price' => $data['price'],
+            'unit' => $data['unit'],
         ];
     }
 
@@ -16,7 +16,7 @@ class ItemDTO {
         return [
             'name' => $data['name'],
             'category' => $data['category'],
-            'price' => $data['price'],
+            'unit' => $data['unit'],
         ];
     }
 }

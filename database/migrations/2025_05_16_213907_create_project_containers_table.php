@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('project_containers', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->integer('quantity-available');
-            $table->integer('expected-quantity');
-            $table->integer('consumed-quantity');
+            $table->integer('quantity-available')->default(0);
+            $table->integer('expected-quantity')->default(0);
+            $table->integer('consumed-quantity')->default(0);
             $table->integer('remaining-quantity');
             $table->integer('required-quantity');
             $table->integer('items_id');

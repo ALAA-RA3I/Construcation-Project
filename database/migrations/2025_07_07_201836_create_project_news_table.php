@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_bills', function (Blueprint $table) {
+        Schema::create('project_news', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->text('description')->nullable();
-            $table->date('date_of_payment');
             $table->integer('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->cascadeOnDelete();
+            $table->string('path_file');
+            $table->string('description');
             $this->addBaseColumns($table);
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_bills');
+        Schema::dropIfExists('project_news');
     }
 };

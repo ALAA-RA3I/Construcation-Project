@@ -1,23 +1,18 @@
 <?php
 
-use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    use AddBaseColumnsTrait;
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->integer('id')->autoIncrement();
-            $table->string('name');
-            $table->string('category');
-            $this->addBaseColumns($table);
+        Schema::table('items', function (Blueprint $table) {
+            $table->string('unit')->after('category');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::table('items', function (Blueprint $table) {
+            $table->dropColumn('unit');
+        });
     }
 };

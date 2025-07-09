@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id')->autoIncrement();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('national_id');
             $table->string('api_token');
             $table->boolean('is_active')->default(1);
-            
+
             $this->addBaseColumns($table);
         });
     }

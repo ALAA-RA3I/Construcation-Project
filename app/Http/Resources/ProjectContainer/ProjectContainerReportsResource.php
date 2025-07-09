@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\ProjectContainer;
 
+use App\Http\Resources\ItemResource;
+use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\ItemResource;
 
-class ProjectContainerResource extends JsonResource
+class ProjectContainerReportsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +18,11 @@ class ProjectContainerResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'quantity_available' => $this->quantity_available,
             'expected_quantity' => $this->expected_quantity,
+            'consumed_quantity' => $this->consumed_quantity,
             'project_id' => $this->project_id,
-            'items_id' => new ItemResource($this->whenLoaded('items')),
+            'item' => new ItemResource($this->whenLoaded('items')),
         ];
     }
 }

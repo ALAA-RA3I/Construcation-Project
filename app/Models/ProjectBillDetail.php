@@ -9,13 +9,13 @@ class ProjectBillDetail extends BaseModel
 {
     protected $fillable = [
         'item',
-        'quantity',
+        'note',
         'cost',
-        'project-bills-id',
+        'project_bill_id',
     ];
 
     public function projectBill () : BelongsTo
     {
-        return $this->belongsTo(ProjectBill::class,'project-bills-id');
+        return $this->belongsTo(ProjectBill::class,'project_bills_id');
     }
 }

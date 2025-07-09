@@ -3,6 +3,8 @@
 namespace App\Domain\Services;
 
 use App\Criteria\AdvancedDynamicFilterSearchCriteria;
+use App\Criteria\WhereCriteria;
+use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\ProjectContainerRepositoryInterface;
 use App\Domain\Services\Contracts\ProjectContainerServiceInterface;
 use App\Infrastructure\Repositories\Contracts\ItemRepositoryInterface;
@@ -33,7 +35,6 @@ class ProjectContainerService implements ProjectContainerServiceInterface
     {
         return $this->projectContainerRepo->findWhere(['project_id' => $id]);
     }
-
     public function paginate()
     {
         return $this->projectContainerRepo->paginate();
@@ -47,31 +48,27 @@ class ProjectContainerService implements ProjectContainerServiceInterface
                 $itemData = Arr::only($data, [
                     'name',
                     'category',
-                    'price'
+                    'unit',
                 ]);
                 $item = $this->itemRepo->create($itemData);
                 $projectContainerData = Arr::only($data, [
-                    'quantity-available',
-                    'expected-quantity',
-                    'consumed-quantity',
-                    'required-quantity',
-                    'remaining-quantity',
+                    'expected_quantity',
                 ]);
                 $projectContainerData['project_id'] = $project->id;
                 $projectContainerData['items_id'] = $item->id;
                 $itemCreated = $this->projectContainerRepo->create($projectContainerData);
-            }catch(ModelNotFoundException $e) {
+            }
+            catch(ModelNotFoundException $e) {
                 return $e->getMessage();
             }
-
             return $itemCreated;
         });
     }
 
-    public function createIfExisit(array $data,$projectID,$itemID) {
+    public function createIfExisit(array $data,$id) {
         try {
-            $project = $this->projectRepo->findOrFail($projectID);
-            $item = $this->itemRepo->findOrFail($itemID);
+            $project = $this->projectRepo->findOrFail($id);
+            $item = $this->itemRepo->findOrFail($data['items_id']);
 
             $data['project_id'] = $project->id;
             $data['items_id'] = $item->id;
@@ -79,8 +76,8 @@ class ProjectContainerService implements ProjectContainerServiceInterface
             return $this->projectContainerRepo->create($data);
         } catch (ModelNotFoundException $e) {
             Log::error("Project or Item not found", [
-                'projectID' => $projectID,
-                'itemID' => $itemID,
+                'projectID' => $id,
+                'itemID' => $item->id,
             ]);
             throw $e; // أو رجع response مناسب
         }
@@ -91,7 +88,7 @@ class ProjectContainerService implements ProjectContainerServiceInterface
         return $this->projectContainerRepo->find($id);
     }
 
-    public function update($id, array $data)
+    public function update( array $data,$id)
     {
         return $this->projectContainerRepo->update($data, $id);
     }
@@ -100,4 +97,47 @@ class ProjectContainerService implements ProjectContainerServiceInterface
     {
         return $this->projectContainerRepo->delete($id);
     }
+    public function getProjectContainerReports($id)
+    {
+        return $this->projectContainerRepo
+            ->pushCriteria(new WithRelationsCriteria(['items']))
+            ->findWhere(['project_id' => $id]);
+    }
+    public function getProjectWareHouse($id)
+    {
+        return $this->projectContainerRepo
+            ->pushCriteria(new WithRelationsCriteria(['items']))
+            ->findWhere([
+                ['project_id', '=', $id],
+                ['quantity_available', '>', 0],
+            ]);
+    }
+    public function addItemsToWarehouse($projectId,  $data)
+    {
+        foreach ($data['items'] as $item) {
+            // التحقق من وجود السطر الحالي
+            $existing = $this->projectContainerRepo
+                ->findWhere([
+                    ['project_id', '=', $projectId],
+                    ['items_id', '=', $item['item_id']]
+                ])->first();
+
+            if ($existing) {
+                // التحديث
+                $this->projectContainerRepo->update([
+                    'quantity_available' => $existing->quantity_available + $item['quantity'],
+                ], $existing->id);
+            } else {
+                // إنشاء سطر جديد
+                $this->projectContainerRepo->create([
+                    'project_id' => $projectId,
+                    'items_id' => $item['item_id'],
+                    'quantity_available' => $item['quantity'],
+                    'expected_quantity' => 0,
+                    'consumed_quantity' => 0,
+                ]);
+            }
+        }
+    }
+
 }

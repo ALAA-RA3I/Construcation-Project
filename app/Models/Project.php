@@ -49,12 +49,6 @@ class Project extends BaseModel
     {
         return $this->hasMany(ProjectStage::class, 'project_id');
     }
-
-    public function projectBills(): HasMany
-    {
-        return $this->hasMany(ProjectBill::class, 'project_id');
-    }
-
     public function projectFiles(): HasMany
     {
         return $this->hasMany(ProjectFile::class, 'project_id');
@@ -64,7 +58,10 @@ class Project extends BaseModel
     {
         return $this->hasMany(ProjectContainer::class, 'project_id');
     }
-
+    public function salesDetails() : HasOne
+    {
+        return $this->hasOne(ProjectSalesDetails::class,'project_id');
+    }
     public function media(): HasMany
     {
         return $this->hasMany(Media::class, 'project_id');
@@ -78,5 +75,21 @@ class Project extends BaseModel
     public function propertyBook(): HasMany
     {
         return $this->hasMany(PropertyBook::class, 'project_id');
+    }
+    public function projectMedia() : HasMany
+    {
+        return $this->hasMany(ProjectMedia::class,'project_id');
+    }
+    public function projectNews() : HasMany
+    {
+        return $this->hasMany(ProjectNews::class,'project_id');
+    }
+    public function projectBills(): HasMany
+    {
+        return $this->hasMany(ProjectBill::class, 'project_id');
+    }
+    public function getTotalCostAttribute()
+    {
+        return $this->projectBills->flatMap->details->sum('cost');
     }
 }

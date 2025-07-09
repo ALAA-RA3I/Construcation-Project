@@ -23,7 +23,7 @@ return new class extends Migration
             $table->longText('description');
             $table->string('location');
             $table->integer('area');
-            $table->integer('number_of_floor');
+            $table->integer('number_of_floor')->nullable();
             $table->enum('status_of_sale', StatusOfSaleEnum::getValues())->default(StatusOfSaleEnum::NotForSale);
             $table->date('expected_date_of_completed');
             $table->enum('type', PropertyTypeEnum::getValues())->default(PropertyTypeEnum::Commercial);

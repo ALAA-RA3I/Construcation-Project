@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('project_bill_details', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('item');
-            $table->integer('quantity');
-            $table->integer('cost');
-            $table->integer('project-bills-id');
-            $table->foreign('project-bills-id')->references('id')->on('project_bills')->cascadeOnDelete();
+            $table->text('note')->nullable();
+            $table->decimal('cost', 12, 2);
+            $table->Integer('project_bill_id');
+            $table->foreign('project_bill_id')->references('id')->on('project_bills')->cascadeOnDelete();
             $this->addBaseColumns($table);
         });
     }

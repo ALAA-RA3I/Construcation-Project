@@ -24,7 +24,7 @@ class CreateItemRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'price' => 'required|integer|min:0',
+            'unit' => 'required|string|max:20',
         ];
     }
 }
