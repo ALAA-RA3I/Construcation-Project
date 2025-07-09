@@ -3,22 +3,46 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PropertyBook extends BaseModel
 {
+
     protected $fillable = [
-        'area',
-        'number_of_room',
-        'floor',
-        'cost',
+        'project_id',
+        'model',
+        'space',
+        'price',
         'description',
         'payment_period',
-        'project_id',
+        'number_of_rooms',
+        'number_of_bathrooms',
+        'direction',
+        'diagram_image',
     ];
 
-    public function project() : BelongsTo
+
+
+    /**
+     * العلاقة مع المشروع
+     */
+    public function project()
     {
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * العلاقة مع الشقق (PropertyUnits) - إن كنت ستنشئها لاحقًا
+     */
+    public function units()
+    {
+        return $this->hasMany(PropertyUnit::class);
+    }
+
+    /**
+     * العلاقة مع الفواتير أو الأقساط - إن وجدت
+     */
+    public function bills()
+    {
+        return $this->hasMany(PropertyBookBill::class);
     }
 }

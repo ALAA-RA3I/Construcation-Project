@@ -22,11 +22,8 @@ class CreateContainerRequset extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity-available' => 'required|numeric|min:0',
-            'expected-quantity' => 'nullable|numeric|min:0',
-            'consumed-quantity' => 'nullable|numeric|min:0',
-            'required-quantity' => 'nullable|numeric|min:0',
-            'remaining-quantity' => 'nullable|numeric|min:0',
+            'expected_quantity' => 'required|numeric|min:0',
+            'items_id' => 'required|exists:items,id',
         ];
     }
 }

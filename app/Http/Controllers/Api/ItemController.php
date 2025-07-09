@@ -16,7 +16,7 @@ class ItemController extends Controller
     protected $itemService;
 
     public function __construct(ItemServiceInterface $itemService)
-    {   
+    {
         $this->itemService = $itemService;
     }
 
@@ -38,7 +38,7 @@ class ItemController extends Controller
 
     public function show($id) {
         $item = $this->itemService->show($id);
-        if (!$item) 
+        if (!$item)
             return ApiResponse::error('Item not found', 404);
         return ApiResponse::success(new ItemResource($item));
     }
@@ -46,14 +46,13 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, $id) {
         $validatedData = ItemDTO::fromUpdateRequest($request->validated());
         $item = $this->itemService->update($id, $validatedData);
-        if (!$item) 
+        if (!$item)
             return ApiResponse::error('Something went wrong :(', 400);
         return ApiResponse::success(new ItemResource($item), 'Item updated successfully');
     }
 
     public function delete($id) {
         $deleted = $this->itemService->delete($id);
-
         if(!$deleted)
             return ApiResponse::error('Something went wrong :(', 400);
         return ApiResponse::success(null, 'Item deleted successfully');

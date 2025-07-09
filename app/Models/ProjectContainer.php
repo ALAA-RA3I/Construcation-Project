@@ -8,11 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProjectContainer extends BaseModel
 {
     protected $fillable = [
-        'quantity-available',
-        'expected-quantity',
-        'consumed-quantity',
-        'remaining-quantity',
-        'required-quantity',
+        'quantity_available',
+        'expected_quantity',
+        'consumed_quantity',
         'items_id',
         'project_id',
     ];

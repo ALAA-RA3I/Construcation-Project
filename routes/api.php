@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EngineerController;
 use App\Http\Controllers\Api\EngineerSpecializationController;
 use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\Owner\OwnerController;
+use App\Http\Controllers\Api\ProjectBillsController;
 use App\Http\Controllers\Api\ProjectFilesController;
 
 use App\Http\Controllers\Api\ProjectController;
@@ -19,7 +20,7 @@ use App\Http\Controllers\Api\RealStateManagerController;
 use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
-use App\Http\Controllers\Api\ProjectContainer;
+use App\Http\Controllers\Api\ProjectContainerController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -173,14 +174,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}',[BackupFilesController::class,'show']);
         Route::post('/create/{id}',[BackupFilesController::class,'create']);
     });
+    Route::prefix('projectContainer')->group(function() {
+        Route::post('/createNewItems/{id}',[ProjectContainerController::class,'createIfNotExisit']);
+        Route::post('/create/{id}',[ProjectContainerController::class,'createIfExisit']);
+        Route::get('/{id}/all',[ProjectContainerController::class,'getAll']);
+        Route::get('/{id}',[ProjectContainerController::class,'show']);
+        Route::delete('delete/{id}',[ProjectContainerController::class,'delete']);
+        Route::get('{id}/reports',[ProjectContainerController::class,'getProjectContainerAsReports']);
+        Route::get('{id}/warehouse',[ProjectContainerController::class,'getProjectWareHouseContent']);
+        Route::post('{id}/addItemsToWarehouse', [ProjectContainerController::class, 'addItemsToWarehouse']);
+
+    });
+    Route::prefix('projectBills')->group(function () {
+        Route::get('{projectId}', [ProjectBillsController::class, 'getBillsOfProject']);
+        Route::get('DetailsOfBill/{billId}', [ProjectBillsController::class, 'getBillDetails']);
+        Route::post('create', [ProjectBillsController::class, 'create']);
+    });
 });
 
-Route::prefix('ProjectContainer')->group(function() {
-    Route::post('/createNewItems/{id}',[ProjectContainer::class,'createIfNotExisit']);
-    Route::post('/create/{id1}/{id2}',[ProjectContainer::class,'createIfExisit']);
-    Route::get('/{id}/all',[ProjectContainer::class,'getAll']);
-    Route::get('/{id}',[ProjectContainer::class,'show']);
-    Route::delete('delete/{id}',[ProjectContainer::class,'delete']);
-});
+
 
 

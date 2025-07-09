@@ -1,6 +1,5 @@
 <?php
 
-use App\Domain\Enums\MediaTypeEnum;
 use App\Traits\AddBaseColumnsTrait;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,14 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('project_sales_details', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
-            $table->string('path');
-            $table->string('description');
-            $table->boolean('is_main');
-            $table->enum('type', MediaTypeEnum::getValues())->default(MediaTypeEnum::Project); // Optional: set default
             $table->integer('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->cascadeOnDelete();
+            $table->string('main_title')->nullable();
+            $table->longText('marketing_description')->nullable();
+            $table->string('location_link')->nullable();
+            $table->string('address')->nullable();
+            $table->string('video_url')->nullable();
+            $table->string('main_image')->nullable();
+            $table->string('diagram_image')->nullable();
             $this->addBaseColumns($table);
         });
     }
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('project_sales_details');
     }
 };

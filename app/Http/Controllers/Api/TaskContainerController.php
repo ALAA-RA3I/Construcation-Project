@@ -15,7 +15,7 @@ class TaskContainerController extends Controller
     protected $taskContainerService;
 
     public function __construct(TaskContainerServiceInterface $taskContainerService)
-    {   
+    {
         $this->taskContainerService = $taskContainerService;
     }
 
@@ -43,7 +43,7 @@ class TaskContainerController extends Controller
     public function update(UpdateTaskContainerRequest $data, $id) {
         $validatedData = TaskContainerDTO::fromUpdateRequest($data->validated());
         $taskContainer = $this->taskContainerService->update($id, $validatedData);
-        if (!$taskContainer) 
+        if (!$taskContainer)
             return ApiResponse::error('Something went wrong :(', 400);
         return ApiResponse::success(new TaskContainerResource($taskContainer), 'TaskContainer updated successfully');
     }

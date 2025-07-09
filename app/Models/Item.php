@@ -10,7 +10,7 @@ class Item extends BaseModel
     protected $fillable = [
         'name',
         'category',
-        'price',
+        'unit',
     ];
 
     public function projectContainer() : HasMany

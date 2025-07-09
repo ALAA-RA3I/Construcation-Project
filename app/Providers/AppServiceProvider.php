@@ -17,6 +17,8 @@ use App\Domain\Services\Contracts\ConsultingEngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerServiceInterface;
 use App\Domain\Services\Contracts\EngineerSpecializationServiceInterface;
 use App\Domain\Services\Contracts\Owner\OwnerServiceInterface;
+use App\Domain\Services\Contracts\ProjectBillDetailServiceInterface;
+use App\Domain\Services\Contracts\ProjectBillServiceInterface;
 use App\Domain\Services\Contracts\ProjectFileServiceInterface;
 use App\Domain\Services\Contracts\ProjectManagerServiceInterface;
 use App\Domain\Services\Contracts\ProjectServiceInterface;
@@ -29,6 +31,8 @@ use App\Domain\Services\Contracts\UserServiceInterface;
 use App\Domain\Services\EngineerService;
 use App\Domain\Services\EngineerSpecializationService;
 use App\Domain\Services\Owner\OwnerService;
+use App\Domain\Services\ProjectBillDetailService;
+use App\Domain\Services\ProjectBillService;
 use App\Domain\Services\ProjectManagerService;
 use App\Domain\Services\ProjectService;
 use App\Domain\Services\ProjectStageService;
@@ -59,6 +63,8 @@ use App\Infrastructure\Repositories\Contracts\EngineerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\EngineerSpecializationRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ItemRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\OwnerRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ProjectBillDetailRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\ProjectBillRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectContainerRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectFileRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectManagerRepositoryInterface;
@@ -74,6 +80,8 @@ use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
 use App\Infrastructure\Repositories\ItemRepository;
 use App\Infrastructure\Repositories\OwnerRepository;
+use App\Infrastructure\Repositories\ProjectBillDetailRepository;
+use App\Infrastructure\Repositories\ProjectBillRepository;
 use App\Infrastructure\Repositories\ProjectContainerRepository;
 use App\Infrastructure\Repositories\ProjectManagerRepository;
 use App\Infrastructure\Repositories\ProjectParticipantRepository;
@@ -129,6 +137,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
         $this->app->bind(ProjectContainerRepositoryInterface::class, ProjectContainerRepository::class);
         $this->app->bind(ClientRepositoryInterface::class, ClientRepository::class);
+        $this->app->bind(ProjectBillRepositoryInterface::class, ProjectBillRepository::class);
+        $this->app->bind(ProjectBillDetailRepositoryInterface::class, ProjectBillDetailRepository::class);
+
+
     }
 
     /**
@@ -160,6 +172,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectParticipantServiceInterface::class, ProjectParticipantService::class);
         $this->app->bind(ProjectContainerServiceInterface::class, ProjectContainerService::class);
         $this->app->bind(ClientAuthServiceInterface::class, ClientAuthService::class);
+        $this->app->bind(ProjectBillServiceInterface::class, ProjectBillService::class);
+        $this->app->bind(ProjectBillDetailServiceInterface::class, ProjectBillDetailService::class);
     }
 
 

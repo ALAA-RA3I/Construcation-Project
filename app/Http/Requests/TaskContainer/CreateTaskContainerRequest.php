@@ -22,7 +22,7 @@ class CreateTaskContainerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity' => ['required', 'numeric', 'min:0'],
             'task_id' => ['required', 'integer', 'exists:tasks,id'],
             'items_id' => ['required', 'integer', 'exists:items,id'],
         ];

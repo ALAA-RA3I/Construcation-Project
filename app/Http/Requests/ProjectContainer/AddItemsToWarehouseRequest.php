@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\ProjectContainer;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateItemsIfNotFoundRequset extends FormRequest
+class AddItemsToWarehouseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,15 +18,14 @@ class CreateItemsIfNotFoundRequset extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'unit' => 'required|string|max:20',
-            'expected_quantity' => 'required|numeric|min:0',
+            'items' => ['required', 'array'],
+            'items.*.item_id' => ['required', 'exists:items,id'],
+            'items.*.quantity' => ['required', 'numeric', 'min:0']
         ];
     }
 }
