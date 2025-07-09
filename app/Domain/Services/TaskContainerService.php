@@ -17,15 +17,22 @@ class TaskContainerService implements TaskContainerServiceInterface
         $this->taskContainerRepo = $taskContainerRepo;
     }
 
-    public function getAll()
+    public function getAll($taskId = null)
     {
+
         $this->taskContainerRepo->pushCriteria(new WithRelationsCriteria(['task', 'item']));
+        if ($taskId) {
+            return $this->taskContainerRepo->findWhere(['task_id' => $taskId]);
+        }
         return $this->taskContainerRepo->all();
     }
 
-    public function paginate()
+    public function paginate($taskId = null)
     {
         $this->taskContainerRepo->pushCriteria(new WithRelationsCriteria(['task', 'item']));
+        if ($taskId) {
+            return $this->taskContainerRepo->findWhere(['task_id' => $taskId]);
+        }
         return $this->taskContainerRepo->paginate();
     }
 
