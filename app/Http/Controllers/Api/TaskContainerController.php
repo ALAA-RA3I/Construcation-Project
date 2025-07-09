@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskContainer\CreateTaskContainerRequest;
 use App\Http\Requests\TaskContainer\UpdateTaskContainerRequest;
 use App\Http\Resources\TaskContainerResource;
+use Illuminate\Http\Request;
 
 class TaskContainerController extends Controller
 {
@@ -19,13 +20,16 @@ class TaskContainerController extends Controller
         $this->taskContainerService = $taskContainerService;
     }
 
-    public function index() {
-        $taskContainers = $this->taskContainerService->paginate();
+    public function index(Request $request) {
+        $taskId = $request->query('task_id');
+        $taskContainers = $this->taskContainerService->paginate($taskId);
         return ApiResponse::success(TaskContainerResource::collection($taskContainers));
     }
 
-    public function getAll() {
-        $taskContainers = $this->taskContainerService->getAll();
+    public function getAll(Request $request)
+    {
+        $taskId = $request->query('task_id');
+        $taskContainers = $this->taskContainerService->getAll($taskId);
         return ApiResponse::success(TaskContainerResource::collection($taskContainers));
     }
 
