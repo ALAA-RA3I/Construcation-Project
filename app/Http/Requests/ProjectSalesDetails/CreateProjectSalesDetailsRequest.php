@@ -27,9 +27,9 @@ class CreateProjectSalesDetailsRequest extends FormRequest
             'marketing_description' => ['nullable', 'string'],
             'location_link' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
-            'video_url' => ['nullable', 'string', 'max:255'],
-            'main_image' => ['nullable', 'string', 'max:255'],
-            'diagram_image' => ['nullable', 'string', 'max:255'],
+            'video_url' => ['nullable', 'file', 'mimes:mp4,avi,mov,wmv,flv,webm', 'max:102400'], // 100MB max for videos
+            'main_image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:10240'], // 10MB max
+            'diagram_image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'], // 10MB max
         ];
     }
 }

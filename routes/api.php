@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\ProjectContainerController;
 use App\Http\Controllers\Api\ProjectSalesDetailsController;
 use App\Http\Controllers\Api\PropertyBookController;
+use App\Http\Controllers\Api\PropertyBookBillController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -207,5 +208,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [PropertyBookController::class, 'create']);
         Route::put('update/{id}', [PropertyBookController::class, 'update']);
         Route::delete('delete/{id}', [PropertyBookController::class, 'delete']);
+    });
+    Route::prefix('propertyBookBill')->group(function () {
+        Route::get('/all', [PropertyBookBillController::class, 'getAll']);
+        Route::get('/', [PropertyBookBillController::class, 'index']);
+        Route::get('/{id}', [PropertyBookBillController::class, 'show']);
+        Route::post('/create', [PropertyBookBillController::class, 'create']);
+        Route::put('update/{id}', [PropertyBookBillController::class, 'update']);
+        Route::delete('delete/{id}', [PropertyBookBillController::class, 'delete']);
     });
 });

@@ -47,11 +47,13 @@ use App\Domain\Services\Contracts\ProjectParticipantServiceInterface;
 use App\Domain\Services\Contracts\TicketServiceInterface;
 use App\Domain\Services\Contracts\ProjectSalesDetailsServiceInterface;
 use App\Domain\Services\Contracts\PropertyBookServiceInterface;
+use App\Domain\Services\Contracts\PropertyBookBillServiceInterface;
 use App\Domain\Services\ItemService;
 use App\Domain\Services\ProjectContainerService;
 use App\Domain\Services\ProjectParticipantService;
 use App\Domain\Services\ProjectSalesDetailsService;
 use App\Domain\Services\PropertyBookService;
+use App\Domain\Services\PropertyBookBillService;
 use App\Domain\Services\TicketService;
 use App\Infrastructure\Repositories\BackupFileRepository;
 use App\Infrastructure\Repositories\BaseRepository;
@@ -81,6 +83,7 @@ use App\Infrastructure\Repositories\Contracts\TaskRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\TicketRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\ProjectSalesDetailsRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\PropertyBookRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\PropertyBookBillRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserRepositoryInterface;
 use App\Infrastructure\Repositories\EngineerRepository;
 use App\Infrastructure\Repositories\EngineerSpecializationRepository;
@@ -99,6 +102,7 @@ use App\Infrastructure\Repositories\TaskContainerRepository;
 use App\Infrastructure\Repositories\TaskRepository;
 use App\Infrastructure\Repositories\ProjectSalesDetailsRepository;
 use App\Infrastructure\Repositories\PropertyBookRepository;
+use App\Infrastructure\Repositories\PropertyBookBillRepository;
 use App\Infrastructure\Repositories\TicketRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -149,6 +153,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectBillDetailRepositoryInterface::class, ProjectBillDetailRepository::class);
         $this->app->bind(ProjectSalesDetailsRepositoryInterface::class, ProjectSalesDetailsRepository::class);
         $this->app->bind(PropertyBookRepositoryInterface::class, PropertyBookRepository::class);
+        $this->app->bind(PropertyBookBillRepositoryInterface::class, PropertyBookBillRepository::class);
     }
 
     /**
@@ -184,6 +189,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectBillDetailServiceInterface::class, ProjectBillDetailService::class);
         $this->app->bind(ProjectSalesDetailsServiceInterface::class, ProjectSalesDetailsService::class);
         $this->app->bind(PropertyBookServiceInterface::class, PropertyBookService::class);
+        $this->app->bind(PropertyBookBillServiceInterface::class, PropertyBookBillService::class);
     }
 
 

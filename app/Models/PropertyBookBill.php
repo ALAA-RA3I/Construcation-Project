@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Domain\Enums\BookBillTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 
-class PropertyBookBill extends Model
+class PropertyBookBill extends BaseModel
 {
 
 

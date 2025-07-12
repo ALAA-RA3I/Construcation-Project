@@ -21,9 +21,9 @@ class ProjectSalesDetailsResource extends JsonResource
             'marketing_description' => $this->marketing_description,
             'location_link' => $this->location_link,
             'address' => $this->address,
-            'video_url' => $this->video_url,
-            'main_image' => $this->main_image,
-            'diagram_image' => $this->diagram_image,
+            'video_url' => $this->video_url ? asset('storage/' . $this->video_url) : null,
+            'main_image' => $this->main_image ? asset('storage/' . $this->main_image) : null,
+            'diagram_image' => $this->diagram_image ? asset('storage/' . $this->diagram_image) : null,
             'project' => new ProjectResource($this->whenLoaded('project')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

@@ -13,9 +13,9 @@ class ProjectSalesDetailsDTO
             'marketing_description' => $data['marketing_description'] ?? null,
             'location_link' => $data['location_link'] ?? null,
             'address' => $data['address'] ?? null,
-            'video_url' => $data['video_url'] ?? null,
-            'main_image' => $data['main_image'] ?? null,
-            'diagram_image' => $data['diagram_image'] ?? null,
+            'video_url' => isset($data['video_url']) ? $data['video_url'] : null,
+            'main_image' => isset($data['main_image']) ? $data['main_image'] : null,
+            'diagram_image' => isset($data['diagram_image']) ? $data['diagram_image'] : null,
         ];
     }
 
@@ -27,9 +27,9 @@ class ProjectSalesDetailsDTO
             'marketing_description' => $data['marketing_description'] ?? null,
             'location_link' => $data['location_link'] ?? null,
             'address' => $data['address'] ?? null,
-            'video_url' => $data['video_url'] ?? null,
-            'main_image' => $data['main_image'] ?? null,
-            'diagram_image' => $data['diagram_image'] ?? null,
+            'video_url' => isset($data['video_url']) ? $data['video_url'] : null,
+            'main_image' => isset($data['main_image']) ? $data['main_image'] : null,
+            'diagram_image' => isset($data['diagram_image']) ? $data['diagram_image'] : null,
         ];
     }
 }
