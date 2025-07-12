@@ -5,12 +5,15 @@ namespace App\Domain\Services;
 use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\PropertyBookRepositoryInterface;
 use App\Domain\Services\Contracts\PropertyBookServiceInterface;
+use App\Traits\HasFileHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PropertyBookService implements PropertyBookServiceInterface
 {
+    use HasFileHandler;
     protected $propertyBookRepo;
 
     public function __construct(PropertyBookRepositoryInterface $propertyBookRepo)
@@ -34,6 +37,17 @@ class PropertyBookService implements PropertyBookServiceInterface
     {
         DB::beginTransaction();
         try {
+            // Handle diagram_image file upload
+            if (isset($data['diagram_image']) && $data['diagram_image'] instanceof \Illuminate\Http\UploadedFile) {
+                $diagramImagePath = $this->storeFile($data['diagram_image'], 'property-books', 'public');
+                if (!$diagramImagePath) {
+                    Log::error("Diagram image storage failed.");
+                    DB::rollBack();
+                    return false;
+                }
+                $data['diagram_image'] = $diagramImagePath;
+            }
+
             $propertyBook = $this->propertyBookRepo->create($data);
             DB::commit();
             return $propertyBook->load(['project']);
@@ -57,6 +71,21 @@ class PropertyBookService implements PropertyBookServiceInterface
             throw new EntityNotFoundException('Property Book not found');
         }
 
+        // Handle diagram_image file upload
+        if (isset($data['diagram_image']) && $data['diagram_image'] instanceof \Illuminate\Http\UploadedFile) {
+            // Delete old file if exists
+            if ($propertyBook->diagram_image && $this->fileExists($propertyBook->diagram_image)) {
+                $this->deleteFile($propertyBook->diagram_image);
+            }
+
+            $diagramImagePath = $this->storeFile($data['diagram_image'], 'property-books', 'public');
+            if (!$diagramImagePath) {
+                Log::error("Diagram image storage failed during update.");
+                return false;
+            }
+            $data['diagram_image'] = $diagramImagePath;
+        }
+
         $this->propertyBookRepo->update($data, $id);
         return $propertyBook->fresh()->load(['project']);
     }
@@ -71,6 +100,11 @@ class PropertyBookService implements PropertyBookServiceInterface
                 return false;
             }
 
+            // Delete associated files
+            if ($propertyBook->diagram_image && $this->fileExists($propertyBook->diagram_image)) {
+                $this->deleteFile($propertyBook->diagram_image);
+            }
+
             // Soft delete the property book
             $propertyBook->delete();
 
@@ -81,4 +115,4 @@ class PropertyBookService implements PropertyBookServiceInterface
             return false;
         }
     }
-} 
+}

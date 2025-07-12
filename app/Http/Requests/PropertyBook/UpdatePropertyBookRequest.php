@@ -31,7 +31,7 @@ class UpdatePropertyBookRequest extends FormRequest
             'number_of_rooms' => ['nullable', 'integer', 'min:0'],
             'number_of_bathrooms' => ['nullable', 'integer', 'min:0'],
             'direction' => ['nullable', 'string', 'max:255'],
-            'diagram_image' => ['nullable', 'string', 'max:255'],
+            'diagram_image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'], // 10MB max
         ];
     }
 }

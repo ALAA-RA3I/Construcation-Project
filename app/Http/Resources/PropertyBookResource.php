@@ -25,7 +25,7 @@ class PropertyBookResource extends JsonResource
             'number_of_rooms' => $this->number_of_rooms,
             'number_of_bathrooms' => $this->number_of_bathrooms,
             'direction' => $this->direction,
-            'diagram_image' => $this->diagram_image,
+            'diagram_image' => $this->diagram_image ? asset('storage/' . $this->diagram_image) : null,
             'project' => new ProjectResource($this->whenLoaded('project')),
             // 'units' => PropertyUnitResource::collection($this->whenLoaded('units')),
             // 'bills' => PropertyBookBillResource::collection($this->whenLoaded('bills')),

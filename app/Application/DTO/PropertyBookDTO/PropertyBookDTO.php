@@ -17,7 +17,7 @@ class PropertyBookDTO
             'number_of_rooms' => $data['number_of_rooms'] ?? null,
             'number_of_bathrooms' => $data['number_of_bathrooms'] ?? null,
             'direction' => $data['direction'] ?? null,
-            'diagram_image' => $data['diagram_image'] ?? null,
+            'diagram_image' => isset($data['diagram_image']) ? $data['diagram_image'] : null,
         ];
     }
 
@@ -33,7 +33,7 @@ class PropertyBookDTO
             'number_of_rooms' => $data['number_of_rooms'] ?? null,
             'number_of_bathrooms' => $data['number_of_bathrooms'] ?? null,
             'direction' => $data['direction'] ?? null,
-            'diagram_image' => $data['diagram_image'] ?? null,
+            'diagram_image' => isset($data['diagram_image']) ? $data['diagram_image'] : null,
         ];
     }
 }
