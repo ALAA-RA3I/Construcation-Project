@@ -4,12 +4,16 @@ namespace App\Domain\Services;
 
 use App\Criteria\SortByStartDateCriteria;
 use App\Criteria\WithRelationsCriteria;
+use App\Domain\Enums\TaskStatusEnum;
+use App\Domain\Enums\TicketStatusEnum;
 use App\Infrastructure\Repositories\Contracts\TaskRepositoryInterface;
 use App\Domain\Services\Contracts\TaskServiceInterface;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
 use App\Domain\Enums\ApproveTaskEnum;
 use App\Infrastructure\Repositories\Contracts\TicketRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class TaskService implements TaskServiceInterface
 {
@@ -71,40 +75,97 @@ class TaskService implements TaskServiceInterface
     {
         return $this->taskRepo->delete($id);
     }
-    public function markTaskAsDone($id) {
-        $task = $this->taskRepo->findOrFail($id);
-        if (!$task) {
-            return new ModelNotFoundException('Not Found');
-        }
-        $updatedData = [
-            'status_of_approval' => ApproveTaskEnum::Done,
-        ];      
-        return $this->taskRepo->update($updatedData,$id);
+    public function changeStatus(array $data)
+    {
+        return DB::transaction(function () use ($data) {
+            /** @var Task $task */
+            $task = $data['task'];
+            $user = $data['user'];
+            $newStatus = $data['status'];
+            $ticketDescription = $data['ticket_description'];
+
+            $role = $user->getRoleNames()->first(); // assume you use spatie
+
+            $currentStatus = $task->status;
+
+
+            if ($role === 'engineer') {
+                if ($currentStatus === TaskStatusEnum::ToDo && $newStatus === TaskStatusEnum::Doing) {
+                    $task->status = $newStatus;
+                } elseif ($currentStatus === TaskStatusEnum::Doing && $newStatus === TaskStatusEnum::PendingApproval) {
+                    $task->status = $newStatus;
+                } else {
+                    throw new \Exception('Engineer not allowed to perform this transition');
+                }
+
+            } elseif ($role === 'consultingEngineer') {
+                if ($currentStatus === TaskStatusEnum::PendingApproval && $newStatus === TaskStatusEnum::Done) {
+                    $task->status = $newStatus;
+                    $task->actual_date_of_closed = now();
+                }
+                elseif ($currentStatus === TaskStatusEnum::PendingApproval && $newStatus === TaskStatusEnum::WaitingTicket) {
+                    $task->status = $newStatus;
+
+                    $this->ticketRepo->create([
+                        'description' => $ticketDescription,
+                        'status' => TicketStatusEnum::Open,
+                        'task_id' => $task->id,
+                        'created_by' => $user->id,
+                    ]);
+                }
+                elseif ($currentStatus === TaskStatusEnum::WaitingTicket && $newStatus === TaskStatusEnum::Done) {
+                    $task->status = $newStatus;
+                    $task->actual_date_of_closed = now();
+                }
+                else {
+                    throw new \Exception('Consultant not allowed to perform this transition');
+                }
+
+            } else {
+                throw new \Exception('Unauthorized role');
+            }
+
+            $task->save();
+
+            return $task->fresh(['employeeAssigned', 'supervisor','ticket']);
+        });
     }
 
-    public function markTaskAsRefuse(array $data ,$id) {
-        $task = $this->taskRepo->findOrFail($id);
-        if (!$task) {
-            return new ModelNotFoundException('Not Found');
-        }
-        $updatedData = [
-            'status_of_approval' => ApproveTaskEnum::WaitingForTicket,
-        ];      
-        $this->taskRepo->update($updatedData,$id);
-        $data['task_id'] = $id;
-        return $this->ticketRepo->create($data);
-    }
+//    public function markTaskAsDone($id) {
+//        $task = $this->taskRepo->findOrFail($id);
+//        if (!$task) {
+//            return new ModelNotFoundException('Not Found');
+//        }
+//        $updatedData = [
+//            'status_of_approval' => ApproveTaskEnum::Done,
+//        ];
+//        return $this->taskRepo->update($updatedData,$id);
+//    }
+//
+//    public function markTaskAsRefuse(array $data ,$id) {
+//        $task = $this->taskRepo->findOrFail($id);
+//        if (!$task) {
+//            return new ModelNotFoundException('Not Found');
+//        }
+//        $updatedData = [
+//            'status_of_approval' => ApproveTaskEnum::WaitingForTicket,
+//        ];
+//        $this->taskRepo->update($updatedData,$id);
+//        $data['task_id'] = $id;
+//        return $this->ticketRepo->create($data);
+//    }
+//
+//    public function markTaskAsDoneByExecutionEngineer($id) {
+//        $task = $this->taskRepo->findOrFail($id);
+//        if (!$task) {
+//            return new ModelNotFoundException('Not Found');
+//        }
+//        $updatedData = [
+//            'status_of_approval' => ApproveTaskEnum::WaitingApproval()->value,
+//        ];
+//        return $this->taskRepo->update($updatedData,$id);
+//    }
 
-    public function markTaskAsDoneByExecutionEngineer($id) {
-        $task = $this->taskRepo->findOrFail($id);
-        if (!$task) {
-            return new ModelNotFoundException('Not Found');
-        }
-        $updatedData = [
-            'status_of_approval' => ApproveTaskEnum::WaitingApproval()->value,
-        ];      
-        return $this->taskRepo->update($updatedData,$id);
-    }
 
 
 }

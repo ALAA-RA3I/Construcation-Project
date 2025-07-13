@@ -14,5 +14,6 @@ final class TaskStatusEnum extends Enum
     const ToDo = 'ToDo';
     const Doing = 'Doing';
     const PendingApproval = 'pendingApproval'; // Keep spelling same as DB if needed
+    const WaitingTicket = 'waitingTicket';
     const Done = 'Done';
 }

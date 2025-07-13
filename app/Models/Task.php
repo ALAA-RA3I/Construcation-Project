@@ -13,7 +13,6 @@ class Task extends BaseModel
     protected $fillable = [
         'dead_line',
         'status',
-        'status_of_approval',
         'type_of_task',
         'note',
         'actual_date_of_closed',

@@ -2,6 +2,8 @@
 
 namespace App\Application\DTO\TaskDTO;
 
+use App\Models\Task;
+
 class TaskDTO
 {
 
@@ -36,6 +38,15 @@ class TaskDTO
             'stage_id' => $data['stage_id'],
             'employee_assigned' => $data['employee_assigned'],
             'supervisor_id' => $data['supervisor_id'],
+        ];
+    }
+    public static function fromChangeStatusRequest(array $data, Task $task): array
+    {
+        return [
+            'task' => $task,
+            'status' => $data['status'],
+            'ticket_description' => $data['ticket_description'] ?? null,
+            'user' => auth()->user(), // مهم لتحديد الدور
         ];
     }
 }

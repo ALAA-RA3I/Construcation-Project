@@ -19,7 +19,6 @@ class TaskResource extends JsonResource
             'dead_line' => date('Y-m-d', strtotime($this->dead_line)),
             'expected_period_to_complete' => date('d', strtotime($this->dead_line)) - date('d', strtotime($this->start_date)) . ' days',
             'status' => $this->status,
-            'status_of_approval' => $this->status_of_approval,
             'description' => $this->description,
             'type_of_task' => $this->type_of_task,
             'note' => $this->note,
@@ -43,11 +42,9 @@ class TaskResource extends JsonResource
                     'email' => optional($this->employeeAssigned->participant)->user->email ?? null,
                 ];
             }),
-            
-
             // 'supervisor' => new ProjectParticipantResource($this->whenLoaded('supervisor')),
             'taskContainer' => TaskContainerResource::collection($this->whenLoaded('taskContainer')),
-            // 'ticket' => TicketResource::collection($this->whenLoaded('ticket')),
+            'tickets' => TicketResource::collection($this->whenLoaded('ticket')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
