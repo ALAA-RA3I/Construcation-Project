@@ -7,11 +7,13 @@ use App\Application\DTO\TicketDTO\TicketDTO;
 use App\Domain\Services\Contracts\TaskServiceInterface;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Task\ChangeTaskStatusRequest;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Requests\Ticket\CreateTicketRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TicketResource;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -19,7 +21,7 @@ class TaskController extends Controller
     protected $taskService;
 
     public function __construct(TaskServiceInterface $taskService)
-    {   
+    {
         $this->taskService = $taskService;
     }
 
@@ -59,19 +61,26 @@ class TaskController extends Controller
         return ApiResponse::success(null, 'Task deleted successfully');
     }
 
-    public function markTaskAsDone($id) {
-        $this->taskService->markTaskAsDone($id);
-        return ApiResponse::success(null, 'Status of task has been changed successfully');
-    }
+    public function changeStatus(ChangeTaskStatusRequest $request, Task $task)
+    {
+        $data = TaskDTO::fromChangeStatusRequest($request->validated(), $task);
+        $task = $this->taskService->changeStatus($data);
 
-    public function markTaskAsDoneByExecutionEngineer($id) {
-        $this->taskService->markTaskAsDoneByExecutionEngineer($id);
-        return ApiResponse::success(null, 'Status of task has been changed successfully');
+        return ApiResponse::success(new TaskResource($task), 'Task status updated successfully');
     }
-
-    public function refuseTask(CreateTicketRequest $request,$id) {
-        $validatedData = TicketDTO::fromCreateRequest($request->validated());
-        $ticket = $this->taskService->markTaskAsRefuse($validatedData,$id);
-        return ApiResponse::success(TicketResource::make($ticket),'Ticket Status has been updated successfully');
-    }
+//    public function markTaskAsDone($id) {
+//        $this->taskService->markTaskAsDone($id);
+//        return ApiResponse::success(null, 'Status of task has been changed successfully');
+//    }
+//
+//    public function markTaskAsDoneByExecutionEngineer($id) {
+//        $this->taskService->markTaskAsDoneByExecutionEngineer($id);
+//        return ApiResponse::success(null, 'Status of task has been changed successfully');
+//    }
+//
+//    public function refuseTask(CreateTicketRequest $request,$id) {
+//        $validatedData = TicketDTO::fromCreateRequest($request->validated());
+//        $ticket = $this->taskService->markTaskAsRefuse($validatedData,$id);
+//        return ApiResponse::success(TicketResource::make($ticket),'Ticket Status has been updated successfully');
+//    }
 }

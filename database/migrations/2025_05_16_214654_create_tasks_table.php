@@ -20,7 +20,6 @@ return new class extends Migration
             // $table->integer('priority'); added in new migration
             $table->date('dead_line');
             $table->enum('status', TaskStatusEnum::getValues())->default(TaskStatusEnum::ToDo);
-            $table->boolean('status_of_approval');
             $table->string('type_of_task');
             $table->string('note');
             $table->date('actual_date_of_closed'); //nullable
