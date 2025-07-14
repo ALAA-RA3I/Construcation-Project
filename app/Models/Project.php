@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Domain\Enums\ProgressStatusEnum;
 use App\Domain\Enums\PropertyTypeEnum;
 use App\Domain\Enums\StatusOfSaleEnum;
+use App\Domain\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -90,6 +91,20 @@ class Project extends BaseModel
     }
     public function getTotalCostAttribute()
     {
-        return $this->projectBills->flatMap->details->sum('cost');
+        return $this->projectBills->flatMap->billsDetails->sum('cost');
+    }
+    public function getProgressPercentageAttribute()
+    {
+        $totalTasks = $this->projectStage()->withCount('task')->get()->sum('task_count');
+
+        if ($totalTasks == 0) {
+            return 0;
+        }
+
+        $completedTasks = \App\Models\Task::whereIn('stage_id', $this->projectStage()->pluck('id'))
+            ->where('status', TaskStatusEnum::Done) // أو 'done' حسب enum
+            ->count();
+
+        return round(($completedTasks / $totalTasks) * 100, 2); // مثلاً 75.00
     }
 }
