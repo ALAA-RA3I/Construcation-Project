@@ -27,6 +27,8 @@ use App\Http\Controllers\Api\PropertyBookBillController;
 use App\Http\Controllers\Api\ProjectNewsController;
 use App\Http\Controllers\Api\ProjectMediaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\PropertyUnitController;
+use App\Http\Controllers\Api\PropertyUnitOrderController;
 
 
 Route::post('login', [AuthController::class, 'login']);
@@ -115,11 +117,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
-//        Route::patch('updateStatusOfTask/{id}', [TaskController::class, 'markTaskAsDone']);
-//        Route::patch('refuseTask/{id}', [TaskController::class, 'refuseTask']);
-//        Route::patch('makeTaskAsDone/{id}', [TaskController::class, 'markTaskAsDoneByExecutionEngineer']);
+        //        Route::patch('updateStatusOfTask/{id}', [TaskController::class, 'markTaskAsDone']);
+        //        Route::patch('refuseTask/{id}', [TaskController::class, 'refuseTask']);
+        //        Route::patch('makeTaskAsDone/{id}', [TaskController::class, 'markTaskAsDoneByExecutionEngineer']);
         Route::put('/{task}/change-status', [TaskController::class, 'changeStatus']);
-
     });
 
     Route::prefix('taskContainer')->group(function () {
@@ -236,5 +237,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [ProjectMediaController::class, 'create']);
         Route::put('update/{id}', [ProjectMediaController::class, 'update']);
         Route::delete('delete/{id}', [ProjectMediaController::class, 'delete']);
+    });
+    Route::prefix('propertyUnit')->group(function () {
+        Route::get('/all', [PropertyUnitController::class, 'getAll']);
+        Route::get('/', [PropertyUnitController::class, 'index']);
+        Route::get('/{id}', [PropertyUnitController::class, 'show']);
+        Route::post('/create', [PropertyUnitController::class, 'create']);
+        Route::put('update/{id}', [PropertyUnitController::class, 'update']);
+        Route::delete('delete/{id}', [PropertyUnitController::class, 'delete']);
+    });
+    Route::prefix('propertyUnitOrder')->group(function () {
+        Route::get('/all', [PropertyUnitOrderController::class, 'getAll']);
+        Route::get('/', [PropertyUnitOrderController::class, 'index']);
+        Route::get('/{id}', [PropertyUnitOrderController::class, 'show']);
+        Route::post('/create', [PropertyUnitOrderController::class, 'create']);
+        Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
+        Route::delete('delete/{id}', [PropertyUnitOrderController::class, 'delete']);
     });
 });

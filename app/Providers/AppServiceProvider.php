@@ -59,6 +59,10 @@ use App\Domain\Services\PropertyBookBillService;
 use App\Domain\Services\ProjectNewsService;
 use App\Domain\Services\ProjectMediaService;
 use App\Domain\Services\TicketService;
+use App\Domain\Services\Contracts\PropertyUnitServiceInterface;
+use App\Domain\Services\PropertyUnitService;
+use App\Infrastructure\Repositories\Contracts\PropertyUnitRepositoryInterface;
+use App\Infrastructure\Repositories\PropertyUnitRepository;
 use App\Infrastructure\Repositories\BackupFileRepository;
 use App\Infrastructure\Repositories\BaseRepository;
 use App\Infrastructure\Repositories\ClientRepository;
@@ -115,6 +119,10 @@ use App\Infrastructure\Repositories\TicketRepository;
 use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use App\Domain\Services\Contracts\PropertyUnitOrderServiceInterface;
+use App\Domain\Services\PropertyUnitOrderService;
+use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
+use App\Infrastructure\Repositories\PropertyUnitOrderRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -164,6 +172,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PropertyBookBillRepositoryInterface::class, PropertyBookBillRepository::class);
         $this->app->bind(ProjectNewsRepositoryInterface::class, ProjectNewsRepository::class);
         $this->app->bind(ProjectMediaRepositoryInterface::class, ProjectMediaRepository::class);
+        $this->app->bind(PropertyUnitRepositoryInterface::class, PropertyUnitRepository::class);
+        $this->app->bind(PropertyUnitOrderRepositoryInterface::class, PropertyUnitOrderRepository::class);
     }
 
     /**
@@ -202,6 +212,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PropertyBookBillServiceInterface::class, PropertyBookBillService::class);
         $this->app->bind(ProjectNewsServiceInterface::class, ProjectNewsService::class);
         $this->app->bind(ProjectMediaServiceInterface::class, ProjectMediaService::class);
+        $this->app->bind(PropertyUnitServiceInterface::class, PropertyUnitService::class);
+        $this->app->bind(PropertyUnitOrderServiceInterface::class, PropertyUnitOrderService::class);
     }
 
 

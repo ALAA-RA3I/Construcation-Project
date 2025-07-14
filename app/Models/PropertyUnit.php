@@ -19,7 +19,7 @@ class PropertyUnit extends BaseModel
      */
     public function propertyBook()
     {
-        return $this->belongsTo(PropertyBook::class);
+        return $this->belongsTo(PropertyBook::class, 'property_book_id');
     }
 
     /**
