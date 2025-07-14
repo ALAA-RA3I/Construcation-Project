@@ -31,4 +31,12 @@ class Client extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function propertyUnits()
+    {
+        return $this->hasMany(PropertyUnit::class);
+    }
+    public function propertyUnitOrders()
+    {
+        return $this->hasMany(PropertyUnitOrder::class);
+    }
 }

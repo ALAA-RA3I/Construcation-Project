@@ -22,6 +22,11 @@ return new class extends Migration
             $table->decimal('amount', 12, 2); // قيمة القسط
             $table->date('due_date'); // تاريخ الاستحقاق
             $table->boolean('is_paid')->default(false);
+
+            $table->integer('property_book_bill_id')->nullable();
+            $table->foreign('property_book_bill_id')->references('id')->on('property_book_bills')->cascadeOnDelete();
+
+
             $this->addBaseColumns($table);
         });
     }

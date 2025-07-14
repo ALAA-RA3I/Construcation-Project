@@ -18,11 +18,8 @@ return new class extends Migration
             $table->integer('id')->autoIncrement();
             $table->integer('property_unit_id');
             $table->foreign('property_unit_id')->references('id')->on('property_units')->cascadeOnDelete();
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->string('email')->nullable();
-            $table->string('phone');
+            $table->integer('client_id');
+            $table->foreign('client_id')->references('id')->on('clients')->cascadeOnDelete();
             $table->string('identity_file')->nullable(); // صورة أو PDF للهوية
             $table->string('clearance_certificate')->nullable(); // "لا حكم عليه
             $table->enum('status', PropertUnitOrderStatusEnum::getValues())->default(PropertUnitOrderStatusEnum::Pending);

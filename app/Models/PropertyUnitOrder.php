@@ -17,10 +17,15 @@ class PropertyUnitOrder extends BaseModel
         'clearance_certificate',
         'status',
         'note',
+        'client_id',
     ];
 
     public function propertyUnit(): BelongsTo
     {
         return $this->belongsTo(PropertyUnit::class, 'property_unit_id');
+    }
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
     }
 }

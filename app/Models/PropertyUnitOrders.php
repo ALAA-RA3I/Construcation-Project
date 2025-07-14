@@ -18,6 +18,7 @@ class PropertyUnitOrders extends BaseModel
         'clearance_certificate',
         'status',
         'note',
+        'client_id',
     ];
     protected function casts(): array
     {
@@ -36,5 +37,9 @@ class PropertyUnitOrders extends BaseModel
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->middle_name} {$this->last_name}";
+    }
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
     }
 }

@@ -12,6 +12,7 @@ class UserPropertyUnitInstallments extends BaseModel
         'amount',
         'due_date',
         'is_paid',
+        'property_book_bill_id',
     ];
 
     protected $casts = [
@@ -30,5 +31,9 @@ class UserPropertyUnitInstallments extends BaseModel
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+    public function propertyBookBill()
+    {
+        return $this->belongsTo(PropertyBookBill::class);
     }
 }

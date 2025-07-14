@@ -3,11 +3,13 @@
 namespace App\Domain\Services;
 
 use App\Criteria\WithRelationsCriteria;
+use App\Domain\Enums\PropertUnitOrderStatusEnum;
 use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
 use App\Domain\Services\Contracts\PropertyUnitOrderServiceInterface;
 use App\Traits\HasFileHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -23,13 +25,13 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
 
     public function getAll()
     {
-        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit']));
+        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']));
         return $this->propertyUnitOrderRepo->all();
     }
 
     public function paginate()
     {
-        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit']));
+        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']));
         return $this->propertyUnitOrderRepo->paginate();
     }
 
@@ -56,11 +58,19 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
                     return false;
                 }
                 $data['clearance_certificate'] = $clearancePath;
+                $user = Auth::user();
+                if (!$user) {
+                    Log::error("No authenticated user found when creating property unit order.");
+                    DB::rollBack();
+                    return false;
+                }
+                $data['client_id'] = $user->id;
+                $data['status'] = PropertUnitOrderStatusEnum::Pending;
             }
 
             $order = $this->propertyUnitOrderRepo->create($data);
             DB::commit();
-            return $order->load(['propertyUnit']);
+            return $order->load(['propertyUnit', 'client']);
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -69,7 +79,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
 
     public function show($id)
     {
-        $order = $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit']))->find($id);
+        $order = $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']))->find($id);
         return $order;
     }
 
@@ -105,7 +115,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
             $data['clearance_certificate'] = $clearancePath;
         }
         $this->propertyUnitOrderRepo->update($data, $id);
-        return $order->fresh()->load(['propertyUnit']);
+        return $order->fresh()->load(['propertyUnit', 'client']);
     }
 
     public function delete($id)

@@ -12,6 +12,7 @@ class PropertyUnit extends BaseModel
         'unit_number',
         'floor',
         'client_id',
+
     ];
 
     /**
@@ -27,7 +28,7 @@ class PropertyUnit extends BaseModel
      */
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'client_id');
     }
     public function userInstallments()
     {

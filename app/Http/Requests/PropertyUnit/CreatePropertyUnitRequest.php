@@ -25,7 +25,7 @@ class CreatePropertyUnitRequest extends FormRequest
             'property_book_id' => ['required', 'integer', 'exists:property_books,id'],
             'unit_number' => ['required', 'integer'],
             'floor' => ['nullable', 'integer'],
-            'client_id' => ['required', 'integer'],
+            // 'client_id' => ['required', 'integer'],
         ];
     }
 }

@@ -25,7 +25,7 @@ class UpdatePropertyUnitRequest extends FormRequest
             'property_book_id' => ['nullable', 'integer', 'exists:property_books,id'],
             'unit_number' => ['nullable', 'integer'],
             'floor' => ['nullable', 'integer'],
-            'client_id' => ['nullable', 'integer'],
+            // 'client_id' => ['nullable', 'integer'],
         ];
     }
 }

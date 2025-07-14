@@ -11,7 +11,7 @@ class PropertyUnitDTO
             'property_book_id' => $data['property_book_id'],
             'unit_number' => $data['unit_number'],
             'floor' => $data['floor'] ?? null,
-            'client_id' => $data['client_id'],
+            // 'client_id' => $data['client_id'],
         ];
     }
 
@@ -21,7 +21,7 @@ class PropertyUnitDTO
             'property_book_id' => $data['property_book_id'] ?? null,
             'unit_number' => $data['unit_number'] ?? null,
             'floor' => $data['floor'] ?? null,
-            'client_id' => $data['client_id'] ?? null,
+            // 'client_id' => $data['client_id'] ?? null,
         ];
     }
 }

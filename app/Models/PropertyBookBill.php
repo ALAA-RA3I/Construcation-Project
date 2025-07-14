@@ -30,4 +30,8 @@ class PropertyBookBill extends BaseModel
     {
         return $this->belongsTo(PropertyBook::class);
     }
+    public function userInstallments()
+    {
+        return $this->hasMany(UserPropertyUnitInstallments::class);
+    }
 }
