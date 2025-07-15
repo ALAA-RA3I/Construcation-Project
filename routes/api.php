@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\ProjectMediaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
+use App\Http\Controllers\Api\ContractFlowController;
 
 
 Route::post('login', [AuthController::class, 'login']);
@@ -253,5 +254,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [PropertyUnitOrderController::class, 'create']);
         Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitOrderController::class, 'delete']);
+    });
+
+    // تدفق العقد - Contract Flow
+    Route::prefix('contract-flow')->group(function () {
+        Route::post('/activate-account', [ContractFlowController::class, 'activateAccount']);
+        Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
+
+        // مسارات المدير
+        Route::put('/{orderId}/approve', [ContractFlowController::class, 'approveOrder']);
+        Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
+        Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
+        Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
+
+        // مسارات العميل
+        Route::post('/{orderId}/create-payment-intent', [ContractFlowController::class, 'createPaymentIntent']);
+        Route::post('/{orderId}/confirm-payment', [ContractFlowController::class, 'confirmPayment']);
+        Route::post('/{orderId}/sign-by-client', [ContractFlowController::class, 'signContractByClient']);
     });
 });
