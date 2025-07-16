@@ -33,6 +33,9 @@ use App\Http\Controllers\Api\ContractFlowController;
 
 
 Route::post('login', [AuthController::class, 'login']);
+Route::get('login', function () {
+    return view('login-static');
+});
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });
@@ -258,11 +261,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // تدفق العقد - Contract Flow
     Route::prefix('contract-flow')->group(function () {
-        Route::post('/activate-account', [ContractFlowController::class, 'activateAccount']);
-        Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
+         Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
 
         // مسارات المدير
-        Route::put('/{orderId}/approve', [ContractFlowController::class, 'approveOrder']);
+        Route::put('/{orderId}/{status}', [ContractFlowController::class, 'approveOrder']);
         Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
         Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
         Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
@@ -272,4 +274,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{orderId}/confirm-payment', [ContractFlowController::class, 'confirmPayment']);
         Route::post('/{orderId}/sign-by-client', [ContractFlowController::class, 'signContractByClient']);
     });
+});
+Route::prefix('contract-flow')->group(function () {
+    Route::get('/activate-account', [ContractFlowController::class, 'activateAccount']);
 });

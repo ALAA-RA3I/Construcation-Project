@@ -4,24 +4,32 @@ namespace App\Domain\Services;
 
 use App\Domain\Services\Contracts\ContractServiceServiceInterface;
 use App\Models\PropertyUnitOrder;
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ContractServiceService implements ContractServiceServiceInterface
 {
     /**
      * إنشاء ملف العقد
      */
-    public function generateContract(PropertyUnitOrder $order)
+    public function generateContract(PropertyUnitOrder $order, $withSignatures = false)
     {
         try {
-            // إنشاء محتوى العقد
-            $contractContent = $this->generateContractContent($order);
+            // استخدم Blade أو HTML كقالب
+            $pdf = Pdf::loadView('contracts.pdf', [
+                'order' => $order,
+                'withSignatures' => $withSignatures,
+                'date' => now()->format('Y-m-d'),
+                'client' => $order->client,
+                'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                'secret_code' => $order->signature_code,
 
-            // حفظ العقد كملف PDF
+            ]);
             $contractFileName = 'contracts/contract_' . $order->id . '_' . time() . '.pdf';
-            Storage::disk('public')->put($contractFileName, $contractContent);
+            Storage::disk('public')->put($contractFileName, $pdf->output());
 
             // تحديث الطلب
             $order->update([

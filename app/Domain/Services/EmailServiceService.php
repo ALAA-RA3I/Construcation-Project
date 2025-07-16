@@ -15,15 +15,39 @@ class EmailServiceService implements EmailServiceServiceInterface
     public function sendAccountActivationEmail(PropertyUnitOrder $order)
     {
         try {
+            Log::info('Starting sendAccountActivationEmail', [
+                'order_id' => $order->id,
+                'client_id' => $order->client_id,
+                'client' => $order->client,
+            ]);
+
+            if (!$order->client) {
+                Log::error('Order has no client relation', ['order_id' => $order->id]);
+                return false;
+            }
+            if (empty($order->client->email)) {
+                Log::error('Client has no email', ['order_id' => $order->id, 'client_id' => $order->client_id]);
+                return false;
+            }
+
             $activationToken = \Illuminate\Support\Str::random(64);
+            Log::info('Generated activation token', ['order_id' => $order->id, 'activation_token' => $activationToken]);
 
             // تحديث الطلب برمز التفعيل
             $order->update([
                 'activation_token' => $activationToken,
                 'activation_token_sent_at' => now(),
             ]);
+            Log::info('Order updated with activation token', [
+                'order_id' => $order->id,
+                'activation_token' => $activationToken
+            ]);
 
             // إرسال الإيميل
+            Log::info('Sending account activation email', [
+                'to' => $order->client->email,
+                'order_id' => $order->id
+            ]);
             Mail::send('emails.account-activation', [
                 'client' => $order->client,
                 'activationToken' => $activationToken,
@@ -38,7 +62,8 @@ class EmailServiceService implements EmailServiceServiceInterface
         } catch (\Exception $e) {
             Log::error('Failed to send account activation email', [
                 'order_id' => $order->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
             return false;
         }

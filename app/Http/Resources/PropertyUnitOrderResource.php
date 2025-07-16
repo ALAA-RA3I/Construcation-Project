@@ -39,9 +39,9 @@ class PropertyUnitOrderResource extends JsonResource
             'account_activated_at' => $this->account_activated_at,
 
             // حقول محسوبة
-            'is_client_signed' => $this->isClientSigned(),
-            'is_company_signed' => $this->isCompanySigned(),
-            'is_payment_completed' => $this->isPaymentCompleted(),
+            'is_client_signed' => $this->resource instanceof \App\Models\PropertyUnitOrder ? $this->resource->isClientSigned() : null,
+            'is_company_signed' => $this->resource instanceof \App\Models\PropertyUnitOrder ? $this->resource->isCompanySigned() : null,
+            'is_payment_completed' => $this->resource instanceof \App\Models\PropertyUnitOrder ? $this->resource->isPaymentCompleted() : null,
             'contract_file_url' => $this->contract_file_url,
 
             'created_at' => $this->created_at,

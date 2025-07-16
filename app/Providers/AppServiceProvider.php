@@ -214,6 +214,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectMediaServiceInterface::class, ProjectMediaService::class);
         $this->app->bind(PropertyUnitServiceInterface::class, PropertyUnitService::class);
         $this->app->bind(PropertyUnitOrderServiceInterface::class, PropertyUnitOrderService::class);
+        $this->app->bind(\App\Domain\Services\Contracts\EmailServiceServiceInterface::class, \App\Domain\Services\EmailServiceService::class);
+        $this->app->bind(\App\Domain\Services\Contracts\PaymentServiceServiceInterface::class, \App\Domain\Services\PaymentServiceService::class);
+        $this->app->bind(\App\Domain\Services\Contracts\ContractServiceServiceInterface::class, \App\Domain\Services\ContractServiceService::class);
     }
 
 

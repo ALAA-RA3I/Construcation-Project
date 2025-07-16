@@ -13,7 +13,7 @@ try {
     $client = Client::create([
         'first_name' => 'John',
         'last_name' => 'Doe',
-        'email' => 'john.doe@example.com',
+        'email' => 'moayad.harmoush@gmail.com',
         'password' => Hash::make('password123'),
         'phone_number' => '+1234567890',
         'national_id' => 123456789012345,

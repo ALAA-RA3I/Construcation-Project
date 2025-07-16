@@ -46,7 +46,7 @@ class ContractFlowController extends Controller
     /**
      * الخطوة 2: مدير يوافق على الطلب
      */
-    public function approveOrder($orderId)
+    public function approveOrder($orderId, $status)
     {
         DB::beginTransaction();
         try {
@@ -55,13 +55,16 @@ class ContractFlowController extends Controller
             if (!$order) {
                 return ApiResponse::error('Order not found', 404);
             }
-
-            if (!$order->isStatus(PropertUnitOrderStatusEnum::Pending)) {
-                return ApiResponse::error('Order is not in pending status', 400);
+            // if ($order->status !='pending') {
+            //     return ApiResponse::error('Order is not in pending status', 400);
+            // }
+            if ($status == 'approve') {
+                // تحديث حالة الطلب
+                $order->update(['status' => PropertUnitOrderStatusEnum::Approved]);
+            } else {
+                // تحديث حالة الطلب
+                $order->update(['status' => PropertUnitOrderStatusEnum::Rejected]);
             }
-
-            // تحديث حالة الطلب
-            $order->update(['status' => PropertUnitOrderStatusEnum::Approved]);
 
             // إرسال إيميل تفعيل الحساب
             $this->emailService->sendAccountActivationEmail($order);
@@ -69,12 +72,13 @@ class ContractFlowController extends Controller
             DB::commit();
             return ApiResponse::success(
                 new PropertyUnitOrderResource($order),
-                'Order approved and activation email sent'
+                'Order updated successfully'
+
             );
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to approve order', ['order_id' => $orderId, 'error' => $e->getMessage()]);
-            return ApiResponse::error('Failed to approve order', 500);
+            Log::error('Failed to update order status', ['order_id' => $orderId, 'error' => $e->getMessage()]);
+            return ApiResponse::error('Failed to update order status', 500);
         }
     }
 
@@ -83,33 +87,62 @@ class ContractFlowController extends Controller
      */
     public function activateAccount(Request $request)
     {
-        $request->validate([
-            'activation_token' => 'required|string'
-        ]);
-
+        $token = $request->input('activation_token') ?? $request->query('token');
+        if (!$token) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'رمز التفعيل غير موجود.'], 400);
+            }
+            return view('activation-success', ['success' => false, 'message' => 'رمز التفعيل غير موجود.']);
+        }
         try {
-            $order = PropertyUnitOrder::where('activation_token', $request->activation_token)
+            $order = \App\Models\PropertyUnitOrder::where('activation_token', $token)
                 ->whereNull('account_activated_at')
                 ->first();
 
             if (!$order) {
-                return ApiResponse::error('Invalid or expired activation token', 400);
+                if ($request->expectsJson()) {
+                    return response()->json(['success' => false, 'message' => 'رمز التفعيل غير صالح أو منتهي الصلاحية.'], 400);
+                }
+                return view('activation-success', ['success' => false, 'message' => 'رمز التفعيل غير صالح أو منتهي الصلاحية.']);
             }
 
             $order->update([
                 'account_activated_at' => now()
             ]);
 
-            // إرسال إيميل العقد
-            $this->emailService->sendContractEmail($order);
+            // إنشاء العقد وتخزينه وربطه بالطلب (بدون تواقيع)
+            $contractFilePath = app('App\\Domain\\Services\\Contracts\\ContractServiceServiceInterface')->generateContract($order, false); // false = بدون تواقيع
+            if ($contractFilePath) {
+                $order->update([
+                    'contract_file' => $contractFilePath,
+                    'contract_sent_at' => now(),
+                ]);
+            }
 
-            return ApiResponse::success(
-                new PropertyUnitOrderResource($order),
-                'Account activated and contract email sent'
-            );
+            // إرسال الرمز السري فقط
+            $this->emailService->sendSignatureCodeEmail($order);
+
+            $contractUrl = $order->contract_file ? asset('storage/' . $order->contract_file) : null;
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'تم تفعيل حسابك بنجاح! تم إرسال رمز التوقيع إلى بريدك الإلكتروني. يمكنك الآن تسجيل الدخول، مراجعة العقد، وإتمام عملية الدفع.',
+                    'contract_url' => $contractUrl
+                ]);
+            }
+
+            // في الواجهة: لا تعرض رابط العقد
+            return view('activation-success', [
+                'success' => true,
+                'message' => 'تم تفعيل حسابك بنجاح! تم إرسال رمز التوقيع إلى بريدك الإلكتروني.<br>يمكنك الآن تسجيل الدخول، مراجعة العقد، وإتمام عملية الدفع.',
+                'contract_url' => null // لا ترسل الرابط للواجهة
+            ]);
         } catch (\Exception $e) {
-            Log::error('Failed to activate account', ['error' => $e->getMessage()]);
-            return ApiResponse::error('Failed to activate account', 500);
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'حدث خطأ أثناء تفعيل الحساب.'], 500);
+            }
+            return view('activation-success', ['success' => false, 'message' => 'حدث خطأ أثناء تفعيل الحساب.']);
         }
     }
 
