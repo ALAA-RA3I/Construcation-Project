@@ -80,4 +80,37 @@ class PropertyUnitService implements PropertyUnitServiceInterface
             return false;
         }
     }
+    public function getProjectsOfClient($clientId)
+    {
+        return $this->propertyUnitRepo
+            ->with([
+                'propertyBook.project.salesDetails'
+            ])
+            ->findWhere([
+                'client_id' => $clientId
+            ]);
+    }
+    public function getProjectDetailsByPropertyUnit($propertyUnitId)
+    {
+        return $this->propertyUnitRepo
+            ->with([
+                'propertyBook.project.salesDetails',
+            ])
+            ->find($propertyUnitId);
+    }
+    public function getClientProjectNews($clientId)
+    {
+        $propertyUnits = $this->propertyUnitRepo
+            ->with(['propertyBook.project.salesDetails', 'propertyBook.project.projectNews'])
+            ->findWhere(['client_id' => $clientId]);
+
+        $news = collect();
+
+        foreach ($propertyUnits as $unit) {
+            $projectNews = optional($unit->propertyBook->project)->projectNews ?? collect();
+            $news = $news->merge($projectNews);
+        }
+
+        return $news->unique('id')->values();
+    }
 }

@@ -33,8 +33,6 @@ class TaskService implements TaskServiceInterface
         $this->taskRepo->pushCriteria(new WithRelationsCriteria(['stage', 'employeeAssigned.participant.user', 'supervisor', 'taskContainer', 'ticket']));
         $this->taskRepo->pushCriteria(new \App\Criteria\StageCriteria($stageId));
         $this->taskRepo->pushCriteria(new \App\Criteria\SortByStartDateCriteria());
-
-
         return $this->taskRepo->all();
     }
 
