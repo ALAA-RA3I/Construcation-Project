@@ -8,6 +8,7 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             direction: ltr;
+            color: #222;
         }
 
         .header {
@@ -31,18 +32,29 @@
             border-radius: 8px;
         }
 
-        .signatures {
-            margin-top: 40px;
-        }
-
-        .sign {
-            display: inline-block;
-            width: 45%;
-            text-align: center;
+        .clause {
+            margin-bottom: 10px;
         }
 
         .label {
             font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background: #f0f0f0;
         }
     </style>
 </head>
@@ -61,26 +73,52 @@
     </div>
     <div class="section details">
         <div><span class="label">Apartment Details:</span></div>
-        <div>Unit Number: {{ $propertyUnit->unit_number }}</div>
-        <div>Floor: {{ $propertyUnit->floor ?? 'Not specified' }}</div>
-        <div>Area: {{ $propertyBook->space }} m²</div>
-        <div>Price: ${{ number_format($propertyBook->price) }}</div>
+        <table class="table">
+            <tr>
+                <th>Unit Number</th>
+                <td>{{ $propertyUnit->unit_number }}</td>
+            </tr>
+            <tr>
+                <th>Floor</th>
+                <td>{{ $propertyUnit->floor ?? 'Not specified' }}</td>
+            </tr>
+            <tr>
+                <th>Area</th>
+                <td>{{ $propertyBook->space }} m²</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>${{ number_format($propertyBook->price) }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ $propertyUnit->address ?? 'Not specified' }}</td>
+            </tr>
+            <tr>
+                <th>Project</th>
+                <td>{{ $propertyBook->project_name ?? 'Not specified' }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="section">
+        <span class="label">Contract Clauses:</span>
+        <div class="clause">1. The Seller agrees to sell and the Buyer agrees to purchase the above-described apartment under the terms and conditions set forth in this contract.</div>
+        <div class="clause">2. The total purchase price is <b>${{ number_format($propertyBook->price) }}</b>, payable as agreed between both parties.</div>
+        <div class="clause">3. The Buyer acknowledges that they have inspected the apartment and accepts its current condition.</div>
+        <div class="clause">4. The Seller guarantees that the apartment is free from any legal encumbrances, liens, or debts.</div>
+        <div class="clause">5. The transfer of ownership will be completed upon full payment and signing of the final contract by both parties.</div>
+        <div class="clause">6. All taxes, fees, and registration costs related to the transfer of ownership shall be borne by the Buyer unless otherwise agreed.</div>
+        <div class="clause">7. The Seller shall provide all necessary documents required for the legal transfer of the apartment.</div>
+        <div class="clause">8. In case of any dispute arising from this contract, both parties agree to resolve the matter amicably or through the competent courts.</div>
+        <div class="clause">9. This contract is governed by the laws of the country in which the property is located.</div>
+        <div class="clause">10. This contract is made in two original copies, one for each party.</div>
     </div>
     <div class="section">
         <span class="label">Notes:</span>
         {{ $order->note ?? '-' }}
     </div>
-    <div class="signatures">
-        <div class="sign">
-            <div class="label">Seller Signature</div>
-            <div style="margin-bottom: 8px;">Sunset Development Corp.</div>
-            <img src="{{ public_path('signatures/company-sign.png') }}" alt="Company Signature" style="height: 50px; margin-bottom: 4px;">
-        </div>
-        <div class="sign">
-            <div class="label">Buyer Signature</div>
-            <div style="margin-bottom: 8px;">{{ $client->first_name }} {{ $client->last_name }}</div>
-            <div style="font-size: 12px; color: #555;">Secret Code: <b>{{ $secret_code }}</b></div>
-        </div>
+    <div class="section" style="margin-top: 40px;">
+        <span class="label">This contract is preliminary and does not include any signatures at this stage.</span>
     </div>
 </body>
 
