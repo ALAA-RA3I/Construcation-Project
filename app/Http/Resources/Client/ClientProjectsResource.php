@@ -18,6 +18,7 @@ class ClientProjectsResource extends JsonResource
         $salesDetails = optional($project)->salesDetails;
 
         return [
+            'id' => $this->id,
             'main_title' => $salesDetails->main_title ?? null,
             'marketing_description' => $salesDetails->marketing_description ?? null,
             'address' => $salesDetails->address ?? null,
