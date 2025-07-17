@@ -20,15 +20,15 @@ class PropertyBookController extends Controller
         $this->propertyBookService = $propertyBookService;
     }
 
-    public function index()
+    public function index($projectId)
     {
-        $propertyBooks = $this->propertyBookService->paginate();
+        $propertyBooks = $this->propertyBookService->paginate($projectId);
         return ApiResponse::success(PropertyBookResource::collection($propertyBooks));
     }
 
-    public function getAll()
+    public function getAll($projectId)
     {
-        $propertyBooks = $this->propertyBookService->getAll();
+        $propertyBooks = $this->propertyBookService->getAll($projectId);
         return ApiResponse::success(PropertyBookResource::collection($propertyBooks));
     }
 
