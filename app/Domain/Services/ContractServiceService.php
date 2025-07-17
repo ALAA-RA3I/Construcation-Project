@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\Services\Contracts\ContractServiceServiceInterface;
+use App\Domain\Services\IPFSServiceService;
 use App\Models\PropertyUnitOrder;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ContractServiceService implements ContractServiceServiceInterface
 {
+    protected $ipfsService;
+
+    public function __construct(IPFSServiceService $ipfsService = null)
+    {
+        $this->ipfsService = $ipfsService ?? app(IPFSServiceService::class);
+    }
+
     /**
      * إنشاء ملف العقد
      */
@@ -62,10 +70,17 @@ class ContractServiceService implements ContractServiceServiceInterface
     /**
      * توقيع العميل على العقد
      */
-    public function signContractByClient(PropertyUnitOrder $order, $signatureCode)
+    public function signContractByClient(PropertyUnitOrder $order, $signatureCode, $clientIp = null, $request = null)
     {
         try {
+            Log::info('Start client contract signing', [
+                'order_id' => $order->id,
+                'signatureCode' => $signatureCode,
+                'client_ip' => $clientIp,
+            ]);
+
             if (!$this->verifySignatureCode($order, $signatureCode)) {
+                Log::warning('Invalid signature code', ['order_id' => $order->id]);
                 throw new \Exception('Invalid signature code');
             }
 
@@ -74,12 +89,73 @@ class ContractServiceService implements ContractServiceServiceInterface
                 'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractSigned
             ]);
 
-            Log::info('Contract signed by client', ['order_id' => $order->id]);
-            return true;
+            // معلومات إضافية من الريكوست (إن وجدت)
+            $clientInfo = [
+                'user_agent' => $request ? $request->header('User-Agent') : null,
+                'client_ip' => $clientIp,
+                'client_email' => $order->client->email ?? null,
+                'client_phone' => $order->client->phone ?? null,
+                'client_identity' => $order->client->identity_number ?? null,
+                'client_full_name' => $order->client->first_name . ' ' . $order->client->last_name,
+            ];
+
+            // توليد PDF أولي بدون رابط بلوك تشين
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
+                'order' => $order,
+                'withSignatures' => true,
+                'date' => now()->format('Y-m-d'),
+                'client' => $order->client,
+                'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                'secret_code' => $order->signature_code,
+                'client_ip' => $clientIp,
+                'blockchain_link' => null,
+                'clientInfo' => $clientInfo,
+            ]);
+            $signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '.pdf';
+            \Illuminate\Support\Facades\Storage::disk('public')->put($signedFileName, $pdf->output());
+            $order->update(['contract_file' => $signedFileName]);
+
+            Log::info('PDF generated and saved', ['order_id' => $order->id, 'file' => $signedFileName]);
+
+            // رفع العقد الموقع على البلوك تشين (IPFS)
+            $fullPath = storage_path('app/public/' . $signedFileName);
+            $cid = $this->ipfsService->uploadFile($fullPath, basename($signedFileName));
+            $blockchainLink = $cid ? ("https://gateway.pinata.cloud/ipfs/" . $cid) : null;
+
+            Log::info('Contract uploaded to IPFS', ['order_id' => $order->id, 'cid' => $cid, 'blockchain_link' => $blockchainLink]);
+
+            // إعادة توليد PDF مع رابط البلوك تشين
+            $pdfWithLink = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
+                'order' => $order,
+                'withSignatures' => true,
+                'date' => now()->format('Y-m-d'),
+                'client' => $order->client,
+                'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                'secret_code' => $order->signature_code,
+                'client_ip' => $clientIp,
+                'blockchain_link' => $blockchainLink,
+                'clientInfo' => $clientInfo,
+            ]);
+            $finalFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '_blockchain.pdf';
+            \Illuminate\Support\Facades\Storage::disk('public')->put($finalFileName, $pdfWithLink->output());
+            $order->update([
+                'contract_file' => $finalFileName,
+                'contract_hash' => $cid,
+            ]);
+
+            Log::info('Final PDF with blockchain link generated and saved', ['order_id' => $order->id, 'file' => $finalFileName]);
+
+            return [
+                'signed_contract_url' => asset('storage/' . $finalFileName),
+                'blockchain_link' => $blockchainLink,
+            ];
         } catch (\Exception $e) {
             Log::error('Failed to sign contract by client', [
                 'order_id' => $order->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
             throw $e;
         }
@@ -96,10 +172,53 @@ class ContractServiceService implements ContractServiceServiceInterface
                 'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractFinalized
             ]);
 
-            Log::info('Contract signed by company', ['order_id' => $order->id]);
-            return true;
+            // Generate signed PDF with both signatures using the new Blade
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
+                'order' => $order,
+                'withSignatures' => true,
+                'date' => now()->format('Y-m-d'),
+                'client' => $order->client,
+                'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                'secret_code' => $order->signature_code,
+                'client_ip' => null,
+                'blockchain_link' => null,
+            ]);
+            $signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '.pdf';
+            \Illuminate\Support\Facades\Storage::disk('public')->put($signedFileName, $pdf->output());
+            $order->update(['contract_file' => $signedFileName]);
+
+            // رفع العقد الموقع على البلوك تشين (IPFS)
+            $fullPath = storage_path('app/public/' . $signedFileName);
+            $cid = $this->ipfsService->uploadFile($fullPath, basename($signedFileName));
+            $blockchainLink = $cid ? ("https://gateway.pinata.cloud/ipfs/" . $cid) : null;
+
+            // إعادة توليد PDF مع رابط البلوك تشين باستخدام البليد الجديد
+            $pdfWithLink = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
+                'order' => $order,
+                'withSignatures' => true,
+                'date' => now()->format('Y-m-d'),
+                'client' => $order->client,
+                'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                'secret_code' => $order->signature_code,
+                'client_ip' => null,
+                'blockchain_link' => $blockchainLink,
+            ]);
+            $finalFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '_blockchain.pdf';
+            \Illuminate\Support\Facades\Storage::disk('public')->put($finalFileName, $pdfWithLink->output());
+            $order->update([
+                'contract_file' => $finalFileName,
+                'contract_hash' => $cid,
+            ]);
+
+            \Illuminate\Support\Facades\Log::info('Contract signed by company and uploaded to blockchain', ['order_id' => $order->id, 'cid' => $cid]);
+            return [
+                'signed_contract_url' => asset('storage/' . $finalFileName),
+                'blockchain_link' => $blockchainLink,
+            ];
         } catch (\Exception $e) {
-            Log::error('Failed to sign contract by company', [
+            \Illuminate\Support\Facades\Log::error('Failed to sign contract by company', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage()
             ]);

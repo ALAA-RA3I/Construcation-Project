@@ -278,12 +278,13 @@ class ContractFlowController extends Controller
             if (!$order) {
                 return ApiResponse::error('Order not found', 404);
             }
+            // return after payment completed
+            // if (!$order->isPaymentCompleted()) {
+            //     return ApiResponse::error('Payment must be completed before signing', 400);
+            // }
 
-            if (!$order->isPaymentCompleted()) {
-                return ApiResponse::error('Payment must be completed before signing', 400);
-            }
-
-            $this->contractService->signContractByClient($order, $request->signature_code);
+            $clientIp = $request->ip();
+            $this->contractService->signContractByClient($order, $request->signature_code, $clientIp);
 
             return ApiResponse::success(
                 new PropertyUnitOrderResource($order),
@@ -311,16 +312,14 @@ class ContractFlowController extends Controller
                 return ApiResponse::error('Client must sign first', 400);
             }
 
-            $this->contractService->signContractByCompany($order);
-
-            // رفع العقد على البلوك تشين
-            $contractHash = $this->contractService->uploadToBlockchain($order);
+            $result = $this->contractService->signContractByCompany($order);
 
             // إرسال إيميل تأكيد اكتمال العقد
             $this->emailService->sendContractFinalizedEmail($order);
 
             return ApiResponse::success([
-                'contract_hash' => $contractHash,
+                'signed_contract_url' => $result['signed_contract_url'],
+                'blockchain_link' => $result['blockchain_link'],
                 'order' => new PropertyUnitOrderResource($order)
             ], 'Contract signed by company and uploaded to blockchain');
         } catch (\Exception $e) {

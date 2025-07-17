@@ -127,6 +127,8 @@ use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterfa
 use App\Infrastructure\Repositories\Contracts\UserPropertyUnitInstallmentsRepositoryInterface;
 use App\Infrastructure\Repositories\PropertyUnitOrderRepository;
 use App\Infrastructure\Repositories\UserPropertyUnitInstallmentsRepository;
+use App\Domain\Services\Contracts\IPFSServiceServiceInterface;
+use App\Domain\Services\IPFSServiceService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -137,6 +139,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bindRepositories();
         $this->bindServices();
+        $this->app->bind(IPFSServiceServiceInterface::class, IPFSServiceService::class);
     }
 
     /**
@@ -219,11 +222,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectMediaServiceInterface::class, ProjectMediaService::class);
         $this->app->bind(PropertyUnitServiceInterface::class, PropertyUnitService::class);
         $this->app->bind(PropertyUnitOrderServiceInterface::class, PropertyUnitOrderService::class);
-        $this->app->bind(UserPropertyUnitInstallmentsServiceInterface::class,UserPropertyUnitInstallmentsService::class);
+        $this->app->bind(UserPropertyUnitInstallmentsServiceInterface::class, UserPropertyUnitInstallmentsService::class);
         $this->app->bind(\App\Domain\Services\Contracts\EmailServiceServiceInterface::class, \App\Domain\Services\EmailServiceService::class);
         $this->app->bind(\App\Domain\Services\Contracts\PaymentServiceServiceInterface::class, \App\Domain\Services\PaymentServiceService::class);
         $this->app->bind(\App\Domain\Services\Contracts\ContractServiceServiceInterface::class, \App\Domain\Services\ContractServiceService::class);
-
     }
 
 

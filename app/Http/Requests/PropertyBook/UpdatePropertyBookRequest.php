@@ -35,3 +35,4 @@ class UpdatePropertyBookRequest extends FormRequest
         ];
     }
 }
+ 
