@@ -24,9 +24,6 @@ return new class extends Migration
             $table->foreign('client_id')->nullable()->references('id')->on('clients')->cascadeOnDelete();
             $this->addBaseColumns($table);
         });
-
-
-
     }
 
     /**

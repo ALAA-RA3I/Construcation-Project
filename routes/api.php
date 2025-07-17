@@ -211,8 +211,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectSalesDetailsController::class, 'delete']);
     });
     Route::prefix('propertyBook')->group(function () {
-        Route::get('/all', [PropertyBookController::class, 'getAll']);
-        Route::get('/', [PropertyBookController::class, 'index']);
+        Route::get('/all/{projectId}', [PropertyBookController::class, 'getAll']);
+        Route::get('/{projectId}', [PropertyBookController::class, 'index']);
         Route::get('/{id}', [PropertyBookController::class, 'show']);
         Route::post('/create', [PropertyBookController::class, 'create']);
         Route::put('update/{id}', [PropertyBookController::class, 'update']);

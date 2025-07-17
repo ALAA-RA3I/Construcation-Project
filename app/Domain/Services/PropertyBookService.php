@@ -21,15 +21,22 @@ class PropertyBookService implements PropertyBookServiceInterface
         $this->propertyBookRepo = $propertyBookRepo;
     }
 
-    public function getAll()
+    public function getAll($projectId)
     {
         $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['project']));
+
+
+        $this->propertyBookRepo->pushCriteria(new \App\Criteria\ProjectCriteria($projectId));
+
+
         return $this->propertyBookRepo->all();
     }
 
-    public function paginate()
+    public function paginate($projectId)
     {
         $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['project']));
+        $this->propertyBookRepo->pushCriteria(new \App\Criteria\ProjectCriteria($projectId));
+
         return $this->propertyBookRepo->paginate();
     }
 

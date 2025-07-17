@@ -8,6 +8,7 @@ use App\Domain\Services\Contracts\PropertyUnitServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class PropertyUnitService implements PropertyUnitServiceInterface
 {
@@ -79,5 +80,40 @@ class PropertyUnitService implements PropertyUnitServiceInterface
             DB::rollBack();
             return false;
         }
+    }
+    public function getProjectsOfClient($clientId)
+    {
+        return $this->propertyUnitRepo
+            ->with([
+                'propertyBook.project.salesDetails'
+            ])
+            ->findWhere([
+                'client_id' => $clientId
+            ]);
+    }
+    public function getProjectDetailsByPropertyUnit($propertyUnitId)
+    {
+        return $this->propertyUnitRepo
+            ->with([
+                'propertyBook.project.salesDetails',
+            ])
+            ->find($propertyUnitId);
+    }
+    public function getClientProjectNews($clientId)
+    {
+        $propertyUnits = $this->propertyUnitRepo
+            ->with(['propertyBook.project.salesDetails', 'propertyBook.project.projectNews'])
+            ->scopeQuery(function($query) use ($clientId) {
+                return $query->where('client_id', $clientId);
+            })->all();
+
+        $news = new Collection();
+
+        foreach ($propertyUnits as $unit) {
+            $projectNews = optional($unit->propertyBook->project)->projectNews ?? collect();
+            $news = $news->merge($projectNews);
+        }
+
+    return $news->load('project.salesDetails')->unique('id')->values();
     }
 }
