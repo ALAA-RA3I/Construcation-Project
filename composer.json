@@ -16,7 +16,8 @@
         "laravel/sanctum": "*",
         "laravel/tinker": "^2.10.1",
         "prettus/l5-repository": "^2.10",
-        "spatie/laravel-permission": "^6.18"
+        "spatie/laravel-permission": "^6.18",
+        "stripe/stripe-php": "^17.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
