@@ -120,9 +120,13 @@ use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use App\Domain\Services\Contracts\PropertyUnitOrderServiceInterface;
+use App\Domain\Services\Contracts\UserPropertyUnitInstallmentsServiceInterface;
 use App\Domain\Services\PropertyUnitOrderService;
+use App\Domain\Services\UserPropertyUnitInstallmentsService;
 use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\UserPropertyUnitInstallmentsRepositoryInterface;
 use App\Infrastructure\Repositories\PropertyUnitOrderRepository;
+use App\Infrastructure\Repositories\UserPropertyUnitInstallmentsRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -174,6 +178,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectMediaRepositoryInterface::class, ProjectMediaRepository::class);
         $this->app->bind(PropertyUnitRepositoryInterface::class, PropertyUnitRepository::class);
         $this->app->bind(PropertyUnitOrderRepositoryInterface::class, PropertyUnitOrderRepository::class);
+        $this->app->bind(UserPropertyUnitInstallmentsRepositoryInterface::class, UserPropertyUnitInstallmentsRepository::class);
     }
 
     /**
@@ -214,6 +219,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectMediaServiceInterface::class, ProjectMediaService::class);
         $this->app->bind(PropertyUnitServiceInterface::class, PropertyUnitService::class);
         $this->app->bind(PropertyUnitOrderServiceInterface::class, PropertyUnitOrderService::class);
+        $this->app->bind(UserPropertyUnitInstallmentsServiceInterface::class,UserPropertyUnitInstallmentsService::class);
     }
 
 
