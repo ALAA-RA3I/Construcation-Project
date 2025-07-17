@@ -8,6 +8,7 @@ use App\Domain\Services\Contracts\PropertyUnitServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class PropertyUnitService implements PropertyUnitServiceInterface
 {
@@ -102,15 +103,17 @@ class PropertyUnitService implements PropertyUnitServiceInterface
     {
         $propertyUnits = $this->propertyUnitRepo
             ->with(['propertyBook.project.salesDetails', 'propertyBook.project.projectNews'])
-            ->findWhere(['client_id' => $clientId]);
+            ->scopeQuery(function($query) use ($clientId) {
+                return $query->where('client_id', $clientId);
+            })->all();
 
-        $news = collect();
+        $news = new Collection();
 
         foreach ($propertyUnits as $unit) {
             $projectNews = optional($unit->propertyBook->project)->projectNews ?? collect();
             $news = $news->merge($projectNews);
         }
 
-        return $news->unique('id')->values();
+    return $news->load('project.salesDetails')->unique('id')->values();
     }
 }
