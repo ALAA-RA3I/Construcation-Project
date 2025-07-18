@@ -34,14 +34,18 @@ Route::prefix('property-book')->group(function () {
 });
 
 Route::prefix('property-book-bill')->group(function () {
-    Route::get('/', [PropertyBookBillBladeController::class, 'index']);
-    Route::get('/all', [PropertyBookBillBladeController::class, 'getAll']);
-    Route::get('/show/{id}', [PropertyBookBillBladeController::class, 'show']);
+
+    Route::get('/all/{propertyBookId}', [PropertyBookBillBladeController::class, 'getAll']);
+    Route::get('/{propertyBookId}', [PropertyBookBillBladeController::class, 'index']);
+    Route::get('/getOne/{id}', [PropertyBookBillBladeController::class, 'show']);
+
 });
 
 Route::prefix('property-unit')->group(function () {
-    Route::get('/', [PropertyUnitBladeController::class, 'index']);
-    Route::get('/all', [PropertyUnitBladeController::class, 'getAll']);
-    Route::get('/show/{id}', [PropertyUnitBladeController::class, 'show']);
+
+    Route::get('/all/{propertyBookId}', [PropertyUnitBladeController::class, 'getAll']);
+    Route::get('/{propertyBookId}', [PropertyUnitBladeController::class, 'index']);
+    Route::get('/getOne/{propertyBookId}', [PropertyUnitBladeController::class, 'show']);
+
 
 });

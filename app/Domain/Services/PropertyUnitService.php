@@ -19,15 +19,19 @@ class PropertyUnitService implements PropertyUnitServiceInterface
         $this->propertyUnitRepo = $propertyUnitRepo;
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
         $this->propertyUnitRepo->pushCriteria(new WithRelationsCriteria(['propertyBook']));
+        $this->propertyUnitRepo->pushCriteria(new \App\Criteria\PropertyBookCriteria($propertyBookId));
+
         return $this->propertyUnitRepo->all();
     }
 
-    public function paginate()
+    public function paginate($propertyBookId)
     {
         $this->propertyUnitRepo->pushCriteria(new WithRelationsCriteria(['propertyBook']));
+        $this->propertyUnitRepo->pushCriteria(new \App\Criteria\PropertyBookCriteria($propertyBookId));
+
         return $this->propertyUnitRepo->paginate();
     }
 

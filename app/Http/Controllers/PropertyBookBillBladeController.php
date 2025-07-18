@@ -17,14 +17,14 @@ class PropertyBookBillBladeController extends Controller
         $this->propertyBookBillService = $propertyBookBillService;
     }
 
-    public function index()
+    public function index($propertyBookId)
     {
-        return $this->propertyBookBillService->paginate();
+        return $this->propertyBookBillService->paginate($propertyBookId);
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
-        return $this->propertyBookBillService->getAll();
+        return $this->propertyBookBillService->getAll($propertyBookId);
     }
 
     public function show($id)

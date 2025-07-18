@@ -58,9 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [EngineerController::class, 'delete']);
     });
     Route::prefix('consultingEngineers')->group(function () {
-        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);
+        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/all', [ConsultingEngineerController::class, 'getAll']);
-        Route::post('/create', [ConsultingEngineerController::class, 'create']);
+        Route::post('/create', [ConsultingEngineerController::class, 'create']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/{id}', [ConsultingEngineerController::class, 'show']);
         Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
         Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
@@ -107,8 +107,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix('projectStage')->group(function () {
         Route::get('/all/{projectId}', [ProjectStageController::class, 'getAll']);
-        Route::get('/{projectId}', [ProjectStageController::class, 'index']);
-        Route::get('/{id}', [ProjectStageController::class, 'show']);
+        Route::get('/{projectId}', [ProjectStageController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{id}', [ProjectStageController::class, 'show']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::post('/create', [ProjectStageController::class, 'create']);
         Route::put('update/{id}', [ProjectStageController::class, 'update']);
         Route::delete('delete/{id}', [ProjectStageController::class, 'delete']);
@@ -116,8 +116,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('task')->group(function () {
         Route::get('/all/{stageId}', [TaskController::class, 'getAll']);
-        Route::get('/{stageId}', [TaskController::class, 'index']);
-        Route::get('/{id}', [TaskController::class, 'show']);
+        Route::get('/{stageId}', [TaskController::class, 'index']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{id}', [TaskController::class, 'show']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
@@ -219,9 +219,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [PropertyBookController::class, 'delete']);
     });
     Route::prefix('propertyBookBill')->group(function () {
-        Route::get('/all', [PropertyBookBillController::class, 'getAll']);
-        Route::get('/', [PropertyBookBillController::class, 'index']);
-        Route::get('/{id}', [PropertyBookBillController::class, 'show']);
+        Route::get('/all/{propertyBookId}', [PropertyBookBillController::class, 'getAll']);
+        Route::get('/{propertyBookId}', [PropertyBookBillController::class, 'index']);
+        Route::get('/getOne/{id}', [PropertyBookBillController::class, 'show']);
         Route::post('/create', [PropertyBookBillController::class, 'create']);
         Route::put('update/{id}', [PropertyBookBillController::class, 'update']);
         Route::delete('delete/{id}', [PropertyBookBillController::class, 'delete']);
@@ -243,9 +243,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectMediaController::class, 'delete']);
     });
     Route::prefix('propertyUnit')->group(function () {
-        Route::get('/all', [PropertyUnitController::class, 'getAll']);
-        Route::get('/', [PropertyUnitController::class, 'index']);
-        Route::get('/{id}', [PropertyUnitController::class, 'show']);
+        Route::get('/all/{propertyBookId}', [PropertyUnitController::class, 'getAll']);
+        Route::get('/{propertyBookId}', [PropertyUnitController::class, 'index']);
+        Route::get('/getOne/{propertyBookId}', [PropertyUnitController::class, 'show']);
         Route::post('/create', [PropertyUnitController::class, 'create']);
         Route::put('update/{id}', [PropertyUnitController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitController::class, 'delete']);

@@ -17,14 +17,14 @@ class PropertyUnitBladeController extends Controller
         $this->propertyUnitService = $propertyUnitService;
     }
 
-    public function index()
+    public function index($propertyBookId)
     {
-        return $this->propertyUnitService->paginate();
+        return $this->propertyUnitService->paginate($propertyBookId);
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
-        return $this->propertyUnitService->getAll();
+        return $this->propertyUnitService->getAll($propertyBookId);
     }
 
     public function show($id)
