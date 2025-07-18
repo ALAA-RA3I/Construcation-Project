@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ProjectSalesDetailsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectSalesDetailsBladeController;
+use App\Http\Controllers\PropertyBookBladeController;
+use App\Http\Controllers\PropertyBookBillBladeController;
+use App\Http\Controllers\PropertyUnitBladeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,3 +19,29 @@ Route::get('/login-static', function () {
 Route::get('/login', function () {
     return view('login-static'); // or return a simple message
 })->name('login');
+
+
+Route::prefix('project-sales-details')->group(function () {
+    Route::get('', [ProjectSalesDetailsBladeController::class, 'index']);
+    Route::get('/all', [ProjectSalesDetailsBladeController::class, 'getAll'])->name('project_sales_details.all');
+    Route::get('/{id}', [ProjectSalesDetailsBladeController::class, 'show'])->name('project_sales_details.show');
+});
+
+Route::prefix('property-book')->group(function () {
+    Route::get('/{projectId}', [PropertyBookBladeController::class, 'index']);
+    Route::get('/all/{projectId}', [PropertyBookBladeController::class, 'getAll']);
+    Route::get('/show/{id}', [PropertyBookBladeController::class, 'show']);
+});
+
+Route::prefix('property-book-bill')->group(function () {
+    Route::get('/', [PropertyBookBillBladeController::class, 'index']);
+    Route::get('/all', [PropertyBookBillBladeController::class, 'getAll']);
+    Route::get('/show/{id}', [PropertyBookBillBladeController::class, 'show']);
+});
+
+Route::prefix('property-unit')->group(function () {
+    Route::get('/', [PropertyUnitBladeController::class, 'index']);
+    Route::get('/all', [PropertyUnitBladeController::class, 'getAll']);
+    Route::get('/show/{id}', [PropertyUnitBladeController::class, 'show']);
+
+});
