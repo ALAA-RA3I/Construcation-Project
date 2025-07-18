@@ -120,8 +120,10 @@ use App\Infrastructure\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use App\Domain\Services\Contracts\PropertyUnitOrderServiceInterface;
+use App\Domain\Services\Contracts\StripeServiceInterface;
 use App\Domain\Services\Contracts\UserPropertyUnitInstallmentsServiceInterface;
 use App\Domain\Services\PropertyUnitOrderService;
+use App\Domain\Services\StripeService;
 use App\Domain\Services\UserPropertyUnitInstallmentsService;
 use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserPropertyUnitInstallmentsRepositoryInterface;
@@ -226,6 +228,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Domain\Services\Contracts\EmailServiceServiceInterface::class, \App\Domain\Services\EmailServiceService::class);
         $this->app->bind(\App\Domain\Services\Contracts\PaymentServiceServiceInterface::class, \App\Domain\Services\PaymentServiceService::class);
         $this->app->bind(\App\Domain\Services\Contracts\ContractServiceServiceInterface::class, \App\Domain\Services\ContractServiceService::class);
+        $this->app->bind(StripeServiceInterface::class,StripeService::class);
     }
 
 
