@@ -36,46 +36,47 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
     }
 
     public function create(array $data)
-    {
-        DB::beginTransaction();
-        try {
-            // Handle identity_file upload
-            if (isset($data['identity_file']) && $data['identity_file'] instanceof \Illuminate\Http\UploadedFile) {
-                $identityPath = $this->storeFile($data['identity_file'], 'property-unit-orders/identity', 'public');
-                if (!$identityPath) {
-                    Log::error("Identity file storage failed.");
-                    DB::rollBack();
-                    return false;
-                }
-                $data['identity_file'] = $identityPath;
-            }
-            // Handle clearance_certificate upload
-            if (isset($data['clearance_certificate']) && $data['clearance_certificate'] instanceof \Illuminate\Http\UploadedFile) {
-                $clearancePath = $this->storeFile($data['clearance_certificate'], 'property-unit-orders/clearance', 'public');
-                if (!$clearancePath) {
-                    Log::error("Clearance certificate storage failed.");
-                    DB::rollBack();
-                    return false;
-                }
-                $data['clearance_certificate'] = $clearancePath;
-                $user = Auth::user();
-                if (!$user) {
-                    Log::error("No authenticated user found when creating property unit order.");
-                    DB::rollBack();
-                    return false;
-                }
-                $data['client_id'] = $user->id;
-                $data['status'] = PropertUnitOrderStatusEnum::Pending;
-            }
-
-            $order = $this->propertyUnitOrderRepo->create($data);
-            DB::commit();
-            return $order->load(['propertyUnit', 'client']);
-        } catch (\Exception $e) {
+{
+    DB::beginTransaction();
+    try {
+        $user = Auth::user();
+        if (!$user) {
+            Log::error("No authenticated user found when creating property unit order.");
             DB::rollBack();
-            throw $e;
+            return false;
         }
+        $data['client_id'] = $user->id;
+        $data['status'] = PropertUnitOrderStatusEnum::Pending;
+
+        // Handle identity_file upload
+        if (isset($data['identity_file']) && $data['identity_file'] instanceof \Illuminate\Http\UploadedFile) {
+            $identityPath = $this->storeFile($data['identity_file'], 'property-unit-orders/identity', 'public');
+            if (!$identityPath) {
+                Log::error("Identity file storage failed.");
+                DB::rollBack();
+                return false;
+            }
+            $data['identity_file'] = $identityPath;
+        }
+        // Handle clearance_certificate upload
+        if (isset($data['clearance_certificate']) && $data['clearance_certificate'] instanceof \Illuminate\Http\UploadedFile) {
+            $clearancePath = $this->storeFile($data['clearance_certificate'], 'property-unit-orders/clearance', 'public');
+            if (!$clearancePath) {
+                Log::error("Clearance certificate storage failed.");
+                DB::rollBack();
+                return false;
+            }
+            $data['clearance_certificate'] = $clearancePath;
+        }
+
+        $order = $this->propertyUnitOrderRepo->create($data);
+        DB::commit();
+        return $order->load(['propertyUnit', 'client']);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        throw $e;
     }
+}
 
     public function show($id)
     {

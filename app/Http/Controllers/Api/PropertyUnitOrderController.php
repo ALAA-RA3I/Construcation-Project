@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PropertyUnitOrder\CreatePropertyUnitOrderRequest;
 use App\Http\Requests\PropertyUnitOrder\UpdatePropertyUnitOrderRequest;
 use App\Http\Resources\PropertyUnitOrderResource;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PropertyUnitOrderController extends Controller
 {
@@ -40,7 +42,7 @@ class PropertyUnitOrderController extends Controller
 
     public function create(CreatePropertyUnitOrderRequest $data)
     {
-        $validatedData = PropertyUnitOrderDTO::fromCreateRequest($data->validated());
+          $validatedData = PropertyUnitOrderDTO::fromCreateRequest($data->validated());
         $order = $this->propertyUnitOrderService->create($validatedData);
         return ApiResponse::success(new PropertyUnitOrderResource($order));
     }

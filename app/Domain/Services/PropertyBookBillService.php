@@ -18,15 +18,19 @@ class PropertyBookBillService implements PropertyBookBillServiceInterface
         $this->propertyBookBillRepo = $propertyBookBillRepo;
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
         $this->propertyBookBillRepo->pushCriteria(new WithRelationsCriteria(['propertyBook']));
+        $this->propertyBookBillRepo->pushCriteria(new \App\Criteria\PropertyBookCriteria($propertyBookId));
+
         return $this->propertyBookBillRepo->all();
     }
 
-    public function paginate()
+    public function paginate($propertyBookId)
     {
         $this->propertyBookBillRepo->pushCriteria(new WithRelationsCriteria(['propertyBook']));
+        $this->propertyBookBillRepo->pushCriteria(new \App\Criteria\PropertyBookCriteria($propertyBookId));
+
         return $this->propertyBookBillRepo->paginate();
     }
 

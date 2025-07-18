@@ -20,15 +20,15 @@ class PropertyBookBillController extends Controller
         $this->propertyBookBillService = $propertyBookBillService;
     }
 
-    public function index()
+    public function index($propertyBookId)
     {
-        $propertyBookBills = $this->propertyBookBillService->paginate();
+        $propertyBookBills = $this->propertyBookBillService->paginate($propertyBookId);
         return ApiResponse::success(PropertyBookBillResource::collection($propertyBookBills));
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
-        $propertyBookBills = $this->propertyBookBillService->getAll();
+        $propertyBookBills = $this->propertyBookBillService->getAll($propertyBookId);
         return ApiResponse::success(PropertyBookBillResource::collection($propertyBookBills));
     }
 

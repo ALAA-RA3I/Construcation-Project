@@ -4,8 +4,8 @@ namespace App\Domain\Services\Contracts;
 
 interface PropertyUnitServiceInterface
 {
-    public function getAll();
-    public function paginate();
+    public function getAll($propertyBookId);
+    public function paginate($propertyBookId);
     public function create(array $data);
     public function show($id);
     public function update($id, array $data);

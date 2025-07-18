@@ -20,15 +20,15 @@ class PropertyUnitController extends Controller
         $this->propertyUnitService = $propertyUnitService;
     }
 
-    public function index()
+    public function index($propertyBookId)
     {
-        $propertyUnits = $this->propertyUnitService->paginate();
+        $propertyUnits = $this->propertyUnitService->paginate($propertyBookId);
         return ApiResponse::success(PropertyUnitResource::collection($propertyUnits));
     }
 
-    public function getAll()
+    public function getAll($propertyBookId)
     {
-        $propertyUnits = $this->propertyUnitService->getAll();
+        $propertyUnits = $this->propertyUnitService->getAll($propertyBookId);
         return ApiResponse::success(PropertyUnitResource::collection($propertyUnits));
     }
 

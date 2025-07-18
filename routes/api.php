@@ -29,9 +29,13 @@ use App\Http\Controllers\Api\ProjectMediaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
+use App\Http\Controllers\Api\ContractFlowController;
 
 
 Route::post('login', [AuthController::class, 'login']);
+Route::get('login', function () {
+    return view('login-static');
+});
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });
@@ -54,9 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [EngineerController::class, 'delete']);
     });
     Route::prefix('consultingEngineers')->group(function () {
-        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);
+        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/all', [ConsultingEngineerController::class, 'getAll']);
-        Route::post('/create', [ConsultingEngineerController::class, 'create']);
+        Route::post('/create', [ConsultingEngineerController::class, 'create']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/{id}', [ConsultingEngineerController::class, 'show']);
         Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
         Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
@@ -103,8 +107,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix('projectStage')->group(function () {
         Route::get('/all/{projectId}', [ProjectStageController::class, 'getAll']);
-        Route::get('/{projectId}', [ProjectStageController::class, 'index']);
-        Route::get('/{id}', [ProjectStageController::class, 'show']);
+        Route::get('/{projectId}', [ProjectStageController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{id}', [ProjectStageController::class, 'show']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::post('/create', [ProjectStageController::class, 'create']);
         Route::put('update/{id}', [ProjectStageController::class, 'update']);
         Route::delete('delete/{id}', [ProjectStageController::class, 'delete']);
@@ -112,8 +116,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('task')->group(function () {
         Route::get('/all/{stageId}', [TaskController::class, 'getAll']);
-        Route::get('/{stageId}', [TaskController::class, 'index']);
-        Route::get('/{id}', [TaskController::class, 'show']);
+        Route::get('/{stageId}', [TaskController::class, 'index']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{id}', [TaskController::class, 'show']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::post('/create', [TaskController::class, 'create']);
         Route::put('update/{id}', [TaskController::class, 'update']);
         Route::delete('delete/{id}', [TaskController::class, 'delete']);
@@ -207,17 +211,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectSalesDetailsController::class, 'delete']);
     });
     Route::prefix('propertyBook')->group(function () {
-        Route::get('/all', [PropertyBookController::class, 'getAll']);
-        Route::get('/', [PropertyBookController::class, 'index']);
+        Route::get('/all/{projectId}', [PropertyBookController::class, 'getAll']);
+        Route::get('/{projectId}', [PropertyBookController::class, 'index']);
         Route::get('/{id}', [PropertyBookController::class, 'show']);
         Route::post('/create', [PropertyBookController::class, 'create']);
         Route::put('update/{id}', [PropertyBookController::class, 'update']);
         Route::delete('delete/{id}', [PropertyBookController::class, 'delete']);
     });
     Route::prefix('propertyBookBill')->group(function () {
-        Route::get('/all', [PropertyBookBillController::class, 'getAll']);
-        Route::get('/', [PropertyBookBillController::class, 'index']);
-        Route::get('/{id}', [PropertyBookBillController::class, 'show']);
+        Route::get('/all/{propertyBookId}', [PropertyBookBillController::class, 'getAll']);
+        Route::get('/{propertyBookId}', [PropertyBookBillController::class, 'index']);
+        Route::get('/getOne/{id}', [PropertyBookBillController::class, 'show']);
         Route::post('/create', [PropertyBookBillController::class, 'create']);
         Route::put('update/{id}', [PropertyBookBillController::class, 'update']);
         Route::delete('delete/{id}', [PropertyBookBillController::class, 'delete']);
@@ -239,9 +243,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectMediaController::class, 'delete']);
     });
     Route::prefix('propertyUnit')->group(function () {
-        Route::get('/all', [PropertyUnitController::class, 'getAll']);
-        Route::get('/', [PropertyUnitController::class, 'index']);
-        Route::get('/{id}', [PropertyUnitController::class, 'show']);
+        Route::get('/all/{propertyBookId}', [PropertyUnitController::class, 'getAll']);
+        Route::get('/{propertyBookId}', [PropertyUnitController::class, 'index']);
+        Route::get('/getOne/{propertyBookId}', [PropertyUnitController::class, 'show']);
         Route::post('/create', [PropertyUnitController::class, 'create']);
         Route::put('update/{id}', [PropertyUnitController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitController::class, 'delete']);
@@ -254,4 +258,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitOrderController::class, 'delete']);
     });
+
+    // تدفق العقد - Contract Flow
+    Route::prefix('contract-flow')->group(function () {
+         Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
+
+        // مسارات المدير
+        Route::put('/{orderId}/{status}', [ContractFlowController::class, 'approveOrder']);
+        Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
+        Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
+        Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
+
+        // مسارات العميل
+        Route::post('/{orderId}/create-payment-intent', [ContractFlowController::class, 'createPaymentIntent']);
+        Route::post('/{orderId}/confirm-payment', [ContractFlowController::class, 'confirmPayment']);
+        Route::post('/{orderId}/sign-by-client', [ContractFlowController::class, 'signContractByClient']);
+    });
+});
+Route::prefix('contract-flow')->group(function () {
+    Route::get('/activate-account', [ContractFlowController::class, 'activateAccount']);
 });
