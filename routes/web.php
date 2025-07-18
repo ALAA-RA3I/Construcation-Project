@@ -8,7 +8,7 @@ use App\Http\Controllers\PropertyBookBillBladeController;
 use App\Http\Controllers\PropertyUnitBladeController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.home-page');
 });
 
 Route::get('/login-static', function () {
