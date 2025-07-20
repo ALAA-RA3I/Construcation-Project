@@ -22,10 +22,10 @@ class StripeFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'card_number' => ['required','integer','digits_between:13,19'],
-            'exp_month' => ['required','integer','between:1,12'],
-            'exp_year' => ['required','integer', 'min:'. date('Y')],
-            'cvc' => ['required','digits_between:3,4'],
+            // 'card_number' => ['required','integer','digits_between:13,19'],
+            // 'exp_month' => ['required','integer','between:1,12'],
+            // 'exp_year' => ['required','integer', 'min:'. date('Y')],
+            // 'cvc' => ['required','digits_between:3,4'],
             'stripe_token' => ['required','string']
         ];
     }
