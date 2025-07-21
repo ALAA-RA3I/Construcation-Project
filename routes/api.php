@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
-
+use App\Http\Controllers\FirebaseNotificationController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::get('login', function () {
@@ -278,3 +278,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::prefix('contract-flow')->group(function () {
     Route::get('/activate-account', [ContractFlowController::class, 'activateAccount']);
 });
+
+
+Route::post('/send-notification', [FirebaseNotificationController::class, 'send']);
+

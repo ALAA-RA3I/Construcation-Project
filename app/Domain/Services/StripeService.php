@@ -26,8 +26,16 @@ class StripeService implements StripeServiceInterface
         $client = Auth::guard('api-client')->user()->id;
         Stripe::setApiKey(config('stripe.stripe-secret'));
         $bill = $this->installmentsRepo->findOrFail($billId);
+        $billStatus = $bill->is_paid;
+
+        if ($billStatus) {
+            return [
+                'success' => false,
+                'message' => 'Payment failed, The bill already paid',
+            ];
+        }
         try{
-            Charge::create([
+            $charge = Charge::create([
                 'amount' => $bill->amount *100,
                 'currency' => 'usd',
                 'source' => $data['stripe_token'],
@@ -38,14 +46,31 @@ class StripeService implements StripeServiceInterface
                         'bill_id' => $billId,
                     ]
             ]);
+
+        if ($charge->status !== 'succeeded') {
+            return [
+                'success' => false,
+                'message' => 'Payment failed',
+                'charge' => $charge
+            ];
+        }
         $updatedData = [
             'is_paid' => true,
         ];
 
         $this->installmentsRepo->update($updatedData,$billId);
 
+        return [
+            'success' => true,
+            'message' => 'Payment done successfully',
+            'charge' => $charge
+        ];
+
         }catch(Exception $e){
-            return ApiResponse::error('Somethin went wrong :(', $e->getMessage());
+            return [
+            'success' => false,
+            'message' => $e->getMessage()
+            ];        
         }
     }
 
