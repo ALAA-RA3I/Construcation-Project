@@ -20,7 +20,14 @@ class stripeController extends Controller
 
     public function doPayment (StripeFormRequest $data, $id) {
         $validatedData = StripeDTO::doPaymentRequest($data->validated());
-        $this->stripeService->doPayment($validatedData,$id);
-        return ApiResponse::success('Payment successfully Done'); 
+        $response = $this->stripeService->doPayment($validatedData,$id);
+
+        if (!$response['success']) {
+        return ApiResponse::error($response['message']);
+        }
+
+        return ApiResponse::success($response['message'], [
+            'charge_id' => $response['charge']->id ?? null
+        ]);
     }
 }
