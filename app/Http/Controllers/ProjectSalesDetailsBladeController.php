@@ -7,10 +7,12 @@ use App\Domain\Services\Contracts\ProjectSalesDetailsServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectSalesDetails\CreateProjectSalesDetailsRequest;
 use App\Http\Requests\ProjectSalesDetails\UpdateProjectSalesDetailsRequest;
+use App\Traits\HasFileHandler;
 use Illuminate\Http\Request;
 
 class ProjectSalesDetailsBladeController extends Controller
 {
+    use HasFileHandler;
     protected $projectSalesDetailsService;
 
     public function __construct(ProjectSalesDetailsServiceInterface $projectSalesDetailsService)
@@ -20,10 +22,21 @@ class ProjectSalesDetailsBladeController extends Controller
 
     public function index()
     {
-      return   $projectSalesDetails = $this->projectSalesDetailsService->paginate();
-        // return view('project_sales_details.index', compact('projectSalesDetails'));
-    }
+        $projects = $this->projectSalesDetailsService->paginate();
 
+        // تعديل روابط الصور والفيديو هنا فقط
+        $projects->getCollection()->transform(function ($item) {
+            $item->video_url = $item->video_url ? $this->getAssetFileUrl($item->video_url) : null;
+            $item->diagram_image = $item->diagram_image ? $this->getAssetFileUrl($item->diagram_image) : null;
+            $item->main_image = $item->main_image ? $this->getAssetFileUrl($item->main_image) : null;
+            return $item;
+        });
+        return view('pages.salesSection.units-sales-page',compact('projects'));
+    }
+    private function getAssetUrlOrNull($path)
+    {
+        return $path ? $this->getAssetFileUrl($path) : null;
+    }
     public function getAll()
     {
         return  $projectSalesDetails = $this->projectSalesDetailsService->getAll();

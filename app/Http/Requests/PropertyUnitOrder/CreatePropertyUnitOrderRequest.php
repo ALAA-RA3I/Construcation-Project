@@ -15,10 +15,10 @@ class CreatePropertyUnitOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'property_unit_id' => ['required', 'integer', 'exists:property_units,id'],
-            
-            'identity_file' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'],
-            'clearance_certificate' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'],
+            'property_book_id' => ['required', 'integer', 'exists:property_books,id'],
+            'client_id' => ['required', 'integer', 'exists:clients,id'],
+            'identity_file' => ['required', 'file', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'],
+            'clearance_certificate' => ['required', 'file', 'mimes:jpeg,png,jpg,gif,webp,pdf', 'max:10240'],
             // 'status' => ['nullable', 'string', 'in:' . implode(',', PropertUnitOrderStatusEnum::getValues())],
             'note' => ['nullable', 'string'],
         ];

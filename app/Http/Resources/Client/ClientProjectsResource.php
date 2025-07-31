@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources\Client;
 
+use App\Traits\HasFileHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClientProjectsResource extends JsonResource
 {
+    use HasFileHandler;
     /**
      * Transform the resource into an array.
      *
@@ -19,6 +21,7 @@ class ClientProjectsResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'main_image' => $this->getAssetFileUrl($salesDetails->main_image),
             'main_title' => $salesDetails->main_title ?? null,
             'marketing_description' => $salesDetails->marketing_description ?? null,
             'address' => $salesDetails->address ?? null,

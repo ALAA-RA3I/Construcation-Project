@@ -102,7 +102,6 @@
                     <span class="bg-overlay"></span>
                     <img src="images/misc/pic_1.jpg" class="img-responsive" alt="">
                 </figure>
-
                 <h3>Planning</h3>
                 <p>
                     For the successful execution of a project, effective planning is essential. Those involved with the design and execution of the infrastructure in question must consider zoning requirements.
@@ -434,44 +433,63 @@
 <!-- section close -->
 
 <!-- section begin -->
-<section id="section-deco-1" class="text-light no-top no-bottom" data-bgcolor="#333" data-stellar-background-ratio=".2">
-    <div class="color-overlay pt80 pb60">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>We Proud To Be <span class="id-color">Awards Winning</span> Construction Company<span class="tiny-border"></span></h2>
+<section id="section-skills-bg" class="no-top no-bottom" data-stellar-background-ratio=".3">
+    <div class="container-fluid">
+        <div class="row-fluid table">
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3>Our Vision</h3>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                            <a href="#" class="read_more">read more <i class="fa fa-chevron-right id-color"></i></a>
-                        </div>
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6 text-light bg-black-60">
 
-                        <div class="col-md-6">
-                            <h3>Our Mission</h3>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                            <a href="#" class="read_more">read more <i class="fa fa-chevron-right id-color"></i></a>
+
+                <div class="padding60">
+
+                    <h2>Our Skills<span class="tiny-border"></span></h2>
+
+                    <div class="skill-bar">
+                        <h3>General Consulting</h3>
+                        <div class="de-progress">
+                            <div class="progress-bar" data-value="80%">
+                            </div>
                         </div>
                     </div>
 
+                    <div class="spacer-single"></div>
+
+                    <div class="skill-bar">
+                        <h3>Construction Management</h3>
+                        <div class="de-progress">
+                            <div class="progress-bar" data-value="70%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spacer-single"></div>
+
+                    <div class="skill-bar">
+                        <h3>Design &amp; Build</h3>
+                        <div class="de-progress">
+                            <div class="progress-bar" data-value="90%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spacer-single"></div>
+
+
+                    <div class="skill-bar">
+                        <h3>Special Projects</h3>
+                        <div class="de-progress">
+                            <div class="progress-bar" data-value="60%">
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
-                <div class="col-md-6">
-                    <figure class="pic-hover hover-scale mb30">
-                                    <span class="center-xy">
-                                        <a class="popup-youtube" href="https://www.youtube.com/watch?v=rwvmru5JmXk">
-                                            <i class="fa fa-play btn-action btn-play"></i></a>
-                                    </span>
-                        <span class="bg-overlay"></span>
-                        <img src="images/misc/pic_8.jpg" class="img-responsive" alt="">
-                    </figure>
-                </div>
-
-                <div class="clearfix"></div>
             </div>
         </div>
+
     </div>
 </section>
 <!-- section close -->

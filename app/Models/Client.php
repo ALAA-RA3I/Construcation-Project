@@ -35,6 +35,12 @@ class Client extends Authenticatable
     {
         return $this->hasMany(PropertyUnit::class);
     }
+
+    public function propertyBooks()
+    {
+        return $this->hasManyThrough(PropertyBook::class, PropertyUnit::class, 'client_id', 'id', 'id', 'property_book_id');
+    }
+
     public function propertyUnitOrders()
     {
         return $this->hasMany(PropertyUnitOrder::class);

@@ -16,8 +16,7 @@ class PropertyUnitsResources extends JsonResource
     {
         return [
             'id' => $this->id,
-            'unit_number' => $this->unit_number,
-            'floor' => $this->floor,
+            'first_payment_date' => $this->first_payment_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

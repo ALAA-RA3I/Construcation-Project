@@ -8,12 +8,8 @@ use App\Domain\Enums\PropertUnitOrderStatusEnum;
 class PropertyUnitOrder extends BaseModel
 {
     protected $fillable = [
-        'property_unit_id',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'email',
-        'phone',
+        'property_book_id',
+        'priority_number',
         'identity_file',
         'clearance_certificate',
         'status',
@@ -50,9 +46,9 @@ class PropertyUnitOrder extends BaseModel
         'status' => PropertUnitOrderStatusEnum::class,
     ];
 
-    public function propertyUnit(): BelongsTo
+    public function propertyBook(): BelongsTo
     {
-        return $this->belongsTo(PropertyUnit::class, 'property_unit_id');
+        return $this->belongsTo(PropertyBook::class, 'property_book_id');
     }
 
     public function client()

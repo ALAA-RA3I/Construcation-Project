@@ -26,8 +26,10 @@ class UpdatePropertyBookRequest extends FormRequest
             'model' => ['nullable', 'string', 'max:255'],
             'space' => ['nullable', 'integer'],
             'price' => ['nullable', 'numeric', 'min:0'],
+            'first_payment_amount' => ['nullable','numeric','min:0'],
             'description' => ['nullable', 'string'],
             'payment_period' => ['nullable', 'integer', 'min:1'],
+            'available_units' => ['nullable','integer','min:0'],
             'number_of_rooms' => ['nullable', 'integer', 'min:0'],
             'number_of_bathrooms' => ['nullable', 'integer', 'min:0'],
             'direction' => ['nullable', 'string', 'max:255'],
@@ -35,4 +37,3 @@ class UpdatePropertyBookRequest extends FormRequest
         ];
     }
 }
- 

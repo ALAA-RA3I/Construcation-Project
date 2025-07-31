@@ -6,18 +6,6 @@
                     <div class="col"><span class="id-color"><i class="fa fa-map-marker"></i></span>Collins Street West, Victoria 8007 Australia </div>
                     <div class="col"><span class="id-color"><i class="fa fa-clock-o"></i></span>Monday - Friday 08:00-16:00</div>
                     <div class="col"><span class="id-color"><i class="fa fa-phone"></i></span>1800.899.900</div>
-                    <div class="col">
-                        <div id="lang-selector" class="dropdown">
-                            <a href="#" class="btn-selector">English</a>
-                            <ul>
-                                <li class="active"><a href="#">English</a></li>
-                                <li><a href="#">France</a></li>
-                                <li><a href="#">Germany</a></li>
-                                <li><a href="#">Spain</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
                 <div class="col-md-4 text-right">
                     <!-- social icons -->
@@ -53,60 +41,9 @@
                 <!-- mainmenu begin -->
                 <nav>
                     <ul id="mainmenu">
-                        <li><a href="index.html">Home</a>
-                            <ul>
-                                <li><a href="index-14.html">New Homepage</a></li>
-                                <li><a href="index-onepage-1.html">Onepage Template</a></li>
-                                <li><a href="index.html">Homepage 1</a></li>
-                                <li><a href="index-2.html">Homepage 2</a></li>
-                                <li><a href="index-3.html">Homepage 3</a></li>
-                                <li><a href="index-4.html">Homepage 4</a></li>
-                                <li><a href="index-5.html">Homepage 5</a></li>
-                                <li><a href="index-6.html">Homepage 6</a></li>
-                                <li><a href="index-7.html">Homepage 7</a></li>
-                                <li><a href="index-8.html">Homepage 8</a></li>
-                                <li><a href="index-9.html">Homepage 9</a></li>
-                                <li><a href="index-10.html">Homepage 10</a></li>
-                                <li><a href="index-11.html">Homepage 11</a></li>
-                                <li><a href="index-12.html">Homepage 12</a></li>
-                                <li><a href="index-13.html">Homepage 13</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="projects.html">Projects</a>
-                            <ul>
-                                <li><a href="projects.html">Projects Fullwidth</a>
-                                    <ul>
-                                        <li><a href="projects.html">Fullwidth 4 Cols</a></li>
-                                        <li><a href="projects-3-cols.html">Fullwidth 3 Cols</a></li>
-                                        <li><a href="projects-2-cols.html">Fullwidth 2 Cols</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="projects.html">Projects Grid</a>
-                                    <ul>
-                                        <li><a href="projects-grid-4-cols.html">Grid 4 Cols</a></li>
-                                        <li><a href="projects-grid-3-cols.html">Grid 3 Cols</a></li>
-                                        <li><a href="projects-grid-2-cols.html">Grid 2 Cols</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="projects-2-cols.html">Project Single Page</a>
-                                    <ul>
-                                        <li><a href="project-details-1.html">Project Layout 1</a></li>
-                                        <li><a href="project-details-2.html">Project Layout 2</a></li>
-                                        <li><a href="project-details-3.html">Project Layout 3</a></li>
-                                        <li><a href="project-details-4.html">Project Layout 4</a></li>
-                                        <li><a href="project-details-5.html">Project Layout 5</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Gallery</a>
-                                    <ul>
-                                        <li><a href="gallery-4-cols.html">Gallery 4 Cols</a></li>
-                                        <li><a href="gallery-3-cols.html">Gallery 3 Cols</a></li>
-                                        <li><a href="gallery-2-cols.html">Gallery 2 Cols</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="services.html">Services</a>
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('projects') }}">Projects</a></li>
+                        <li><a href="{{ route('services') }}">Services</a>
                             <ul>
                                 <li><a href="service-1.html">General Consulting</a></li>
                                 <li><a href="service-2.html">Construction Management</a></li>
@@ -114,19 +51,12 @@
                                 <li><a href="service-4.html">Preconstruction Consulting</a></li>
                                 <li><a href="service-5.html">Special Projects</a></li>
                                 <li><a href="service-6.html">Renovations</a></li>
-                                <li><a href="services.html">All Services</a></li>
+                                <li><a href="{{ route('services') }}">All Services</a></li>
                             </ul>
                         </li>
-                        <li><a href="about.html">About Us</a>
-                            <ul>
-                                <li><a href="about.html">Company</a></li>
-                                <li><a href="about-history.html">History</a></li>
-                                <li><a href="about-team.html">Team</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="shop.html">Shop</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="{{ route('about') }}">About Us</a></li>
+                        <li><a href="{{ route('unitsSales') }}">Apartments for Sale</a></li>
+                        <li><a href=" {{ route('contact') }}">Contact</a></li>
                     </ul>
                 </nav>
                 <!-- mainmenu close -->

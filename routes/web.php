@@ -1,15 +1,20 @@
 <?php
 
 use App\Http\Controllers\Api\ProjectSalesDetailsController;
+use App\Http\Controllers\View\WebSitePagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectSalesDetailsBladeController;
 use App\Http\Controllers\PropertyBookBladeController;
 use App\Http\Controllers\PropertyBookBillBladeController;
 use App\Http\Controllers\PropertyUnitBladeController;
 
-Route::get('/', function () {
-    return view('pages.home-page');
-});
+
+Route::get('/',[WebSitePagesController::class,'homePage'])->name('home');
+Route::get('projects',[WebSitePagesController::class,'projectsPage'])->name('projects');
+Route::get('services',[WebSitePagesController::class,'servicesPage'])->name('services');
+Route::get('about-us',[WebSitePagesController::class,'aboutPage'])->name('about');
+Route::get('contact-us',[WebSitePagesController::class,'contactPage'])->name('contact');
+
 
 Route::get('/login-static', function () {
     return view('login-static');
@@ -21,16 +26,16 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::prefix('project-sales-details')->group(function () {
-    Route::get('', [ProjectSalesDetailsBladeController::class, 'index']);
+Route::prefix('SalesUnits')->group(function () {
+    Route::get('', [ProjectSalesDetailsBladeController::class, 'index'])->name('unitsSales');
     Route::get('/all', [ProjectSalesDetailsBladeController::class, 'getAll'])->name('project_sales_details.all');
     Route::get('/{id}', [ProjectSalesDetailsBladeController::class, 'show'])->name('project_sales_details.show');
 });
 
 Route::prefix('property-book')->group(function () {
-    Route::get('/{projectId}', [PropertyBookBladeController::class, 'index']);
+    Route::get('/{projectId}', [PropertyBookBladeController::class, 'index'])->name('unitsBooks');
     Route::get('/all/{projectId}', [PropertyBookBladeController::class, 'getAll']);
-    Route::get('/show/{id}', [PropertyBookBladeController::class, 'show']);
+    Route::get('/show/{id}', [PropertyBookBladeController::class, 'show'])->name('bookDetails');
 });
 
 Route::prefix('property-book-bill')->group(function () {
