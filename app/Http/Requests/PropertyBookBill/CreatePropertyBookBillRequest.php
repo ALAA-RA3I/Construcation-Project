@@ -25,8 +25,6 @@ class CreatePropertyBookBillRequest extends FormRequest
         return [
             'property_book_id' => ['required', 'integer', 'exists:property_books,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'due_in_months' => ['nullable', 'integer', 'min:0'],
-            'type' => ['nullable', 'string', 'in:' . implode(',', BookBillTypeEnum::getValues())],
             'description' => ['nullable', 'string', 'max:255'],
         ];
     }

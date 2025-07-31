@@ -18,8 +18,7 @@ return new class extends Migration
             $table->integer('id')->autoIncrement();
             $table->integer('property_book_id');
             $table->foreign('property_book_id')->references('id')->on('property_books')->cascadeOnDelete();
-            $table->integer('unit_number');
-            $table->integer('floor')->nullable();
+            $table->date('first_payment_date');
             $table->integer('client_id');
             $table->foreign('client_id')->nullable()->references('id')->on('clients')->cascadeOnDelete();
             $this->addBaseColumns($table);

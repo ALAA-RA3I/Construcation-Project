@@ -20,12 +20,8 @@ return new class extends Migration
             $table->integer('property_book_id');
             $table->foreign('property_book_id')->references('id')->on('property_books')->cascadeOnDelete();
             $table->decimal('amount', 12, 2); // قيمة القسط
-            $table->integer('due_in_months')->nullable(); // بعد كم شهر من بداية العقد يستحق القسط (مثلاً 0 = دفعة أولى، 1 = بعد شهر)
-            $table->enum('type', BookBillTypeEnum::getValues())->default(BookBillTypeEnum::Monthly);
-
             $table->string('description')->nullable(); // وصف القسط (اختياري)
-
-            $table->timestamps();
+            $this->addBaseColumns($table);
         });
     }
 

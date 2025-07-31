@@ -11,13 +11,15 @@ class PropertyUnitOrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'property_unit_id' => $this->property_unit_id,
+            'priority_number' => $this->priority_number,
+            'property_book_id' => $this->property_book_id,
+            'book' => new PropertyBookBillResource($this->whenLoaded('propertyBook')),
+            'client_id' => $this->client_id,
             'client' => new ClientResource($this->whenLoaded('client')),
             'identity_file' => $this->identity_file ? asset('storage/' . $this->identity_file) : null,
             'clearance_certificate' => $this->clearance_certificate ? asset('storage/' . $this->clearance_certificate) : null,
             'status' => $this->status,
             'note' => $this->note,
-            'property_unit' => new PropertyUnitResource($this->whenLoaded('propertyUnit')),
 
             // حقول العقد
             'contract_file' => $this->contract_file ? asset('storage/' . $this->contract_file) : null,

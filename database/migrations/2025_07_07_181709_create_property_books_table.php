@@ -21,9 +21,10 @@ return new class extends Migration
             $table->string('model'); // مثل A أو B
             $table->integer('space');
             $table->decimal('price', 12, 2);
+            $table->decimal('first_payment_amount', 12, 2)->default(0);
             $table->longText('description')->nullable();
             $table->integer('payment_period')->nullable(); // عدد الأشهر
-
+            $table->integer('available_units')->default(0); // عدد الشقق المتاحة
             $table->integer('number_of_rooms')->nullable();
             $table->integer('number_of_bathrooms')->nullable();
             $table->string('direction')->nullable(); // شرقي، غربي...

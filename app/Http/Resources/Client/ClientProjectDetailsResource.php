@@ -21,6 +21,9 @@ class ClientProjectDetailsResource extends JsonResource
         $salesDetails = optional($project)->salesDetails;
 
         return [
+            'first_payment_amount' => $this->propertyBook->first_payment_amount ?? null,
+            'first_payment_date' => $this->first_payment_date,
+            'model' => $this->propertyBook->model ?? null,
             'price' => $this->propertyBook->price ?? null,
             'space' => $this->propertyBook->space ?? null,
             'description' => $this->propertyBook->description ?? null,
@@ -28,8 +31,6 @@ class ClientProjectDetailsResource extends JsonResource
             'number_of_bathrooms' => $this->propertyBook->number_of_bathrooms ?? null,
             'direction' => $this->propertyBook->direction ?? null,
             'diagram_image' => $this->getAssetFileUrl($this->propertyBook->diagram_image)  ?? null,
-            'unit_number' => $this->unit_number ?? null,
-            'floor' => $this->floor
         ];
     }
 }

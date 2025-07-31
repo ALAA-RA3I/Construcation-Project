@@ -16,6 +16,7 @@ class UpdatePropertyUnitOrderRequest extends FormRequest
     {
         return [
             'property_unit_id' => ['nullable', 'integer', 'exists:property_units,id'],
+            'client_id' => ['nullable', 'integer', 'exists:clients,id'],
             // 'first_name' => ['nullable', 'string', 'max:255'],
             // 'middle_name' => ['nullable', 'string', 'max:255'],
             // 'last_name' => ['nullable', 'string', 'max:255'],

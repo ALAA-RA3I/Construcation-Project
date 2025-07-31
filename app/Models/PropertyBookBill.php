@@ -12,16 +12,9 @@ class PropertyBookBill extends BaseModel
     protected $fillable = [
         'property_book_id',
         'amount',
-        'due_in_months',
-        'type',
         'description',
     ];
-    protected function casts(): array
-    {
-        return [
-            'type' => BookBillTypeEnum::class,
-        ];
-    }
+
 
     /**
      * العلاقة مع النموذج

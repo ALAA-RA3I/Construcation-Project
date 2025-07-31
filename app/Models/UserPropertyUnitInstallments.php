@@ -9,7 +9,6 @@ class UserPropertyUnitInstallments extends BaseModel
     protected $fillable = [
         'property_unit_id',
         'client_id',
-        'amount',
         'due_date',
         'is_paid',
         'property_book_bill_id',
@@ -18,7 +17,6 @@ class UserPropertyUnitInstallments extends BaseModel
     protected $casts = [
         'due_date' => 'date',
         'is_paid' => 'boolean',
-        'amount' => 'decimal:2',
     ];
 
     // العلاقة مع الشقة

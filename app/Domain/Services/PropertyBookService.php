@@ -34,7 +34,7 @@ class PropertyBookService implements PropertyBookServiceInterface
 
     public function paginate($projectId)
     {
-        $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['project']));
+//        $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['project']));
         $this->propertyBookRepo->pushCriteria(new \App\Criteria\ProjectCriteria($projectId));
 
         return $this->propertyBookRepo->paginate();
@@ -66,7 +66,7 @@ class PropertyBookService implements PropertyBookServiceInterface
 
     public function show($id)
     {
-        $propertyBook = $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['project']))->find($id);
+        $propertyBook = $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria(['bills']))->find($id);
         return $propertyBook;
     }
 

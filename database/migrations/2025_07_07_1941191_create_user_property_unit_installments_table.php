@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreign('property_unit_id')->references('id')->on('property_units')->cascadeOnDelete();
             $table->integer('client_id');
             $table->foreign('client_id')->references('id')->on('clients')->cascadeOnDelete();
-            $table->decimal('amount', 12, 2); // قيمة القسط
             $table->date('due_date'); // تاريخ الاستحقاق
             $table->boolean('is_paid')->default(false);
 

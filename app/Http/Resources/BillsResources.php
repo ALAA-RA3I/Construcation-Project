@@ -16,7 +16,6 @@ class BillsResources extends JsonResource
     {
         return [
             'id' => $this->id,
-            'amount' => $this->amount,
             'due_date' => $this->due_date,
             'is_paid' => $this->is_paid,
             'created_at' => $this->created_at,

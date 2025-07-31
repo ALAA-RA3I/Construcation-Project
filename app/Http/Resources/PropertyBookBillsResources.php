@@ -18,8 +18,6 @@ class PropertyBookBillsResources extends JsonResource
             'id' => $this->id,
             'property_book_id' => $this->property_book_id,
             'amount' => $this->amount,
-            'due_in_months' => $this->due_in_months,
-            'type' => $this->type,
             'description' => $this->description
         ];
     }
