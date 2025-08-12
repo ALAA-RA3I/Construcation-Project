@@ -2,10 +2,12 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Domain\Enums\PropertUnitOrderStatusEnum;
 use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
 use App\Domain\Services\Contracts\PropertyUnitOrderServiceInterface;
+use App\Models\PropertyUnitOrder;
 use App\Traits\HasFileHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\EntityNotFoundException;
@@ -39,14 +41,8 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
 {
     DB::beginTransaction();
     try {
-        $user = Auth::user();
-        if (!$user) {
-            Log::error("No authenticated user found when creating property unit order.");
-            DB::rollBack();
-            return false;
-        }
-        $data['client_id'] = $user->id;
-        $data['status'] = PropertUnitOrderStatusEnum::Pending;
+
+        $data['priority_number'] = $this->generatePriorityNumber($data['property_book_id']);
 
         // Handle identity_file upload
         if (isset($data['identity_file']) && $data['identity_file'] instanceof \Illuminate\Http\UploadedFile) {
@@ -58,20 +54,10 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
             }
             $data['identity_file'] = $identityPath;
         }
-        // Handle clearance_certificate upload
-        if (isset($data['clearance_certificate']) && $data['clearance_certificate'] instanceof \Illuminate\Http\UploadedFile) {
-            $clearancePath = $this->storeFile($data['clearance_certificate'], 'property-unit-orders/clearance', 'public');
-            if (!$clearancePath) {
-                Log::error("Clearance certificate storage failed.");
-                DB::rollBack();
-                return false;
-            }
-            $data['clearance_certificate'] = $clearancePath;
-        }
 
         $order = $this->propertyUnitOrderRepo->create($data);
         DB::commit();
-        return $order->load(['propertyUnit', 'client']);
+        return $order->load(['propertyBook', 'client']);
     } catch (\Exception $e) {
         DB::rollBack();
         throw $e;
@@ -103,18 +89,6 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
             }
             $data['identity_file'] = $identityPath;
         }
-        // Handle clearance_certificate upload
-        if (isset($data['clearance_certificate']) && $data['clearance_certificate'] instanceof \Illuminate\Http\UploadedFile) {
-            if ($order->clearance_certificate && $this->fileExists($order->clearance_certificate)) {
-                $this->deleteFile($order->clearance_certificate);
-            }
-            $clearancePath = $this->storeFile($data['clearance_certificate'], 'property-unit-orders/clearance', 'public');
-            if (!$clearancePath) {
-                Log::error("Clearance certificate storage failed during update.");
-                return false;
-            }
-            $data['clearance_certificate'] = $clearancePath;
-        }
         $this->propertyUnitOrderRepo->update($data, $id);
         return $order->fresh()->load(['propertyUnit', 'client']);
     }
@@ -140,5 +114,37 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
             DB::rollBack();
             return false;
         }
+    }
+    private function generatePriorityNumber(int $propertyBookId): int
+    {
+        // Get the maximum priority number for this property book
+        $maxPriority = PropertyUnitOrder::where('property_book_id', $propertyBookId)
+            ->max('priority_number');
+
+        // If no orders exist for this book yet, start from 1000
+        if (is_null($maxPriority)) {
+            return 1000;
+        }
+
+        // Increment by 1 from the current max
+        return $maxPriority + 1;
+    }
+    public function getClientOrders($clientId)
+    {
+        return $this->propertyUnitOrderRepo
+            ->join('property_books', 'property_unit_orders.property_book_id', '=', 'property_books.id')
+            ->join('projects', 'property_books.project_id', '=', 'projects.id')
+            ->join('project_sales_details', 'projects.id', '=', 'project_sales_details.project_id')
+            ->where('property_unit_orders.client_id', $clientId)
+            ->select(
+                'property_books.id',
+                'property_unit_orders.priority_number',
+                'property_unit_orders.status',
+                'property_books.price',
+                'property_books.first_payment_amount',
+                'project_sales_details.main_title',
+                'project_sales_details.address'
+            )
+            ->paginate();
     }
 }

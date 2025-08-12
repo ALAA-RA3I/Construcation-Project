@@ -1,3 +1,16 @@
+<style>
+    .sign-in a {
+        color: #ffffff; /* Changed to gray */
+        text-decoration: none;
+        font-size: 13px;
+        transition: all 0.3s;
+    }
+
+    .sign-in a:hover {
+        color: #ffd200;
+        text-decoration: none;
+    }
+</style>
 <header>
     <div class="info">
         <div class="container">
@@ -8,6 +21,31 @@
                     <div class="col"><span class="id-color"><i class="fa fa-phone"></i></span>1800.899.900</div>
                 </div>
                 <div class="col-md-4 text-right">
+                    @auth('client')
+                        <div class="col sign-in">
+                            <a href="{{ route('client.logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                               class="logout-btn">
+                                <i class="fa fa-sign-out mr-1"></i>Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('client.logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
+                    @else
+                        <div class="col sign-in">
+                            <a href="{{ route('client.login') }}">
+                                <i class="fa fa-sign-in mr-1" style="margin-right: 10px"></i>Sign in
+                            </a>
+                            <span style="margin: 0px 3px">|</span>
+                            <a href="{{ route('client.register') }}">
+                                <i class="fa fa-user-plus mr-1" style="margin-right: 10px"></i>Sign up
+                            </a>
+                        </div>
+
+
+                    @endauth
+
                     <!-- social icons -->
                     <div class="col social">
                         <a href="#"><i class="fa fa-facebook"></i></a>
@@ -56,11 +94,23 @@
                         </li>
                         <li><a href="{{ route('about') }}">About Us</a></li>
                         <li><a href="{{ route('unitsSales') }}">Apartments for Sale</a></li>
-                        <li><a href=" {{ route('contact') }}">Contact</a></li>
+                        <li><a href="{{ route('contact') }}">Contact</a></li>
+                        @auth('client')
+                            <li>
+                                <a href="#">My Account</a>
+                                <ul>
+                                    <li><a href="{{ route('myOrders') }}">My Orders</a></li>
+                                    <li><a href="{{ route('client.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                                    <form id="logout-form" action="{{ route('client.logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </ul>
+                            </li>
+                        @endauth
                     </ul>
                 </nav>
                 <!-- mainmenu close -->
-
             </div>
         </div>
-    </div></header>
+    </div>
+</header>

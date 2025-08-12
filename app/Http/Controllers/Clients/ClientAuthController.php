@@ -30,9 +30,10 @@ class ClientAuthController extends Controller
         ]);
     }
 
-    public function changePassword(PasswordRequest $request,$id) {
+    public function changePassword(PasswordRequest $request) {
         $validatedData = changePasswordDTO::fromChangeRequest($request->validated());
-        $this->clientService->changePassword($validatedData,$id);
+        $clientId = auth('api-client')->id();
+        $this->clientService->changePassword($validatedData,$clientId);
         return ApiResponse::success(null,'password changed Successfully');
     }
 }

@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\View;
 
-use App\Application\DTO\PropertyBookBillDTO\PropertyBookBillDTO;
 use App\Domain\Services\Contracts\PropertyBookBillServiceInterface;
-use App\Http\Requests\PropertyBookBill\CreatePropertyBookBillRequest;
-use App\Http\Requests\PropertyBookBill\UpdatePropertyBookBillRequest;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PropertyBookBillBladeController extends Controller
 {
@@ -32,5 +29,5 @@ class PropertyBookBillBladeController extends Controller
         return $this->propertyBookBillService->show($id);
     }
 
-   
+
 }

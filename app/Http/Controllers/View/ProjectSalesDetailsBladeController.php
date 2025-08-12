@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\View;
 
-use App\Application\DTO\ProjectSalesDetailsDTO\ProjectSalesDetailsDTO;
 use App\Domain\Services\Contracts\ProjectSalesDetailsServiceInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProjectSalesDetails\CreateProjectSalesDetailsRequest;
-use App\Http\Requests\ProjectSalesDetails\UpdateProjectSalesDetailsRequest;
 use App\Traits\HasFileHandler;
-use Illuminate\Http\Request;
 
 class ProjectSalesDetailsBladeController extends Controller
 {

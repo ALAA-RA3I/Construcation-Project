@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\View;
 
-use App\Application\DTO\PropertyUnitDTO\PropertyUnitDTO;
 use App\Domain\Services\Contracts\PropertyUnitServiceInterface;
-use App\Http\Requests\PropertyUnit\CreatePropertyUnitRequest;
-use App\Http\Requests\PropertyUnit\UpdatePropertyUnitRequest;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PropertyUnitBladeController extends Controller
 {

@@ -19,11 +19,11 @@ use BenSampo\Enum\Enum;
 final class PropertUnitOrderStatusEnum extends Enum
 {
     const Pending = 'pending';
-    const Approved = 'approved';
+//    const Approved = 'approved';
     const Rejected = 'rejected';
-    const ContractReady = 'contract_ready';
+//    const ContractReady = 'contract_ready';
     const PaymentPending = 'payment_pending';
     const PaymentCompleted = 'payment_completed';
     const ContractSigned = 'contract_signed';
-    const ContractFinalized = 'contract_finalized';
+//    const ContractFinalized = 'contract_finalized';
 }

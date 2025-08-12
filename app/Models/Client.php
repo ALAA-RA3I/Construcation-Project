@@ -10,14 +10,13 @@ use Laravel\Sanctum\HasApiTokens;
 class Client extends Authenticatable
 {
     use HasFactory, HasApiTokens,SoftDeletes;
-
+    protected $guard = ['client', 'api-client']; // متعدد الحراس
     protected $fillable = [
         'first_name',
         'last_name',
         'email',
         'password',
         'phone_number',
-        'national_id',
         'is_active',
     ];
 

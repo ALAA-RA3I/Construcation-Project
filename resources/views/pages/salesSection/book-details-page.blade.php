@@ -430,7 +430,6 @@
                             <span class="summary-value">{{ number_format($book->bills->sum('amount'), 0) }} SYP</span>
                         </div>
                     </div>
-
                     <div style="display: flex; justify-content: end; align-items: center; margin-top: 30px; gap: 20px;">
                         <a href="{{ route('unitsBooks',$book->id) }}" class="back-btn">
                             <i class="fa fa-arrow-right " style="margin-right: 5px ; margin-bottom: 1px" ></i>
@@ -446,4 +445,140 @@
             </div>
         </div>
     </div>
+    <!-- Registration Form Modal -->
+    <div id="registerModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background-color: #fefefe; margin: 10% auto; padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 50%; max-width: 600px;">
+            <span class="close-modal" style="float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+
+            <h2 style="color: #333; margin-bottom: 20px;">Register for Apartment</h2>
+
+            @auth('client')
+                <form id="registrationForm" action="{{ route('registerOrder') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="property_book_id" value="{{ $book->id }}">
+                    <input type="hidden" name="client_id" value="{{ auth('client')->id() }}">
+
+                    <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+                        <!-- Identity File Input -->
+                        <div class="file-upload-container" style="flex: 1;">
+                            <label for="identity_file" class="file-upload-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Identity Document</label>
+                            <div class="file-upload-box" style="border: 2px solid #ffd200; border-radius: 8px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;">
+                                <input type="file" id="identity_file" name="identity_file" required class="file-upload-input" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                                <i class="fas fa-id-card" style="font-size: 36px; color: #ffd200; margin-bottom: 10px;"></i>
+                                <div class="file-upload-text" style="text-align: center; color: #555; font-size: 14px;">
+                                    <div>ID/Passport</div>
+                                    <div class="file-name" style="margin-top: 5px; color: #333; font-weight: 600; display: none;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Clearance Certificate Input -->
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="note" style="display: block; margin-bottom: 8px; font-weight: 600;">Additional Notes (Optional)</label>
+                        <textarea id="note" name="note" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;">
+                        <button type="button" class="close-modal back-btn">Cancel</button>
+                        <button type="submit" class="register-btn">Submit Registration</button>
+                    </div>
+                </form>
+            @else
+                <div style="text-align: center; padding: 20px;">
+                    <p style="font-size: 16px; margin-bottom: 30px;">You need to login to register for this apartment.</p>
+                    <a href="{{ route('client.login') }}?redirect={{ urlencode(Request::url()) }}" class="register-btn" style="text-decoration: none;">
+                        <i class="fa fa-sign-in-alt" style="margin-right: 8px;"></i>
+                        Login Now
+                    </a>
+                </div>
+            @endauth
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('registerModal');
+            const showBtn = document.getElementById('showRegisterForm');
+            const closeBtns = document.querySelectorAll('.close-modal');
+
+            // Show modal when button is clicked
+            showBtn.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+
+            // Close modal when X or Cancel is clicked
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // File input handling
+            document.querySelectorAll('.file-upload-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const container = this.closest('.file-upload-box');
+                    const fileNameDisplay = container.querySelector('.file-name');
+
+                    if (this.files.length > 0) {
+                        fileNameDisplay.textContent = this.files[0].name;
+                        fileNameDisplay.style.display = 'block';
+                        container.style.borderColor = '#28a745'; // Green border when file selected
+                    } else {
+                        fileNameDisplay.style.display = 'none';
+                        container.style.borderColor = '#ffd200'; // Yellow border when no file
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .modal {
+            transition: all 0.3s ease;
+        }
+
+        .modal-content {
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .file-upload-box {
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-box:hover {
+            background-color: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+
+            .file-upload-container {
+                flex: 100% !important;
+            }
+
+            .file-upload-container + .file-upload-container {
+                margin-top: 20px;
+            }
+        }
+    </style>
 @endsection

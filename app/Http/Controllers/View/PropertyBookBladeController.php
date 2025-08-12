@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\View;
 
-use App\Application\DTO\PropertyBookDTO\PropertyBookDTO;
 use App\Domain\Services\Contracts\PropertyBookServiceInterface;
-use App\Http\Requests\PropertyBook\CreatePropertyBookRequest;
-use App\Http\Requests\PropertyBook\UpdatePropertyBookRequest;
+use App\Http\Controllers\Controller;
 use App\Traits\HasFileHandler;
-use Illuminate\Http\Request;
 
 class PropertyBookBladeController extends Controller
 {

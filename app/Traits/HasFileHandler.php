@@ -10,7 +10,7 @@ use Exception;
 
 trait HasFileHandler
 {
-    public function storeFile(UploadedFile $file,  $directory = 'uploads',  $disk = 'public')
+    public function storeFile(UploadedFile $file, $directory = 'uploads', $disk = 'public')
     {
         if (!$file->isValid()) {
             Log::warning('Invalid file upload.');
@@ -18,14 +18,25 @@ trait HasFileHandler
         }
 
         try {
+            // Get the original file name (without extension)
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+            // Clean file name to remove spaces and unsafe characters
+            $safeName = Str::slug($originalName, '_');
+
+            // Get file extension
             $extension = $file->getClientOriginalExtension();
-            $uniqueName = Str::uuid() . '.' . $extension;
+
+            // Append random 4-digit number
+            $uniqueName = $safeName . '_' . rand(1000, 9999) . '.' . $extension;
+
             return $file->storeAs($directory, $uniqueName, $disk);
         } catch (Exception $e) {
             Log::error("Store failed: " . $e->getMessage());
             return null;
         }
     }
+
 
     public function updateFileWithBackup(UploadedFile $newFile,  $oldFilePath,  $directory = 'uploads',  $disk = 'public',  $backupDir = 'backups')
     {

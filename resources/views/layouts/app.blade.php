@@ -3,17 +3,19 @@
 <head>
     @include('layouts.partials.meta')
     <title>@yield('page-title','HomePage')</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
+
 </head>
 
 <body id="homepage">
 
 <div id="wrapper">
-
     <!-- header begin -->
     @include('layouts.partials.header')
     <!-- header close -->
-
     <!-- content begin -->
+
     <div id="content" class="no-bottom no-top">
 
        @yield('main-content')
@@ -81,5 +83,6 @@
 </div>
 
 @include('layouts.partials.scripts')
+@include('components.alert')
 </body>
 </html>

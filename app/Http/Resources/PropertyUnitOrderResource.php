@@ -17,7 +17,6 @@ class PropertyUnitOrderResource extends JsonResource
             'client_id' => $this->client_id,
             'client' => new ClientResource($this->whenLoaded('client')),
             'identity_file' => $this->identity_file ? asset('storage/' . $this->identity_file) : null,
-            'clearance_certificate' => $this->clearance_certificate ? asset('storage/' . $this->clearance_certificate) : null,
             'status' => $this->status,
             'note' => $this->note,
 

@@ -4,6 +4,7 @@
 <meta name="description" content="BuildPro is the most complete constructon and building website template">
 <meta name="keywords" content="construction,multipurpose,onepage,responsive,minimal,bootstrap,theme">
 <meta name="author" content="">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 <!--[if lt IE 9]>

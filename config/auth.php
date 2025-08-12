@@ -40,11 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
+        'client' => [ // للويب
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
         'api-client' => [
-            'driver' => 'sanctum',             
-            'provider' => 'clients',         
-            'hash' => false,                 
+            'driver' => 'sanctum',
+            'provider' => 'clients',
+            'hash' => false,
         ],
     ],
 
@@ -75,7 +78,7 @@ return [
 
         'clients' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Client::class, 
+            'model' => App\Models\Client::class,
         ],
 
         // 'users' => [

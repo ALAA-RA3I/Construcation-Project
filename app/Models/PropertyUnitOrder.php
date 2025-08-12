@@ -11,7 +11,6 @@ class PropertyUnitOrder extends BaseModel
         'property_book_id',
         'priority_number',
         'identity_file',
-        'clearance_certificate',
         'status',
         'note',
         'client_id',

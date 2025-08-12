@@ -39,10 +39,11 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         // Validation Errors (optional: these are already nicely formatted by Laravel)
-        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e, Request $request) {
-            return ApiResponse::error('Validation failed.', $e->errors(), 422);
-        });
-
+//        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e, Request $request) {
+//            return ApiResponse::error('Validation failed.', $e->errors(), 422);
+//        });
+//
+//
         // Authentication failure
         $exceptions->renderable(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
             return ApiResponse::error('Unauthenticated.', [], 401);
@@ -55,6 +56,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Fallback for unexpected exceptions
         $exceptions->renderable(function (\Throwable $e, Request $request) {
-            return ApiResponse::error($e->getMessage(), [], 500);
+            if ($request->expectsJson()) {
+                return ApiResponse::error($e->getMessage(), [], 500);
+            }
         });
     })->create();
