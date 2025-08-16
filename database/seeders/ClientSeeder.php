@@ -18,7 +18,7 @@ class ClientSeeder extends Seeder
             'email'        => 'client@example.com',
             'password'     => Hash::make('password123'),
             'phone_number' => '0501234567',
-            'national_id'  => 1234567890,
+            // 'national_id'  => 1234567890,
             'is_active'    => true,
             'created_by'   => 1,
             'created_at' => Carbon::now(),

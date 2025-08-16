@@ -14,7 +14,7 @@ interface EmailServiceServiceInterface
     /**
      * إرسال إيميل العقد
      */
-    public function sendContractEmail(PropertyUnitOrder $order);
+    public function sendContractEmail(PropertyUnitOrder $order,$contractPdfPath);
 
     /**
      * إرسال رمز التوقيع السري

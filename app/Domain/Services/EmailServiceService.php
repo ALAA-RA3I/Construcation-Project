@@ -72,23 +72,23 @@ class EmailServiceService implements EmailServiceServiceInterface
     /**
      * إرسال إيميل العقد
      */
-    public function sendContractEmail(PropertyUnitOrder $order)
+    public function sendContractEmail(PropertyUnitOrder $order, $contractPdfPath)
     {
         try {
-            // تحديث الطلب
             $order->update([
                 'contract_sent_at' => now(),
-                'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractReady
             ]);
-
-            // إرسال الإيميل
+ 
             Mail::send('emails.contract-ready', [
                 'client' => $order->client,
                 'order' => $order,
-                'propertyUnit' => $order->propertyUnit
-            ], function ($message) use ($order) {
+            ], function ($message) use ($order, $contractPdfPath) {
                 $message->to($order->client->email)
-                    ->subject('عقدك جاهز للمراجعة والتوقيع');
+                    ->subject('عقدك جاهز للمراجعة والتوقيع')
+                    ->attach(public_path('storage/' . $contractPdfPath), [
+                        'as' => 'contract.pdf',
+                        'mime' => 'application/pdf'
+                    ]);
             });
 
             Log::info('Contract email sent', ['order_id' => $order->id]);

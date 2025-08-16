@@ -31,8 +31,8 @@ class ContractServiceService implements ContractServiceServiceInterface
                 'withSignatures' => $withSignatures,
                 'date' => now()->format('Y-m-d'),
                 'client' => $order->client,
-                'propertyUnit' => $order->propertyUnit,
-                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
+                // 'propertyUnit' => $order->propertyUnit,
+                'propertyBook' => $order->propertyBook,
                 'secret_code' => $order->signature_code,
 
             ]);
@@ -42,7 +42,7 @@ class ContractServiceService implements ContractServiceServiceInterface
             // تحديث الطلب
             $order->update([
                 'contract_file' => $contractFileName,
-                'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractReady
+                // 'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractReady
             ]);
 
             Log::info('Contract generated', ['order_id' => $order->id, 'file' => $contractFileName]);
@@ -169,7 +169,7 @@ class ContractServiceService implements ContractServiceServiceInterface
         try {
             $order->update([
                 'company_signed_at' => now(),
-                'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractFinalized
+                'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractSigned
             ]);
 
             // Generate signed PDF with both signatures using the new Blade

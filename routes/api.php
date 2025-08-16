@@ -264,7 +264,7 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
 
         // مسارات المدير
-        Route::put('/{orderId}/{status}', [ContractFlowController::class, 'approveOrder']);
+        Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrder']);
         Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
         Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
         Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
