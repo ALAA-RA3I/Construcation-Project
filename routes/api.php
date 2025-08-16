@@ -264,10 +264,13 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
 
         // مسارات المدير
-        Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrder']);
+        Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrRejecrOrder']);
+        Route::put('/{orderId}/cancel', [ContractFlowController::class, 'cancel']);
+
         Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
         Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
         Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
+        
 
         // مسارات العميل
         Route::post('/{orderId}/create-payment-intent', [ContractFlowController::class, 'createPaymentIntent']);
