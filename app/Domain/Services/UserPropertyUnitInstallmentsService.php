@@ -51,4 +51,16 @@ class UserPropertyUnitInstallmentsService implements UserPropertyUnitInstallment
     {
         return $this->userPropertyUnitInstallmentsRepo->delete($id);
     }
+    public function getBillsByStatus($propertyUnitId, $isPaid)
+    {
+        $clientId = Auth::guard('api-client')->user()->id;
+
+        return $this->userPropertyUnitInstallmentsRepo->scopeQuery(function ($query) use ($clientId, $propertyUnitId, $isPaid) {
+            return $query->where('client_id', $clientId)
+                ->where('property_unit_id', $propertyUnitId)
+                ->where('is_paid', $isPaid)
+                ->with(['propertyBookBill', 'propertyUnit']);
+        })->all();
+    }
+
 }
