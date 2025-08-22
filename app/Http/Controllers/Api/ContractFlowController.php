@@ -58,27 +58,35 @@ class ContractFlowController extends Controller
             // if ($order->status !='pending') {
             //     return ApiResponse::error('Order is not in pending status', 400);
             // }
-            if ($status == 'approve') {
+
+            if ($status === 'approve') {
                 // تحديث حالة الطلب
-                $order->update(['status' => PropertUnitOrderStatusEnum::Approved]);
-            } else {
+                $order->update(['status' => 'payment_pending']);
+                $contractFilePath = app('App\\Domain\\Services\\Contracts\\ContractServiceServiceInterface')->generateContract($order, false); 
+                if ($contractFilePath) {
+                    $order->update([
+                        'contract_file' => $contractFilePath,
+                        'contract_sent_at' => now(),
+                    ]);
+                }
+             $this->emailService->sendContractEmail($order,$contractFilePath);
+
+            } else if ($status === 'reject') {  // Removed extra curly brace
                 // تحديث حالة الطلب
-                $order->update(['status' => PropertUnitOrderStatusEnum::Rejected]);
+                $order->update(['status' => 'rejected']);
             }
 
-            // إرسال إيميل تفعيل الحساب
-            $this->emailService->sendAccountActivationEmail($order);
 
+ 
             DB::commit();
             return ApiResponse::success(
                 new PropertyUnitOrderResource($order),
                 'Order updated successfully'
-
             );
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Failed to update order status', ['order_id' => $orderId, 'error' => $e->getMessage()]);
-            return ApiResponse::error('Failed to update order status', 500);
+            return ApiResponse::error($e->getMessage(), 500);
         }
     }
 
@@ -158,7 +166,7 @@ class ContractFlowController extends Controller
                 return ApiResponse::error('Order not found', 404);
             }
 
-            if (!$order->isStatus(PropertUnitOrderStatusEnum::ContractReady)) {
+            if (!$order->isStatus(PropertUnitOrderStatusEnum::ContractSigned)) {
                 return ApiResponse::error('Order is not ready for contract generation', 400);
             }
 
@@ -186,7 +194,7 @@ class ContractFlowController extends Controller
                 return ApiResponse::error('Order not found', 404);
             }
 
-            if (!$order->isStatus(PropertUnitOrderStatusEnum::ContractReady)) {
+            if (!$order->isStatus(PropertUnitOrderStatusEnum::ContractSigned)) {
                 return ApiResponse::error('Order is not ready for signature', 400);
             }
 

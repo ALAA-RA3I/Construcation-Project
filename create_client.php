@@ -16,7 +16,7 @@ try {
         'email' => 'moayad.harmoush@gmail.com',
         'password' => Hash::make('password123'),
         'phone_number' => '+1234567890',
-        'national_id' => 123456789012345,
+        // 'national_id' => 123456789012345,
         'api_token' => \Illuminate\Support\Str::random(60),
         'is_active' => true,
     ]);
@@ -26,7 +26,7 @@ try {
     echo "Name: " . $client->first_name . " " . $client->last_name . "\n";
     echo "Email: " . $client->email . "\n";
     echo "Phone: " . $client->phone_number . "\n";
-    echo "National ID: " . $client->national_id . "\n";
+    // echo "National ID: " . $client->national_id . "\n";
     echo "API Token: " . $client->api_token . "\n";
     echo "Is Active: " . ($client->is_active ? 'Yes' : 'No') . "\n";
 } catch (Exception $e) {

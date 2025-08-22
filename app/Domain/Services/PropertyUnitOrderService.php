@@ -66,7 +66,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
 
     public function show($id)
     {
-        $order = $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']))->find($id);
+        $order = $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyBook', 'client']))->find($id);
         return $order;
     }
 

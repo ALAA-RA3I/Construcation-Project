@@ -92,13 +92,13 @@
     <div class="container">
         <div class="header">
             <div class="logo">🏢 شركة العقارات</div>
-            <h1 class="title">عقدك جاهز للمراجعة والتوقيع</h1>
+            <h1 class="title">عقدك جاهز للمراجعة الدفع والتوقيع</h1>
         </div>
 
         <div class="content">
             <p>مرحباً {{ $client->first_name }} {{ $client->last_name }}،</p>
 
-            <p>تم إعداد عقد الشقة الخاصة بك وجاهز للمراجعة والتوقيع!</p>
+            <p>تم إعداد عقد الشقة الخاصة بك وجاهز للمراجعة والدفع والتوقيع!</p>
 
             <div class="highlight">
                 <strong>🎉 تهانينا!</strong><br>
@@ -106,18 +106,15 @@
             </div>
 
             <div class="property-details">
-                <strong>تفاصيل الشقة:</strong><br>
-                رقم الوحدة: {{ $propertyUnit->unit_number }}<br>
-                الطابق: {{ $propertyUnit->floor ?? 'غير محدد' }}<br>
-                المساحة: {{ $propertyUnit->propertyBook->space }} متر مربع<br>
-                السعر: {{ number_format($propertyUnit->propertyBook->price) }} دولار
+                <p><strong>مرفقات:</strong></p>
+                <p>- نسخة من العقد (PDF)</p>
             </div>
-
+          
             <p><strong>الخطوات التالية:</strong></p>
             <ol>
                 <li>مراجعة العقد بعناية</li>
                 <li>إتمام عملية الدفع</li>
-                <li>التوقيع على العقد باستخدام الرمز السري</li>
+                <li>التوقيع على العقد باستخدام التوقيع الرقمي</li>
                 <li>استلام العقد النهائي</li>
             </ol>
 
@@ -130,8 +127,7 @@
 
             <p><strong>معلومات مهمة:</strong></p>
             <ul>
-                <li>سيتم إرسال رمز توقيع سري إلى بريدك الإلكتروني</li>
-                <li>يجب إتمام الدفع قبل التوقيع على العقد</li>
+                 <li>يجب إتمام الدفع قبل التوقيع على العقد</li>
                 <li>العقد سيتم رفعه على البلوك تشين للحماية</li>
                 <li>يمكنك تحميل نسخة من العقد النهائي</li>
             </ul>

@@ -75,24 +75,12 @@
         <div><span class="label">Apartment Details:</span></div>
         <table class="table">
             <tr>
-                <th>Unit Number</th>
-                <td>{{ $propertyUnit->unit_number }}</td>
-            </tr>
-            <tr>
-                <th>Floor</th>
-                <td>{{ $propertyUnit->floor ?? 'Not specified' }}</td>
-            </tr>
-            <tr>
                 <th>Area</th>
                 <td>{{ $propertyBook->space }} m²</td>
             </tr>
             <tr>
                 <th>Price</th>
                 <td>${{ number_format($propertyBook->price) }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ $propertyUnit->address ?? 'Not specified' }}</td>
             </tr>
             <tr>
                 <th>Project</th>
