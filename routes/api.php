@@ -227,16 +227,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [PropertyBookBillController::class, 'delete']);
     });
     Route::prefix('projectNews')->group(function () {
-        Route::get('/all', [ProjectNewsController::class, 'getAll']);
-        Route::get('/', [ProjectNewsController::class, 'index']);
+        Route::get('/all/{projectId?}', [ProjectNewsController::class, 'getAll']);
+        Route::get('/{projectId?}', [ProjectNewsController::class, 'index']);
         Route::get('/{id}', [ProjectNewsController::class, 'show']);
         Route::post('/create', [ProjectNewsController::class, 'create']);
         Route::put('update/{id}', [ProjectNewsController::class, 'update']);
         Route::delete('delete/{id}', [ProjectNewsController::class, 'delete']);
     });
     Route::prefix('projectMedia')->group(function () {
-        Route::get('/all', [ProjectMediaController::class, 'getAll']);
-        Route::get('/', [ProjectMediaController::class, 'index']);
+        Route::get('/all/{projectId?}', [ProjectMediaController::class, 'getAll']);
+        Route::get('/{projectId?}', [ProjectMediaController::class, 'index']);
         Route::get('/{id}', [ProjectMediaController::class, 'show']);
         Route::post('/create', [ProjectMediaController::class, 'create']);
         Route::put('update/{id}', [ProjectMediaController::class, 'update']);

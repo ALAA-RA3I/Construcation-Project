@@ -20,15 +20,15 @@ class ProjectNewsController extends Controller
         $this->projectNewsService = $projectNewsService;
     }
 
-    public function index()
+    public function index($projectId = null)
     {
-        $projectNews = $this->projectNewsService->paginate();
+        $projectNews = $this->projectNewsService->paginate($projectId);
         return ApiResponse::success(ProjectNewsResource::collection($projectNews));
     }
 
-    public function getAll()
+    public function getAll($projectId = null)
     {
-        $projectNews = $this->projectNewsService->getAll();
+        $projectNews = $this->projectNewsService->getAll($projectId);
         return ApiResponse::success(ProjectNewsResource::collection($projectNews));
     }
 

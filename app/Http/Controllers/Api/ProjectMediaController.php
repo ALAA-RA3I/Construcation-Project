@@ -20,15 +20,15 @@ class ProjectMediaController extends Controller
         $this->projectMediaService = $projectMediaService;
     }
 
-    public function index()
+    public function index($projectId = null)
     {
-        $projectMedia = $this->projectMediaService->paginate();
+        $projectMedia = $this->projectMediaService->paginate($projectId);
         return ApiResponse::success(ProjectMediaResource::collection($projectMedia));
     }
 
-    public function getAll()
+    public function getAll($projectId = null)
     {
-        $projectMedia = $this->projectMediaService->getAll();
+        $projectMedia = $this->projectMediaService->getAll($projectId);
         return ApiResponse::success(ProjectMediaResource::collection($projectMedia));
     }
 
