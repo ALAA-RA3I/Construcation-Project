@@ -14,4 +14,5 @@ interface PropertyUnitServiceInterface
     public function getProjectDetailsByPropertyUnit($propertyUnitId);
     public function getClientProjectNews($clientId);
 
+
 }

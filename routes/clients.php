@@ -12,7 +12,9 @@ Route::middleware('auth:api-client')->group(function () {
     Route::get('projects', [ClientProjectsController::class, 'getProjects']);
     Route::get('projects/{property_unit}', [ClientProjectsController::class, 'getProjectDetails']);
     Route::get('news', [ClientProjectsController::class, 'getClientProjectsNews']);
-    Route::get('bills',[ClientProjectsController::class,'getClientPorjectBills']);
+//    Route::get('bills',[ClientProjectsController::class,'getClientProjectBills']);
+    Route::get('getAllPayedBills/{property_unit_id}', [ClientProjectsController::class, 'getPaidBills']);
+    Route::get('getAllUnPayedBills/{property_unit_id}', [ClientProjectsController::class, 'getUnpaidBills']);
     Route::post('doPayments/{id}',[stripeController::class,'doPayment']);
 });
 

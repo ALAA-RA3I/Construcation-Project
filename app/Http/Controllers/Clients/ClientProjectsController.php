@@ -49,8 +49,19 @@ class ClientProjectsController extends Controller
         }
         return ApiResponse::success(ClientProjectNewsResource::collection($news), 'Client Project News Retrieved Successfully');
     }
-    public function getClientPorjectBills() {
-        $bills = $this->propertyInstallmentsService->getAll();
-        return ApiResponse::success(BillsResources::collection($bills),'All bills returned successfully');
+//    public function getClientProjectBills() {
+//        $bills = $this->propertyInstallmentsService->getAll();
+//        return ApiResponse::success(BillsResources::collection($bills),'All bills returned successfully');
+//    }
+    public function getPaidBills($propertyUnitId)
+    {
+        $bills = $this->propertyInstallmentsService->getBillsByStatus($propertyUnitId, true);
+        return ApiResponse::success(BillsResources::collection($bills), 'Paid bills returned successfully');
+    }
+
+    public function getUnpaidBills($propertyUnitId)
+    {
+        $bills = $this->propertyInstallmentsService->getBillsByStatus($propertyUnitId, false);
+        return ApiResponse::success(BillsResources::collection($bills), 'Unpaid bills returned successfully');
     }
 }
