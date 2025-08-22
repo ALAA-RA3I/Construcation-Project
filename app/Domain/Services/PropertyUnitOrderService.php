@@ -137,14 +137,73 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
             ->join('project_sales_details', 'projects.id', '=', 'project_sales_details.project_id')
             ->where('property_unit_orders.client_id', $clientId)
             ->select(
-                'property_books.id',
+                'property_books.id as bookId',
+                'property_unit_orders.id',
                 'property_unit_orders.priority_number',
                 'property_unit_orders.status',
+                'property_unit_orders.contract_file',
                 'property_books.price',
                 'property_books.first_payment_amount',
                 'project_sales_details.main_title',
                 'project_sales_details.address'
             )
             ->paginate();
+    }
+    public function cancelOrderFromClient($id)
+    {
+        DB::beginTransaction();
+        try {
+            // Find the order - use findWhere which won't throw exception if not found
+            $order = $this->propertyUnitOrderRepo->find($id);
+
+            // Check if order exists
+            if (!$order) {
+                // Order doesn't exist (maybe already deleted)
+                return false;
+            }
+
+            // Check if order belongs to current client (authorization)
+            if (auth('client')->id() != $order->client_id) {
+                throw new \Exception("Unauthorized cancellation attempt");
+            }
+
+
+              $propertyBookId = $order->property_book_id;
+              $deletedPriority = $order->priority_number;
+
+            // Delete using repository
+            $deleted = $this->propertyUnitOrderRepo->delete($order->id);
+            if (!$deleted) {
+                throw new \Exception("Failed to delete order");
+            }
+
+            // Reorganize priorities
+            $this->reorganizePriorities($propertyBookId, $deletedPriority);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Order cancellation failed: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    protected function reorganizePriorities($propertyBookId, $deletedPriority)
+    {
+        // Use repository to find orders
+        $ordersToUpdate = $this->propertyUnitOrderRepo
+            ->scopeQuery(function($query) use ($propertyBookId, $deletedPriority) {
+                return $query->where('property_book_id', $propertyBookId)
+                    ->where('priority_number', '>', $deletedPriority)
+                    ->orderBy('priority_number');
+            })->all();
+
+        // Update priorities
+        foreach ($ordersToUpdate as $order) {
+            $this->propertyUnitOrderRepo->update([
+                'priority_number' => $order->priority_number - 1
+            ], $order->id);
+        }
     }
 }

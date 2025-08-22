@@ -25,9 +25,6 @@ Route::middleware(['auth:client'])->group(function () {
 }
 );
 
-Route::get('test',function (){
-    return view('components.alert');
-});
 Route::get('/',[WebSitePagesController::class,'homePage'])->name('home');
 
 Route::get('projects',[WebSitePagesController::class,'projectsPage'])->name('projects');
@@ -51,8 +48,10 @@ Route::prefix('property-book')->group(function () {
 
 Route::prefix('order')->group(function (){
     Route::post('orderRegister', [ClientOrderController::class,'create'])->name('registerOrder');
+    Route::delete('cancel/{id}', [ClientOrderController::class, 'cancel'])->name('cancelOrder');
 });
 Route::get('my-orders', [ClientOrderController::class,'myOrders'])->name('myOrders');
+
 
 
 
