@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\ProjectMediaRepositoryInterface;
 use App\Domain\Services\Contracts\ProjectMediaServiceInterface;
@@ -21,15 +22,23 @@ class ProjectMediaService implements ProjectMediaServiceInterface
         $this->projectMediaRepo = $projectMediaRepo;
     }
 
-    public function getAll()
+    public function getAll($projectId = null)
     {
         $this->projectMediaRepo->pushCriteria(new WithRelationsCriteria(['project']));
+        if($projectId)
+        {
+            $this->projectMediaRepo->pushCriteria(new WhereCriteria('project_id',$projectId));
+        }
         return $this->projectMediaRepo->all();
     }
 
-    public function paginate()
+    public function paginate($projectId = null)
     {
         $this->projectMediaRepo->pushCriteria(new WithRelationsCriteria(['project']));
+        if($projectId)
+        {
+            $this->projectMediaRepo->pushCriteria(new WhereCriteria('project_id',$projectId));
+        }
         return $this->projectMediaRepo->paginate();
     }
 

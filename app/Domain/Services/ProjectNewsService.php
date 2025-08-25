@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\ProjectNewsRepositoryInterface;
 use App\Domain\Services\Contracts\ProjectNewsServiceInterface;
@@ -21,15 +22,23 @@ class ProjectNewsService implements ProjectNewsServiceInterface
         $this->projectNewsRepo = $projectNewsRepo;
     }
 
-    public function getAll()
+    public function getAll($projectId = null)
     {
         $this->projectNewsRepo->pushCriteria(new WithRelationsCriteria(['project']));
+        if($projectId)
+        {
+            $this->projectNewsRepo->pushCriteria(new WhereCriteria('project_id',$projectId));
+        }
         return $this->projectNewsRepo->all();
     }
 
-    public function paginate()
+    public function paginate($projectId = null)
     {
         $this->projectNewsRepo->pushCriteria(new WithRelationsCriteria(['project']));
+        if($projectId)
+        {
+            $this->projectNewsRepo->pushCriteria(new WhereCriteria('project_id',$projectId));
+        }
         return $this->projectNewsRepo->paginate();
     }
 

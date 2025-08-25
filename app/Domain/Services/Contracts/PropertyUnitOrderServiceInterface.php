@@ -11,5 +11,6 @@ interface PropertyUnitOrderServiceInterface
     public function update($id, array $data);
     public function delete($id);
     public function getClientOrders($clientId);
+    public function cancelOrderFromClient($id);
 
 }
