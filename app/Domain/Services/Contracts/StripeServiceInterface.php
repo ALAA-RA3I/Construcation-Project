@@ -14,4 +14,5 @@ interface StripeServiceInterface
     // public function delete($id);
 
     public function doPayment(array $data,$id);
+    public function doFirstPayment($id);
 }

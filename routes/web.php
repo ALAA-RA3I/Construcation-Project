@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Clients\stripeController;
 use App\Http\Controllers\View\ClientOrderController;
 use App\Http\Controllers\View\ClientWebController;
 use App\Http\Controllers\View\ProjectSalesDetailsBladeController;
@@ -18,6 +19,11 @@ Route::post('register', [ClientWebController::class, 'register'])->name('client.
 // Logout Route
 Route::post('logout', [ClientWebController::class, 'logout'])->name('client.logout');
 
+Route::get('/testPayment/{bookId}',[stripeController::class,'doFirstPayment'])->name('client.pay');
+
+Route::get('/pay/{bookId}', function ($bookId) {
+    return view('stripeTest', ['bookId' => $bookId]);
+})->name('pay');
 
 
 Route::middleware(['auth:client'])->group(function () {
