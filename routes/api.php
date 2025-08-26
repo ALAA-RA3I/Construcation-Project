@@ -31,11 +31,14 @@ use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
 use App\Http\Controllers\FirebaseNotificationController;
+use App\Http\Controllers\Stripe;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::get('login', function () {
     return view('login-static');
 });
+
+// Route::post('/testPayment/{bookId}', [StripeController::class, 'doFirstPayment'])->name('api.pay');
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });
