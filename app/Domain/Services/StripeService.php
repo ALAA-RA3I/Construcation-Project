@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Stripe\Charge;
 use Stripe\Stripe;
+use App\Domain\Enums\PropertUnitOrderStatusEnum;
 
 class StripeService implements StripeServiceInterface
 {
@@ -76,7 +77,7 @@ class StripeService implements StripeServiceInterface
         return [
             'success' => true,
             'message' => 'Payment done successfully',
-            'charge' => $charge
+            'charge' => 1
         ];
 
         }catch(Exception $e){
@@ -92,7 +93,7 @@ class StripeService implements StripeServiceInterface
         $stripe = new \Stripe\StripeClient($stripeSecretKey);
         $firstPayment = $this->propertyBookRepo->findOrFail($bookId);
         $amount = $firstPayment->first_payment_amount;
-        // $client = Auth::guard('api-client')->user()->id;
+        $clinetId = Auth::guard('api-client')->user()->id;
 
         try{
             $checkout_session = $stripe->checkout->sessions->create([
@@ -119,11 +120,12 @@ class StripeService implements StripeServiceInterface
             $updatedData = [
                 'payment_amount' => $amount,
                 'payment_completed_at' => now(),
+                'status' => PropertUnitOrderStatusEnum::PaymentCompleted
             ];
             Log::info($bookId);
             $unitId = $this->propertyUnitOrder->findWhere([
                 'property_book_id' => $bookId,
-                'client_id' => 1
+                'client_id' => $clinetId
             ])->first();
             Log::info($unitId);
             $this->propertyUnitOrder->update($updatedData,$unitId->id);
