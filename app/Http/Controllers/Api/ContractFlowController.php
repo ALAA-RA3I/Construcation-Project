@@ -60,7 +60,6 @@ class ContractFlowController extends Controller
             }
 
             if ($status === 'approve') {
-                // تحديث حالة الطلب
                 $order->update(['status' => 'payment_pending']);
                 $contractFilePath = app('App\\Domain\\Services\\Contracts\\ContractServiceServiceInterface')->generateContract($order, false);
                 if ($contractFilePath) {
@@ -90,10 +89,7 @@ class ContractFlowController extends Controller
     }
 
 
-    public function cancel($orderId)
-    {
-  
-    }
+    public function cancel($orderId) {}
 
     /**
      * الخطوة 3: تفعيل حساب العميل
