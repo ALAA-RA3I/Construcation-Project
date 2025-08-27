@@ -21,12 +21,13 @@ class LoginRequest extends FormRequest
      * @return array<string, ValidationRule|array|string>
      */
 
-        public function rules(): array
+    public function rules(): array
     {
         return [
             'email' => 'required|email',
             'password' => 'required|string',
-            'remember' => 'sometimes|boolean'
+            'remember' => 'sometimes|boolean',
+            'device_token'=>'string|nullable'
         ];
     }
 }

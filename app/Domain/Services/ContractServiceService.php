@@ -25,7 +25,7 @@ class ContractServiceService implements ContractServiceServiceInterface
     public function generateContract(PropertyUnitOrder $order, $withSignatures = false)
     {
         try {
-            // Metadata للطلب
+            // Metadata للطلب   
             $request = request();
             $clientIp = $request->ip();
             $userAgent = $request->header('User-Agent');

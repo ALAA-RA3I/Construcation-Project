@@ -8,7 +8,8 @@ class LoginDTO
     {
         return  [
             'email' => $data['email'],
-            'password' => $data['password']
+            'password' => $data['password'],
+            'device_token' => $data['device_token']
         ];
     }
 }
