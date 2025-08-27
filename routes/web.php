@@ -19,7 +19,7 @@ Route::post('register', [ClientWebController::class, 'register'])->name('client.
 // Logout Route
 Route::post('logout', [ClientWebController::class, 'logout'])->name('client.logout');
 
-Route::get('/testPayment/{bookId}',[stripeController::class,'doFirstPayment'])->name('client.pay');
+// Route::get('/testPayment/{bookId}',[stripeController::class,'doFirstPayment'])->name('client.pay');
 
 Route::get('/pay/{bookId}', function ($bookId) {
     return view('stripeTest', ['bookId' => $bookId]);
