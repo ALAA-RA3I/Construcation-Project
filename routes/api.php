@@ -31,11 +31,14 @@ use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
 use App\Http\Controllers\FirebaseNotificationController;
+use App\Http\Controllers\Clients\stripeController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::get('login', function () {
     return view('login-static');
 });
+
+Route::post('/testPayment/{bookId}', [StripeController::class, 'doFirstPayment'])->name('api.pay');
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });
@@ -264,10 +267,13 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
 
         // مسارات المدير
-        Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrder']);
+        Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrRejecrOrder']);
+        Route::put('/{orderId}/cancel', [ContractFlowController::class, 'cancel']);
+
         Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
         Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
         Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
+        
 
         // مسارات العميل
         Route::post('/{orderId}/create-payment-intent', [ContractFlowController::class, 'createPaymentIntent']);

@@ -14,5 +14,4 @@ class StripeDTO {
             'stripe_token' => $data['stripe_token']
         ];  
     }
-
 }

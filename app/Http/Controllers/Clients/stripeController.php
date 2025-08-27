@@ -21,6 +21,7 @@ class stripeController extends Controller
     public function doPayment (StripeFormRequest $data, $id) {
         $validatedData = StripeDTO::doPaymentRequest($data->validated());
         $response = $this->stripeService->doPayment($validatedData,$id);
+        // dd($response);
 
         if (!$response['success']) {
         return ApiResponse::error($response['message']);
@@ -29,5 +30,14 @@ class stripeController extends Controller
         return ApiResponse::success($response['message'], [
             'charge_id' => $response['charge']->id ?? null
         ]);
+    }
+
+    public function doFirstPayment($id) {
+        $response =  $this->stripeService->doFirstPayment($id);
+        
+        if (isset($response['error'])) {
+            return response()->json(['error' => 'An error occurred during payment processing.'], 500);
+        }
+        return response()->json($response);   
     }
 }

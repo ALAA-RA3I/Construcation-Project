@@ -25,27 +25,83 @@ class ContractServiceService implements ContractServiceServiceInterface
     public function generateContract(PropertyUnitOrder $order, $withSignatures = false)
     {
         try {
-            // استخدم Blade أو HTML كقالب
-            $pdf = Pdf::loadView('contracts.pdf', [
+            // Metadata للطلب
+            $request = request();
+            $clientIp = $request->ip();
+            $userAgent = $request->header('User-Agent');
+            $browser = $request->header('sec-ch-ua') ?? null;
+            $platform = $request->header('sec-ch-ua-platform') ?? null;
+            $requestUrl = $request->fullUrl();
+            $referer = $request->headers->get('referer');
+            $acceptLanguage = $request->header('accept-language');
+
+            // البيانات الأساسية
+            $client = $order->client;
+            $propertyBook = $order->propertyBook;
+            $project = $propertyBook->project ?? null;
+            $propertyBookBills = $propertyBook->bills ?? null;
+
+            $property_details = [
+                'rooms' => $propertyBook->rooms ?? null,
+                'bathrooms' => $propertyBook->bathrooms ?? null,
+                'direction' => $propertyBook->direction ?? null,
+                'first_payment' => $propertyBook->first_payment ?? null,
+                'payment_period' => $propertyBook->payment_period ?? null,
+            ];
+
+            $clientSignatureUrl = $order->client_signature_url ?? null;
+            $companySignatureUrl = $order->company_signature_url ?? null;
+
+            // تأكد من المسار المحلي لصورة الهوية للـ DomPDF
+            $identityLocalPath = null;
+            if ($order->identity_file) {
+                $identityFullPath = storage_path('app/public/' . $order->identity_file);
+                if (file_exists($identityFullPath)) {
+                    $identityLocalPath = $identityFullPath;
+                }
+            }
+
+            // إعداد البيانات للـ Blade
+            $viewData = [
                 'order' => $order,
                 'withSignatures' => $withSignatures,
                 'date' => now()->format('Y-m-d'),
-                'client' => $order->client,
-                // 'propertyUnit' => $order->propertyUnit,
-                'propertyBook' => $order->propertyBook,
-                'secret_code' => $order->signature_code,
+                'client' => $client,
+                'propertyBook' => $propertyBook,
+                'project' => $project,
+                'propertyBookBills' => $propertyBookBills,
+                'property_details' => $property_details,
+                'client_ip' => $clientIp,
+                'user_agent' => $userAgent,
+                'browser' => $browser,
+                'platform' => $platform,
+                'request_url' => $requestUrl,
+                'referer' => $referer,
+                'accept_language' => $acceptLanguage,
+                'request_date' => $order->created_at,
+                'approval_date' => $order->updated_at,
+                'order_payment_amount' => $order->payment_amount ?? null,
+                'order_note' => $order->note ?? null,
+                'client_signature_url' => $clientSignatureUrl,
+                'company_signature_url' => $companySignatureUrl,
+                'identity_local_path' => $identityLocalPath, // <-- هنا المسار المحلي
+                'project_sales_details' => $project->salesDetails ?? null,
+            ];
 
-            ]);
+            // توليد PDF
+            $pdf = Pdf::loadView('contracts.pdf', $viewData);
+
+            // اسم ملف العقد
             $contractFileName = 'contracts/contract_' . $order->id . '_' . time() . '.pdf';
             Storage::disk('public')->put($contractFileName, $pdf->output());
 
-            // تحديث الطلب
+            // تحديث order بمسار العقد
             $order->update([
                 'contract_file' => $contractFileName,
-                // 'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractReady
             ]);
 
             Log::info('Contract generated', ['order_id' => $order->id, 'file' => $contractFileName]);
+
             return $contractFileName;
         } catch (\Exception $e) {
             Log::error('Failed to generate contract', [
@@ -55,6 +111,7 @@ class ContractServiceService implements ContractServiceServiceInterface
             throw $e;
         }
     }
+
 
     /**
      * التحقق من رمز التوقيع

@@ -46,7 +46,7 @@ class ContractFlowController extends Controller
     /**
      * الخطوة 2: مدير يوافق على الطلب
      */
-    public function approveOrder($orderId, $status)
+    public function approveOrRejecrOrder($orderId, $status)
     {
         DB::beginTransaction();
         try {
@@ -55,29 +55,27 @@ class ContractFlowController extends Controller
             if (!$order) {
                 return ApiResponse::error('Order not found', 404);
             }
-            // if ($order->status !='pending') {
-            //     return ApiResponse::error('Order is not in pending status', 400);
-            // }
+            if ($order->status != 'pending') {
+                return ApiResponse::error('Order is not in pending status', 400);
+            }
 
             if ($status === 'approve') {
-                // تحديث حالة الطلب
                 $order->update(['status' => 'payment_pending']);
-                $contractFilePath = app('App\\Domain\\Services\\Contracts\\ContractServiceServiceInterface')->generateContract($order, false); 
+                $contractFilePath = app('App\\Domain\\Services\\Contracts\\ContractServiceServiceInterface')->generateContract($order, false);
                 if ($contractFilePath) {
                     $order->update([
                         'contract_file' => $contractFilePath,
                         'contract_sent_at' => now(),
                     ]);
                 }
-             $this->emailService->sendContractEmail($order,$contractFilePath);
-
+                $this->emailService->sendContractEmail($order, $contractFilePath);
             } else if ($status === 'reject') {  // Removed extra curly brace
                 // تحديث حالة الطلب
                 $order->update(['status' => 'rejected']);
             }
 
 
- 
+
             DB::commit();
             return ApiResponse::success(
                 new PropertyUnitOrderResource($order),
@@ -89,6 +87,9 @@ class ContractFlowController extends Controller
             return ApiResponse::error($e->getMessage(), 500);
         }
     }
+
+
+    public function cancel($orderId) {}
 
     /**
      * الخطوة 3: تفعيل حساب العميل
