@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Stripe Embedded Checkout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://js.stripe.com/v3/"></script>
     <style>
         /* Add some basic styling for the checkout form */
@@ -32,10 +33,10 @@
     </div>
 
     <script>
-        const stripe = Stripe("{{ config('stripe.stripe-publishable') }}");
+        const stripe = Stripe("{{ config('stripe.stripe_publishable') }}");
 
         // The book ID that is passed from the route
-        const bookId = 1; // You need to get this dynamically from your route
+        const bookId = {{ $bookId }}; // You need to get this dynamically from your route
 
         // Initialize the embedded checkout form
         async function initialize() {

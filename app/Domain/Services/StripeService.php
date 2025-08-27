@@ -7,7 +7,9 @@ use App\Infrastructure\Repositories\Contracts\StripeRepositoryInterface;
 use App\Domain\Services\Contracts\StripeServiceInterface;
 use App\Helpers\ApiResponse;
 use App\Infrastructure\Repositories\Contracts\PropertyBookRepositoryInterface;
+use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
 use App\Infrastructure\Repositories\Contracts\UserPropertyUnitInstallmentsRepositoryInterface;
+use App\Models\PropertyUnitOrder;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,12 +20,15 @@ class StripeService implements StripeServiceInterface
 {
     protected $installmentsRepo;
     protected $propertyBookRepo;
+    protected $propertyUnitOrder;
 
     public function __construct(UserPropertyUnitInstallmentsRepositoryInterface $installmentsRepo,
-                                PropertyBookRepositoryInterface $propertyBookRepo)
+                                PropertyBookRepositoryInterface $propertyBookRepo,
+                                PropertyUnitOrderRepositoryInterface $propertyUnitOrder)
     {
         $this->installmentsRepo = $installmentsRepo;
         $this->propertyBookRepo = $propertyBookRepo;
+        $this->propertyUnitOrder = $propertyUnitOrder;
     }
 
     public function doPayment(array $data,$billId)
@@ -103,22 +108,29 @@ class StripeService implements StripeServiceInterface
                         ],
                     ],
                     'quantity' => 1,
-                    'metadata' => [
-                        // 'user_id' => $client,
-                        'property_book_id' => $bookId,
-                    ]
                 ]],
                 'mode' => 'payment',
+                'return_url' => route('myOrders'),
                 'metadata' => [
                     'property_book_id' => $bookId, 
-                ],
-                'success_url' => url('/'),  
-                'cancel_url' => url('/'),  
+                ], 
             ]);
+
+            $updatedData = [
+                'payment_amount' => $amount,
+                'payment_completed_at' => now(),
+            ];
+            Log::info($bookId);
+            $unitId = $this->propertyUnitOrder->findWhere([
+                'property_book_id' => $bookId,
+                'client_id' => 1
+            ])->first();
+            Log::info($unitId);
+            $this->propertyUnitOrder->update($updatedData,$unitId->id);
         return ['clientSecret' => $checkout_session->client_secret];
         }catch(Exception $e) {
             Log::info($e->getMessage());
-            dd($e->getMessage());
+            return ['error' => $e->getMessage()];
         }
     }
 

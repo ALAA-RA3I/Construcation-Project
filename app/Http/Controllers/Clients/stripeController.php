@@ -33,6 +33,11 @@ class stripeController extends Controller
     }
 
     public function doFirstPayment($id) {
-        return $this->stripeService->doFirstPayment($id);
+        $response =  $this->stripeService->doFirstPayment($id);
+        
+        if (isset($response['error'])) {
+            return response()->json(['error' => 'An error occurred during payment processing.'], 500);
+        }
+        return response()->json($response);   
     }
 }
