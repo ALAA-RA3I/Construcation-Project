@@ -25,15 +25,17 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
         $this->propertyUnitOrderRepo = $propertyUnitOrderRepo;
     }
 
-    public function getAll()
+    public function getAll($bookId = null)
     {
-        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']));
+        $this->propertyUnitOrderRepo->pushCriteria(new WhereCriteria('property_book_id',$bookId));
+        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['client']));
         return $this->propertyUnitOrderRepo->all();
     }
 
-    public function paginate()
+    public function paginate($bookId = null)
     {
-        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyUnit', 'client']));
+        $this->propertyUnitOrderRepo->pushCriteria(new WhereCriteria('property_book_id',$bookId));
+        $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria([ 'client']));
         return $this->propertyUnitOrderRepo->paginate();
     }
 
@@ -66,8 +68,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
 
     public function show($id)
     {
-        $order = $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['propertyBook', 'client']))->find($id);
-        return $order;
+        return $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['client']))->find($id);
     }
 
     public function update($id, array $data)

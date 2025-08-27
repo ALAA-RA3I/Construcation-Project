@@ -21,7 +21,8 @@ class ClientProjectsResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'main_image' => $this->getAssetFileUrl($salesDetails->main_image),
+            'main_image' => $this->getAssetFileUrl($salesDetails->main_image ?? null),
+//            'main_image' => $salesDetails->main_image ?? null,
             'main_title' => $salesDetails->main_title ?? null,
             'marketing_description' => $salesDetails->marketing_description ?? null,
             'address' => $salesDetails->address ?? null,

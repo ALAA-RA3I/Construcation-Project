@@ -22,15 +22,15 @@ class PropertyUnitOrderController extends Controller
         $this->propertyUnitOrderService = $propertyUnitOrderService;
     }
 
-    public function index()
+    public function index($bookId)
     {
-        $orders = $this->propertyUnitOrderService->paginate();
+        $orders = $this->propertyUnitOrderService->paginate($bookId);
         return ApiResponse::success(PropertyUnitOrderResource::collection($orders));
     }
 
-    public function getAll()
+    public function getAll($bookId)
     {
-        $orders = $this->propertyUnitOrderService->getAll();
+        $orders = $this->propertyUnitOrderService->getAll($bookId);
         return ApiResponse::success(PropertyUnitOrderResource::collection($orders));
     }
 

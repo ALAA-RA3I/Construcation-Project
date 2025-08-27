@@ -251,11 +251,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [PropertyUnitController::class, 'delete']);
     });
     Route::prefix('propertyUnitOrder')->group(function () {
-        Route::get('/all', [PropertyUnitOrderController::class, 'getAll']);
-        Route::get('/', [PropertyUnitOrderController::class, 'index']);
-        Route::get('/{id}', [PropertyUnitOrderController::class, 'show']);
-        Route::post('/create', [PropertyUnitOrderController::class, 'create']);
-        Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
+        Route::get('/all/{bookId?}', [PropertyUnitOrderController::class, 'getAll']);
+        Route::get('/{bookId?}', [PropertyUnitOrderController::class, 'index']);
+        Route::get('{id}/orderDetails', [PropertyUnitOrderController::class, 'show']);
+//        Route::post('/create', [PropertyUnitOrderController::class, 'create']);
+//        Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitOrderController::class, 'delete']);
     });
 
