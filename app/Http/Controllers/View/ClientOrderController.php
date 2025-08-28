@@ -95,8 +95,8 @@ class ClientOrderController extends Controller
             'computed_cid' => $computedCID,
             'is_valid'    => $isValid,
             'message'     => $isValid
-                ? '✅ العقد سليم ولم يتم تغييره.'
-                : '❌ العقد تم تغييره أو غير مطابق.',
+                ? ' العقد سليم ولم يتم تغييره.'
+                : ' العقد تم تغييره أو غير مطابق.',
         ]);
         return redirect()->back()->with([
             'verify_result' => [
@@ -105,8 +105,8 @@ class ClientOrderController extends Controller
                 'computed_cid' => $computedCID,
                 'is_valid'    => $isValid,
                 'message'     => $isValid
-                    ? '✅ العقد سليم ولم يتم تغييره.'
-                    : '❌ العقد تم تغييره أو غير مطابق.',
+                    ? ' العقد سليم ولم يتم تغييره.'
+                    : ' العقد تم تغييره أو غير مطابق.',
             ]
         ]);
     }

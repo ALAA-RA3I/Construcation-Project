@@ -384,16 +384,16 @@
             <button id="closeModal" class="modal-btn btn-danger">
                 <i class="fas fa-times"></i> Close
             </button>
-            @foreach($orders as $order)
 
-            @if($order->contract_file)
+            @foreach($orders as $order)
+            @if($order->client_signed_at !=null)
             <a href="{{ route('contracts.verify.show', $order->id) }}" class="order-btn btn-view-contract">
                 <i class="fas fa-file-contract"></i> View Contract
             </a>
             @endif
             @endforeach
-
         </div>
+
 
     </div>
 </div>
@@ -497,10 +497,11 @@
                             </a>
                             @endif
 
-                            {{-- Always show Verify Contract button --}}
+                            @if($order->status == 'contract_signed')
                             <a href="{{ route('contracts.verify.show', $order->id) }}" class="order-btn btn-view-contract">
                                 <i class="fas fa-check-circle"></i> Verify Contract
                             </a>
+                            @endif
                         </div>
                     </div>
                 </div>
