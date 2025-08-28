@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -483,20 +482,21 @@
                 @endif
                 <div style="border-top:1px solid #000; margin-top:5px; width: 100%;">&nbsp;</div>
             </div>
-
-            {{-- Company signature (right) --}}
             <p> Company
             </p>
+            {{-- Company signature (right) --}}
             <div style="width: 45%; text-align: right; font-size: 13px; line-height: 1.4;">
-                @if($withSignatures && !empty($order->company_signature_url))
+                @if($withSignatures )
+
                 <img src="{{ public_path('signatures/company-sign-MAIN.png') }}"
                     alt="Company Signature"
                     style="height: 70px; display:block; margin-bottom:5px;">
 
-                <p style="margin: 2px 0; font-weight: bold;">Company Signed At:</p>
+
+                <!-- <p style="margin: 2px 0; font-weight: bold;">Company Signed At:</p>
                 <p style="margin: 2px 0;">
                     {{ $order->company_signed_at ? \Carbon\Carbon::parse($order->company_signed_at)->format('Y-m-d H:i') : '-' }}
-                </p>
+                </p> -->
                 @else
                 {{-- Placeholder for empty signature --}}
                 <div style="height: 120px;"></div>
@@ -505,13 +505,29 @@
                 <div style="border-top: 1px solid #000; margin-top: 8px; width: 100%;"></div>
             </div>
 
-        </div>
+            {{-- Footer --}}
+            <div class="footer">
+                <div>Generated on: {{ now()->format('Y-m-d H:i:s') }} • Contract ID: #{{ $order->id }}</div>
 
-        <div class="footer">
-            <div>Generated on: {{ now()->format('Y-m-d H:i:s') }} • Contract ID: #{{ $order->id }}</div>
-            <div style="margin-top:6px;">This is a preliminary contract. The final official contract will be prepared for signature after completion of payments and verification of documents.</div>
+                @if(!empty($blockchain_link))
+                <div style="margin-top:6px; color:#0f3c6b; font-weight:bold;">
+                    ✅ This contract is officially registered on Blockchain
+                </div>
+                <div style="margin-top:4px;">
+                    Verification Link: <a href="{{ $blockchain_link }}" target="_blank">{{ $blockchain_link }}</a>
+                </div>
+                <div style="margin-top:4px;">
+                    Uploaded on Blockchain at:
+                    <strong>{{ $order->blockchain_uploaded_at ? \Carbon\Carbon::parse($order->blockchain_uploaded_at)->format('Y-m-d H:i') : '-' }}</strong>
+                </div>
+                @endif
+
+                <div style="margin-top:6px; color:#444;">
+                    This is a legally binding contract stored permanently on blockchain technology for verification.
+                </div>
+            </div>
+
         </div>
-    </div>
 </body>
 
 </html>
