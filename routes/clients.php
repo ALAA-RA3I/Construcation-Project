@@ -3,6 +3,7 @@
 use App\Http\Controllers\Clients\ClientAuthController;
 use App\Http\Controllers\Clients\ClientProjectsController;
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\FirebaseNotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login',[ClientAuthController::class,'login']);
@@ -16,5 +17,7 @@ Route::middleware('auth:api-client')->group(function () {
     Route::get('getAllPayedBills/{property_unit_id}', [ClientProjectsController::class, 'getPaidBills']);
     Route::get('getAllUnPayedBills/{property_unit_id}', [ClientProjectsController::class, 'getUnpaidBills']);
     Route::post('doPayments/{id}',[stripeController::class,'doPayment']);
+    Route::get('/notifications',[FirebaseNotificationController::class,'getNotifications']);
+
 });
 

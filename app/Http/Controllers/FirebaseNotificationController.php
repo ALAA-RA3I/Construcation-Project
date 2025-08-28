@@ -39,4 +39,30 @@ class FirebaseNotificationController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function getNotifications(Request $request)
+    {
+        // المستخدم من خلال التوكين
+        $user = $request->user();
+
+         $notifications = $user->notifications()
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'count' => $notifications->count(),
+            'notifications' => $notifications->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'title' => $notification->title ?? null,   // من عندك بالـ migration
+                    'data' => $notification->data,
+                    // 'read_at' => $notification->read_at,
+                    'created_at' => $notification->created_at->toDateTimeString(),
+                ];
+            }),
+        ]);
+    }
 }
+ 
