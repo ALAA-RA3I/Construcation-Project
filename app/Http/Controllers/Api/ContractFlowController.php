@@ -10,6 +10,7 @@ use App\Domain\Enums\PropertUnitOrderStatusEnum;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PropertyUnitOrderResource;
+use App\Infrastructure\Repositories\Contracts\PropertyUnitOrderRepositoryInterface;
 use App\Models\PropertyUnitOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,17 +22,20 @@ class ContractFlowController extends Controller
     protected $emailService;
     protected $paymentService;
     protected $contractService;
+    protected $propertyUnitOrderRepo;
 
     public function __construct(
         PropertyUnitOrderServiceInterface $propertyUnitOrderService,
         EmailServiceServiceInterface $emailService,
         PaymentServiceServiceInterface $paymentService,
-        ContractServiceServiceInterface $contractService
+        ContractServiceServiceInterface $contractService,
+        PropertyUnitOrderRepositoryInterface $propertyUnitOrderRepo
     ) {
         $this->propertyUnitOrderService = $propertyUnitOrderService;
         $this->emailService = $emailService;
         $this->paymentService = $paymentService;
         $this->contractService = $contractService;
+        $this->propertyUnitOrderRepo = $propertyUnitOrderRepo;
     }
 
     /**
@@ -89,7 +93,62 @@ class ContractFlowController extends Controller
     }
 
 
-    public function cancel($orderId) {}
+    public function cancel($orderId)
+    {
+        $order = $this->propertyUnitOrderService->show($orderId);
+
+        if (!$order) {
+            return ApiResponse::error('Order not found', 404);
+        }
+
+        // الحالات التي لا يمكن إلغاء الطلب فيها
+        if (in_array($order->status, ['pending', 'rejected','contract_canceled'])) {
+            return ApiResponse::error('Order status '. $order->status . ' cannot be cancelled', 400);
+        }
+
+        // الحالات التي يمكن إلغاء الطلب فيها
+        $canCancelStatuses = ['payment_pending', 'payment_completed', 'contract_signed'];
+
+        if (in_array($order->status, $canCancelStatuses)) {
+            DB::beginTransaction();
+            try {
+                // تحديث الحالة
+                $order->update(['status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractCanceled]);
+
+                // إعادة تنظيم الأولويات
+                $this->reorganizePriorities($order->property_book_id, $order->priority_number);
+
+                // TODO: تنفيذ عمليات خاصة بكل حالة
+                switch ($order->status) {
+                    case 'payment_completed':
+                        // TODO: إرجاع الدفعة الأولى للعميل
+                        break;
+                    case 'contract_signed':
+                        // TODO: إزالة العقار من العميل أو تحديث حالته
+                        break;
+                    case 'payment_pending':
+                    default:
+                        // لا شيء إضافي مطلوب
+                        break;
+                }
+
+                DB::commit();
+
+                return ApiResponse::success(
+                    new PropertyUnitOrderResource($order),
+                    'Order cancelled successfully'
+                );
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error("Order cancellation failed: " . $e->getMessage());
+                return ApiResponse::error($e->getMessage(), 500);
+            }
+        }
+
+        // أي حالة أخرى غير متوقعة
+        return ApiResponse::error('Order cannot be cancelled in its current status', 400);
+    }
+
 
     /**
      * الخطوة 3: تفعيل حساب العميل
@@ -361,6 +420,25 @@ class ContractFlowController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to get order status', ['order_id' => $orderId, 'error' => $e->getMessage()]);
             return ApiResponse::error('Failed to get order status', 500);
+        }
+    }
+
+
+    protected function reorganizePriorities($propertyBookId, $deletedPriority)
+    {
+        // Use repository to find orders
+        $ordersToUpdate = $this->propertyUnitOrderRepo
+            ->scopeQuery(function ($query) use ($propertyBookId, $deletedPriority) {
+                return $query->where('property_book_id', $propertyBookId)
+                    ->where('priority_number', '>', $deletedPriority)
+                    ->orderBy('priority_number');
+            })->all();
+
+        // Update priorities
+        foreach ($ordersToUpdate as $order) {
+            $this->propertyUnitOrderRepo->update([
+                'priority_number' => $order->priority_number - 1
+            ], $order->id);
         }
     }
 }
