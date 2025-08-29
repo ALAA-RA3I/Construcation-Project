@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\OrderByDescCriteria;
 use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Domain\Enums\PropertUnitOrderStatusEnum;
@@ -29,6 +30,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
     {
         $this->propertyUnitOrderRepo->pushCriteria(new WhereCriteria('property_book_id',$bookId));
         $this->propertyUnitOrderRepo->pushCriteria(new WithRelationsCriteria(['client']));
+        $this->propertyUnitOrderRepo->pushCriteria(new OrderByDescCriteria('priority_number'));
         return $this->propertyUnitOrderRepo->all();
     }
 

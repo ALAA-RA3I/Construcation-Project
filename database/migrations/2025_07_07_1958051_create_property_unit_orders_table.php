@@ -28,12 +28,11 @@ return new class extends Migration
             $this->addBaseColumns($table);
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('propert_unit_orders');
+        Schema::dropIfExists('property_unit_orders');
     }
 };

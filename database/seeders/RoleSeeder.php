@@ -29,14 +29,12 @@ class RoleSeeder extends Seeder
             'create project managers',
             'edit project managers',
             'delete project managers',
-            'profile project managers',
 
             ////////// engineers ///////////////
             'view engineers',
             'create engineers',
             'edit engineers',
             'delete engineers',
-            'profile engineers',
 
             ////////// consulting company ///////////////
             'view consulting company',
@@ -50,7 +48,6 @@ class RoleSeeder extends Seeder
             'create consulting engineers',
             'edit consulting engineers',
             'delete consulting engineers',
-            'profile consulting engineers',
 
             ////////// owners ///////////////
             'view owners',
@@ -68,7 +65,6 @@ class RoleSeeder extends Seeder
             'view projects',
             'create projects',
             'edit projects',
-            'delete projects',
             'details projects',
             'assign project engineers',
             'view project department studies',
