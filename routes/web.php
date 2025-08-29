@@ -7,10 +7,15 @@ use App\Http\Controllers\View\ProjectSalesDetailsBladeController;
 use App\Http\Controllers\View\PropertyBookBladeController;
 use App\Http\Controllers\View\WebSitePagesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestDocuSignController;
 
 
 Route::get('login', [ClientWebController::class, 'showLoginForm'])->name('client.login');
 Route::post('login', [ClientWebController::class, 'login'])->name('client.login');
+
+Route::get('/testAccessToken',[TestDocuSignController::class,'testDocuSign'])->name('test');
+Route::get('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');
+
 
 // Registration Routes
 Route::get('register', [ClientWebController::class, 'showRegistrationForm'])->name('client.register');
