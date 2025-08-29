@@ -203,6 +203,7 @@ class RoleSeeder extends Seeder
 
                 ////////// diagrams ///////////////
                 'view diagrams',
+                'download diagrams',
                 'upload diagrams',
                 'update diagrams',
                 'delete diagrams',
@@ -220,15 +221,21 @@ class RoleSeeder extends Seeder
                 /////////////// statistics /////////////
                 'view statistics',
 
+                ////////////// user ///////////////
+//                'activate user',
+
+
+
                 ////////// projects ///////////////
                 'view projects',
-                'create projects',
-                'edit projects',
+//                'create projects',
+//                'edit projects',
                 'details projects',
 
                 ////////// team ///////////////
                 'assign project participant',
                 'delete project participant',
+
 
                 ////////// stages ///////////////
                 'view stages',
@@ -243,110 +250,192 @@ class RoleSeeder extends Seeder
                 'details tasks',
                 'add item to task container',
                 'delete item to task container',
-                'change tasks status',
+//                'change tasks status',
+
                 ////////// projects resource management ///////////////
                 'view reports resource management',
-                'export reports resource management',
-                'view project container',
-                'add project container items',
+                'view project inventory',
+                'add item to inventory',
                 'view financial payments',
                 'view details payments',
                 'add financial payments',
-                ////////// stages ///////////////
-                'view stages',
-                'create stages',
-                'edit stages',
-                'delete stages',
-                ////////// tasks ///////////////
-                'view tasks',
-                'create tasks',
-                'edit tasks',
-                'delete tasks',
+
+
                 ////////// diagrams ///////////////
                 'view diagrams',
+                'download diagrams',
+//                'upload diagrams',
+//                'update diagrams',
+//                'delete diagrams',
                 'view archive diagrams',
+
                 ////////// items ////////////
-                'view items',
-                ////////// tickets ////////////
-                'view tickets',
-                'create tickets',
-                'change tickets status',
+                'view expected items',
+//                'select expected items',
+//                'create new items',
+//                'delete expected items',
+                /////////////// Real State Permissions ///////////////
+//                'view sales project',
 
             ],
             'engineer' => [
                 ////////// projects ///////////////
                 'view projects',
-                'view project department studies',
-                'view project department execution',
-                'view project resources management',
-                ////////// projects resource management ///////////////
-                'view project container',
+//                'create projects',
+//                'edit projects',
+//                'details projects',
+
+                ////////// team ///////////////
+//                'assign project participant',
+//                'delete project participant',
+
+
                 ////////// stages ///////////////
                 'view stages',
+//                'create stages',
+//                'edit stages',
+//                'delete stages',
+
                 ////////// tasks ///////////////
-                'view tasks',
-                'done tasks',
+//                'create tasks',
+//                'edit tasks',
+//                'delete tasks',
+                'details tasks',
+//                'add item to task container',
+//                'delete item to task container',
+                'change tasks status',
+
+                ////////// projects resource management ///////////////
+                'view reports resource management',
+                'view project inventory',
+//                'add item to inventory',
+//                'view financial payments',
+//                'view details payments',
+//                'add financial payments',
+
+
                 ////////// diagrams ///////////////
                 'view diagrams',
+                'download diagrams',
+//                'upload diagrams',
+//                'update diagrams',
+//                'delete diagrams',
                 'view archive diagrams',
-                ////////// items ////////////
-                'view items',
-                ////////// tickets ////////////
-                'view tickets',
-                'create tickets',
-                'change tickets status',
 
+                ////////// items ////////////
+                'view expected items',
+//                'select expected items',
+//                'create new items',
+//                'delete expected items',
+                /////////////// Real State Permissions ///////////////
+//                'view sales project',
             ],
             'consultingEngineer' => [
                 ////////// projects ///////////////
                 'view projects',
-                'view project department studies',
-                'view project department execution',
-                'view project resources management',
-                ////////// projects resource management ///////////////
-                'view reports resource management',
-                'view financial payments',
-                'view details payments',
+//                'create projects',
+//                'edit projects',
+//                'details projects',
+
+                ////////// team ///////////////
+//                'assign project participant',
+//                'delete project participant',
+
+
                 ////////// stages ///////////////
                 'view stages',
+//                'create stages',
+//                'edit stages',
+//                'delete stages',
+
                 ////////// tasks ///////////////
-                'view tasks',
-                'accept tasks',
-                'reject tasks',
+//                'create tasks',
+//                'edit tasks',
+//                'delete tasks',
+                'details tasks',
+//                'add item to task container',
+//                'delete item to task container',
+                'change tasks status',
+
+                ////////// projects resource management ///////////////
+                'view reports resource management',
+                'view project inventory',
+//                'add item to inventory',
+                'view financial payments',
+                'view details payments',
+//                'add financial payments',
+
+
                 ////////// diagrams ///////////////
                 'view diagrams',
                 'upload diagrams',
                 'update diagrams',
                 'delete diagrams',
                 'view archive diagrams',
-                ////////// items ////////////
-                'view items',
-                'create items',
-                'edit items',
-                'delete items',
-                ////////// tickets ////////////
-                'view tickets',
-                'create tickets',
-                'change tickets status',
 
+                ////////// items ////////////
+                'view expected items',
+                'select expected items',
+                'create new items',
+                'delete expected items',
+                /////////////// Real State Permissions ///////////////
+//                'view sales project',
             ],
             'owner' => [
                 ////////// projects ///////////////
                 'view projects',
+//                'create projects',
+//                'edit projects',
                 'details projects',
-                'view project department execution',
-                'view project resources management',
-                ////////// projects resource management ///////////////
-                'view reports resource management',
-                'view financial payments',
-                'view details payments',
+
+                ////////// team ///////////////
+//                'assign project participant',
+//                'delete project participant',
+
+
                 ////////// stages ///////////////
                 'view stages',
+//                'create stages',
+//                'edit stages',
+//                'delete stages',
+
                 ////////// tasks ///////////////
-                'view tasks',
+//                'create tasks',
+//                'edit tasks',
+//                'delete tasks',
+                'details tasks',
+//                'add item to task container',
+//                'delete item to task container',
+//                'change tasks status',
+
+                ////////// projects resource management ///////////////
+                'view reports resource management',
+//                'view project inventory',
+//                'add item to inventory',
+                'view financial payments',
+                'view details payments',
+//                'add financial payments',
+
+
+                ////////// diagrams ///////////////
+                'view diagrams',
+                'download diagrams',
+//                'upload diagrams',
+//                'update diagrams',
+//                'delete diagrams',
+                'view archive diagrams',
+
+                ////////// items ////////////
+                'view expected items',
+//                'select expected items',
+//                'create new items',
+//                'delete expected items',
+                /////////////// Real State Permissions ///////////////
+//                'view sales project',
             ],
             'realStateManager' => [
             'view projects',
+            'view sales project',
             ],
 
         ];
