@@ -41,7 +41,7 @@ class ESignatureService implements ESignatureServiceInterface
 
     public function __construct(IPFSServiceService $ipfsService = null)
     {
-            $this->ipfsService = $ipfsService ?? app(IPFSServiceService::class);
+        $this->ipfsService = $ipfsService ?? app(IPFSServiceService::class);
 
         try {
             $this->apiClient = new ApiClient(new Configuration());
@@ -53,7 +53,7 @@ class ESignatureService implements ESignatureServiceInterface
             $authBasePath = parse_url(config('docusign.docusign.authBaseURI'), PHP_URL_HOST);
             $this->apiClient->getOAuth()->setOAuthBasePath($authBasePath);
 
-            $scopes = ['signature','impersonation'];
+            $scopes = ['signature', 'impersonation'];
 
             $response = $this->apiClient->requestJWTUserToken(
                 config('docusign.docusign.integrationKey'),
@@ -72,7 +72,6 @@ class ESignatureService implements ESignatureServiceInterface
             } else {
                 throw new \Exception("No accounts found for this user.");
             }
-
         } catch (\Exception $e) {
             throw new \Exception("Failed to authenticate with DocuSign: " . $e->getMessage());
         }
@@ -82,7 +81,7 @@ class ESignatureService implements ESignatureServiceInterface
     {
         // $clinetId = 11;
         // $unitOrder=22;
-        $order=PropertyUnitOrder::find($unitOrder);
+        $order = PropertyUnitOrder::find($unitOrder);
         $clientEmail = Client::where([
             'id' => $order->client_id
         ])->value('email');
@@ -142,9 +141,9 @@ class ESignatureService implements ESignatureServiceInterface
             ]);
 
             $envelopeSummary = $envelopeApi->createEnvelope($this->accountId, $envelopeDefinition);
-            
+
             $envelopeId = $envelopeSummary->getEnvelopeId();
-            
+
             $recipientViewRequest = new RecipientViewRequest([
                 'authentication_method' => 'none',
                 'client_user_id' => '12345',
@@ -153,28 +152,27 @@ class ESignatureService implements ESignatureServiceInterface
                 'user_name' => $clientName,
                 'email' => $clientEmail
             ]);
-            
+
             $view = $envelopeApi->createRecipientView($this->accountId, $envelopeId, $recipientViewRequest);
-            
+
             $docusignEnvelope = PropertyUnitOrder::where('id', $unitOrder)
-            ->update([
-                'contract_signed_id' => $envelopeId,
-                'status' =>PropertUnitOrderStatusEnum::ContractSigned
-            ]);
-            
+                ->update([
+                    'contract_signed_id' => $envelopeId,
+                    'status' => PropertUnitOrderStatusEnum::ContractSigned
+                ]);
+
             Log::info($view->getUrl());
 
             return [
                 'signingUrl' => $view->getUrl(),
                 'docusignEnvelope' => $docusignEnvelope,
             ];
-
         } catch (\Exception $e) {
             throw new \Exception("Failed to create envelope or get signing URL: " . $e->getMessage());
         }
     }
 
-    public function getSignedDocument(Request $request,string $envelopeId,$order)
+    public function getSignedDocument(Request $request, string $envelopeId, $order)
     {
         $order = PropertyUnitOrder::findOrFail($order);
         $envelopeApi = new EnvelopesApi($this->apiClient);
@@ -198,7 +196,7 @@ class ESignatureService implements ESignatureServiceInterface
             }
 
             // Use the combined document ID, which is always available after completion
-            $documentId = 'combined'; 
+            $documentId = 'combined';
             Log::info("Fetching combined document for envelope {$envelopeId}");
 
             // Fetch the document content
@@ -215,31 +213,31 @@ class ESignatureService implements ESignatureServiceInterface
                 $documentContent = (string) $response;
             }
 
-        if (empty($documentContent)) {
-            throw new \Exception("Failed to retrieve document content. Response was empty.");
-        }
+            if (empty($documentContent)) {
+                throw new \Exception("Failed to retrieve document content. Response was empty.");
+            }
 
-        // $filePath = storage_path("app/signed_doc_{$envelopeId}.pdf");
-        // اسم الملف النسبي
-$signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '_blockchain.pdf';
+            // $filePath = storage_path("app/signed_doc_{$envelopeId}.pdf");
+            // اسم الملف النسبي
+            $signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '_blockchain.pdf';
 
-// المسار الكامل
-$fullPath = storage_path('app/public/' . $signedFileName);
+            // المسار الكامل
+            $fullPath = storage_path('app/public/' . $signedFileName);
 
-// تأكد من وجود مجلد contracts
-if (!file_exists(dirname($fullPath))) {
-    mkdir(dirname($fullPath), 0777, true);
-}
+            // تأكد من وجود مجلد contracts
+            if (!file_exists(dirname($fullPath))) {
+                mkdir(dirname($fullPath), 0777, true);
+            }
 
-// حفظ الملف في storage
-file_put_contents($fullPath, $documentContent);
+            // حفظ الملف في storage
+            file_put_contents($fullPath, $documentContent);
 
-Log::info("Signed document saved at: {$fullPath}");
+            Log::info("Signed document saved at: {$fullPath}");
 
-// تحديث order بالمسار النسبي فقط
-$order->update([
-    'contract_file' => $signedFileName,
-]);
+            // تحديث order بالمسار النسبي فقط
+            $order->update([
+                'contract_file' => $signedFileName,
+            ]);
 
             // if (!$this->verifySignatureCode($order, $signatureCode)) {
             //     Log::warning('Invalid signature code', ['order_id' => $order->id]);
@@ -394,7 +392,7 @@ $order->update([
                 if ($i === 0) {
                     $userInstallment = UserPropertyUnitInstallments::create([
                         'client_id'             => $order->client_id,
-                         'property_book_bill_id' => $propertyBookBill->id,
+                        'property_book_bill_id' => $propertyBookBill->id,
                         'is_paid'               => false,
                         'due_date'              => $paymentCompletedAt->copy()->addMonth(),
                         'property_unit_id' => $propertyUnit->id
@@ -411,7 +409,7 @@ $order->update([
 
                     $userInstallment = UserPropertyUnitInstallments::create([
                         'client_id'             => $order->client_id,
-                         'property_book_bill_id' => $propertyBookBill->id,
+                        'property_book_bill_id' => $propertyBookBill->id,
                         'is_paid'               => false,
                         'due_date'              => $nextDueDate,
                         'property_unit_id' => $propertyUnit->id
