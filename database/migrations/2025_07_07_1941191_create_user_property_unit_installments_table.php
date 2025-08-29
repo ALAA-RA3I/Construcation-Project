@@ -24,8 +24,6 @@ return new class extends Migration
 
             $table->integer('property_book_bill_id')->nullable();
             $table->foreign('property_book_bill_id')->references('id')->on('property_book_bills')->cascadeOnDelete();
-
-
             $this->addBaseColumns($table);
         });
     }

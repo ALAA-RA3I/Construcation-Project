@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\PropertyBookRepositoryInterface;
 use App\Domain\Services\Contracts\PropertyBookServiceInterface;
@@ -121,5 +122,16 @@ class PropertyBookService implements PropertyBookServiceInterface
             DB::rollBack();
             return false;
         }
+    }
+    public function getPropertyUnits($bookId)
+    {
+        $this->propertyBookRepo->pushCriteria(new WhereCriteria('id', $bookId));
+        $this->propertyBookRepo->pushCriteria(new WithRelationsCriteria([
+            'propertyUnits.client'
+        ]));
+
+        $book = $this->propertyBookRepo->first();
+
+        return $book ? $book->propertyUnits : collect([]);
     }
 }
