@@ -9,7 +9,9 @@ use App\Http\Controllers\View\WebSitePagesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestDocuSignController;
 
-
+Route::get('test-confirm',function (){
+    return view('pages.clientOrders.confirm-sign');
+});
 Route::get('login', [ClientWebController::class, 'showLoginForm'])->name('client.login');
 Route::post('login', [ClientWebController::class, 'login'])->name('client.login');
 
