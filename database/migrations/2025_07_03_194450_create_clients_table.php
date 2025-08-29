@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->bigInteger('national_id');
             $table->string('api_token');
+            //added device token in new migration  $table->string('device_token')->nullable();
+
             $table->boolean('is_active')->default(1);
 
             $this->addBaseColumns($table);

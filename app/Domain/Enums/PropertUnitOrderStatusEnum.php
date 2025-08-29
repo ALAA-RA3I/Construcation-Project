@@ -25,5 +25,6 @@ final class PropertUnitOrderStatusEnum extends Enum
     const PaymentPending = 'payment_pending';
     const PaymentCompleted = 'payment_completed';
     const ContractSigned = 'contract_signed';
+    const ContractCanceled = 'contract_canceled';
 //    const ContractFinalized = 'contract_finalized';
 }

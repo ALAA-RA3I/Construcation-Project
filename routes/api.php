@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
 use App\Http\Controllers\FirebaseNotificationController;
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\View\ClientOrderController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::get('login', function () {
@@ -62,9 +63,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [EngineerController::class, 'delete']);
     });
     Route::prefix('consultingEngineers')->group(function () {
-        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{company?}', [ConsultingEngineerController::class, 'index']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/all', [ConsultingEngineerController::class, 'getAll']);
-        Route::post('/create', [ConsultingEngineerController::class, 'create']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::post('/create', [ConsultingEngineerController::class, 'create']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::get('/{id}', [ConsultingEngineerController::class, 'show']);
         Route::put('update/{id}', [ConsultingEngineerController::class, 'update']);
         Route::delete('delete/{id}', [ConsultingEngineerController::class, 'delete']);
@@ -111,8 +112,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix('projectStage')->group(function () {
         Route::get('/all/{projectId}', [ProjectStageController::class, 'getAll']);
-        Route::get('/{projectId}', [ProjectStageController::class, 'index']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
-        Route::get('/{id}', [ProjectStageController::class, 'show']);//TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{projectId}', [ProjectStageController::class, 'index']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
+        Route::get('/{id}', [ProjectStageController::class, 'show']); //TODO :: FIX THAT 2 ROUTES WITH SAME URL
         Route::post('/create', [ProjectStageController::class, 'create']);
         Route::put('update/{id}', [ProjectStageController::class, 'update']);
         Route::delete('delete/{id}', [ProjectStageController::class, 'delete']);
@@ -258,14 +259,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/all/{bookId?}', [PropertyUnitOrderController::class, 'getAll']);
         Route::get('/{bookId?}', [PropertyUnitOrderController::class, 'index']);
         Route::get('{id}/orderDetails', [PropertyUnitOrderController::class, 'show']);
-//        Route::post('/create', [PropertyUnitOrderController::class, 'create']);
-//        Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
+        //        Route::post('/create', [PropertyUnitOrderController::class, 'create']);
+        //        Route::put('update/{id}', [PropertyUnitOrderController::class, 'update']);
         Route::delete('delete/{id}', [PropertyUnitOrderController::class, 'delete']);
     });
 
     // تدفق العقد - Contract Flow
     Route::prefix('contract-flow')->group(function () {
-         Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
+        Route::get('/{orderId}/status', [ContractFlowController::class, 'getOrderStatus']);
 
         // مسارات المدير
         Route::put('/{orderId}/disicion/{status}', [ContractFlowController::class, 'approveOrRejecrOrder']);
@@ -288,4 +289,4 @@ Route::prefix('contract-flow')->group(function () {
 
 
 Route::post('/send-notification', [FirebaseNotificationController::class, 'send']);
-
+Route::post('verify-my-contract/{orderId}', [ClientOrderController::class, 'verifyMyContract'])->name('verify-my-contract');

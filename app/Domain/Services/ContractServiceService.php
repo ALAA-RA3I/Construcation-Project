@@ -25,7 +25,7 @@ class ContractServiceService implements ContractServiceServiceInterface
     public function generateContract(PropertyUnitOrder $order, $withSignatures = false)
     {
         try {
-            // Metadata للطلب
+            // Metadata للطلب   
             $request = request();
             $clientIp = $request->ip();
             $userAgent = $request->header('User-Agent');
@@ -136,15 +136,82 @@ class ContractServiceService implements ContractServiceServiceInterface
                 'client_ip' => $clientIp,
             ]);
 
-            if (!$this->verifySignatureCode($order, $signatureCode)) {
-                Log::warning('Invalid signature code', ['order_id' => $order->id]);
-                throw new \Exception('Invalid signature code');
-            }
+            // if (!$this->verifySignatureCode($order, $signatureCode)) {
+            //     Log::warning('Invalid signature code', ['order_id' => $order->id]);
+            //     throw new \Exception('Invalid signature code');
+            // }
 
             $order->update([
                 'client_signed_at' => now(),
                 'status' => \App\Domain\Enums\PropertUnitOrderStatusEnum::ContractSigned
             ]);
+            ///////////
+            $request = request();
+            $clientIp = $request->ip();
+            $userAgent = $request->header('User-Agent');
+            $browser = $request->header('sec-ch-ua') ?? null;
+            $platform = $request->header('sec-ch-ua-platform') ?? null;
+            $requestUrl = $request->fullUrl();
+            $referer = $request->headers->get('referer');
+            $acceptLanguage = $request->header('accept-language');
+
+            // البيانات الأساسية
+            $client = $order->client;
+            $propertyBook = $order->propertyBook;
+            $project = $propertyBook->project ?? null;
+            $propertyBookBills = $propertyBook->bills ?? null;
+
+            $property_details = [
+                'rooms' => $propertyBook->rooms ?? null,
+                'bathrooms' => $propertyBook->bathrooms ?? null,
+                'direction' => $propertyBook->direction ?? null,
+                'first_payment' => $propertyBook->first_payment ?? null,
+                'payment_period' => $propertyBook->payment_period ?? null,
+            ];
+
+            $clientSignatureUrl = $order->client_signature_url ?? null;
+            $companySignatureUrl = $order->company_signature_url ?? null;
+
+            // تأكد من المسار المحلي لصورة الهوية للـ DomPDF
+            $identityLocalPath = null;
+            if ($order->identity_file) {
+                $identityFullPath = storage_path('app/public/' . $order->identity_file);
+                if (file_exists($identityFullPath)) {
+                    $identityLocalPath = $identityFullPath;
+                }
+            }
+            $order;
+            // إعداد البيانات للـ Blade
+            $viewData = [
+                'order' => $order,
+                'withSignatures' => true,
+                'date' => now()->format('Y-m-d'),
+                'client' => $client,
+                'propertyBook' => $propertyBook,
+                'project' => $project,
+                'propertyBookBills' => $propertyBookBills,
+                'property_details' => $property_details,
+                'client_ip' => $clientIp,
+                'user_agent' => $userAgent,
+                'browser' => $browser,
+                'platform' => $platform,
+                'request_url' => $requestUrl,
+                'referer' => $referer,
+                'accept_language' => $acceptLanguage,
+                'request_date' => $order->created_at,
+                'approval_date' => $order->updated_at,
+                'order_payment_amount' => $order->payment_amount ?? null,
+                'order_note' => $order->note ?? null,
+                'client_signature_url' => $clientSignatureUrl,
+                'company_signature_url' => $companySignatureUrl,
+                'identity_local_path' => $identityLocalPath, // <-- هنا المسار المحلي
+                'project_sales_details' => $project->salesDetails ?? null,
+            ];
+
+
+
+
+            /////////
 
             // معلومات إضافية من الريكوست (إن وجدت)
             $clientInfo = [
@@ -157,18 +224,7 @@ class ContractServiceService implements ContractServiceServiceInterface
             ];
 
             // توليد PDF أولي بدون رابط بلوك تشين
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
-                'order' => $order,
-                'withSignatures' => true,
-                'date' => now()->format('Y-m-d'),
-                'client' => $order->client,
-                'propertyUnit' => $order->propertyUnit,
-                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
-                'secret_code' => $order->signature_code,
-                'client_ip' => $clientIp,
-                'blockchain_link' => null,
-                'clientInfo' => $clientInfo,
-            ]);
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', $viewData);
             $signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '.pdf';
             \Illuminate\Support\Facades\Storage::disk('public')->put($signedFileName, $pdf->output());
             $order->update(['contract_file' => $signedFileName]);
@@ -182,19 +238,36 @@ class ContractServiceService implements ContractServiceServiceInterface
 
             Log::info('Contract uploaded to IPFS', ['order_id' => $order->id, 'cid' => $cid, 'blockchain_link' => $blockchainLink]);
 
-            // إعادة توليد PDF مع رابط البلوك تشين
-            $pdfWithLink = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', [
+            $DATA = [
                 'order' => $order,
                 'withSignatures' => true,
                 'date' => now()->format('Y-m-d'),
-                'client' => $order->client,
-                'propertyUnit' => $order->propertyUnit,
-                'propertyBook' => $order->propertyUnit ? $order->propertyUnit->propertyBook : null,
-                'secret_code' => $order->signature_code,
+                'client' => $client,
+                'propertyBook' => $propertyBook,
+                'project' => $project,
+                'propertyBookBills' => $propertyBookBills,
+                'property_details' => $property_details,
                 'client_ip' => $clientIp,
+                'user_agent' => $userAgent,
+                'browser' => $browser,
+                'platform' => $platform,
+                'request_url' => $requestUrl,
+                'referer' => $referer,
+                'accept_language' => $acceptLanguage,
+                'request_date' => $order->created_at,
+                'approval_date' => $order->updated_at,
+                'order_payment_amount' => $order->payment_amount ?? null,
+                'order_note' => $order->note ?? null,
+                'client_signature_url' => $clientSignatureUrl,
+                'company_signature_url' => $companySignatureUrl,
+                'identity_local_path' => $identityLocalPath, // <-- هنا المسار المحلي
+                'project_sales_details' => $project->salesDetails ?? null,
+
                 'blockchain_link' => $blockchainLink,
-                'clientInfo' => $clientInfo,
-            ]);
+
+            ];
+            // إعادة توليد PDF مع رابط البلوك تشين
+            $pdfWithLink = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', $DATA);
             $finalFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '_blockchain.pdf';
             \Illuminate\Support\Facades\Storage::disk('public')->put($finalFileName, $pdfWithLink->output());
             $order->update([

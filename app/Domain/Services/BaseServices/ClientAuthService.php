@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ClientAuthService implements ClientAuthServiceInterface {
+class ClientAuthService implements ClientAuthServiceInterface
+{
 
     protected $clientRepo;
 
@@ -30,7 +31,9 @@ class ClientAuthService implements ClientAuthServiceInterface {
         if (! $user->is_active) {
             throw new Exception('Account is inactive. Please contact support.');
         }
-
+        $user->update([
+            'device_token' => $data['device_token']
+        ]);
         $token = $user->createToken('api_token')->plainTextToken;
 
         return [
@@ -39,7 +42,8 @@ class ClientAuthService implements ClientAuthServiceInterface {
         ];
     }
 
-    public function changePassword(array $data,$id){
+    public function changePassword(array $data, $id)
+    {
         $client = $this->clientRepo->findOrFail($id);
 
         $oldPassword = $data['password'];
@@ -51,7 +55,7 @@ class ClientAuthService implements ClientAuthServiceInterface {
         $updatedData = [
             'password' => Hash::make($data['new_password']),
         ];
-        return $this->clientRepo->update($updatedData,$id);
+        return $this->clientRepo->update($updatedData, $id);
     }
     public function webLogin(array $credentials): bool
     {

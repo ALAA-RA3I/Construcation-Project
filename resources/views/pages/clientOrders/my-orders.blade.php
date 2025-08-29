@@ -64,8 +64,8 @@
         align-items: center;
         text-decoration: none;
     }
-    .order-title:hover
-    {
+
+    .order-title:hover {
         color: #ffd200 !important;
         text-decoration: none;
     }
@@ -225,11 +225,24 @@
         margin-bottom: 20px;
     }
 
-    body, h1, h2, h3, h4, h5, h6, p, a, span, li, button {
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    a,
+    span,
+    li,
+    button {
         font-family: 'Cairo', sans-serif;
     }
+
     .order-content {
-        position: relative; /* make it a positioning context */
+        position: relative;
+        /* make it a positioning context */
     }
 
     .cancel-form {
@@ -237,6 +250,7 @@
         bottom: 15px;
         right: 15px;
     }
+
     .contract-modal {
         display: none;
         position: fixed;
@@ -246,7 +260,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.8);
+        background-color: rgba(0, 0, 0, 0.8);
     }
 
     .modal-content {
@@ -257,7 +271,7 @@
         width: 80%;
         height: 80%;
         border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
     .modal-header {
@@ -311,15 +325,14 @@
         cursor: pointer;
         transition: all 0.2s;
     }
-    
-    .download-button
-    {
+
+    .download-button {
         background-color: #ffd200;
         color: #222;
         border: none;
     }
-    .download-button:hover
-    {
+
+    .download-button:hover {
         background-color: #ffd200;
         color: #222;
     }
@@ -336,212 +349,229 @@
 </style>
 
 @section('main-content')
-    <!-- subheader -->
-    <section id="subheader" data-stellar-background-ratio=".3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>My Orders</h1>
-                    <div class="small-border-deco"><span></span></div>
-                    <ul class="crumb">
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li class="sep"></li>
-                        <li>My Orders</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- subheader close -->
-    <!-- Contract Modal -->
-    <div id="contractModal" class="contract-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Contract Document</h3>
-                <span class="close-modal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <iframe id="pdfViewer" class="pdf-container" frameborder="0"></iframe>
-            </div>
-            <div class="modal-actions">
-                <button id="downloadContract" class="modal-btn download-button">
-                    <i class="fas fa-download"></i> Download
-                </button>
-                <button id="closeModal" class="modal-btn btn-danger">
-                    <i class="fas fa-times"></i> Close
-                </button>
+<!-- subheader -->
+<section id="subheader" data-stellar-background-ratio=".3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>My Orders</h1>
+                <div class="small-border-deco"><span></span></div>
+                <ul class="crumb">
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li class="sep"></li>
+                    <li>My Orders</li>
+                </ul>
             </div>
         </div>
     </div>
+</section>
+<!-- subheader close -->
+<!-- Contract Modal -->
+<div id="contractModal" class="contract-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Contract Document</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <iframe id="pdfViewer" class="pdf-container" frameborder="0"></iframe>
+        </div>
 
-    <!-- content begin -->
-    <div id="content">
-        <div class="container">
-            @if($orders->isEmpty())
-                <div class="no-orders">
-                    <i class="far fa-folder-open"></i>
-                    <h3>No Orders Found</h3>
-                    <p>You don't have any orders yet. Start by exploring our available units.</p>
-                    <a href="{{ route('unitsSales') }}" class="btn btn-primary">Browse Properties</a>
-                </div>
-            @else
-                <div class="row">
-                    <div class="col-md-12">
-                        @foreach($orders as $order)
-                            <div class="order-card">
-                                <div class="order-image">
-                                    <i class="fas fa-home"></i>
-                                </div>
+        <div class="modal-actions">
+            <button id="downloadContract" class="modal-btn download-button">
+                <i class="fas fa-download"></i> Download
+            </button>
+            <button id="closeModal" class="modal-btn btn-danger">
+                <i class="fas fa-times"></i> Close
+            </button>
 
-                                <div class="order-content">
-                                    <div class="order-header">
-                                        <a href="{{ route('bookDetails',$order->bookId) }}" class="order-title">
-                                            <i class="fas fa-building"></i>
-                                            {{ $order->main_title }}
-                                        </a>
-                                        <span class="status-badge status-{{ $order->status }}">
-                                            {{ str_replace('_', ' ', $order->status) }}
-                                        </span>
-                                    </div>
-
-                                    <div class="order-details">
-                                        <div class="detail-item">
-                                            <i class="fas fa-hashtag"></i>
-                                            <span class="detail-label">Priority:</span>
-                                            <span class="detail-value">{{ $order->priority_number }}</span>
-                                        </div>
-
-                                        <div class="detail-item">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            <span class="detail-label">Location:</span>
-                                            <span class="detail-value">{{ $order->address }}</span>
-                                        </div>
-
-                                        <div class="detail-item">
-                                            <i class="fas fa-tag"></i>
-                                            <span class="detail-label">Price:</span>
-                                            <span class="detail-value price-highlight">{{ number_format($order->price, 2) }} SYP</span>
-                                        </div>
-
-                                        <div class="detail-item">
-                                            <i class="fas fa-money-bill-wave"></i>
-                                            <span class="detail-label">First Payment:</span>
-                                            <span class="detail-value">{{ number_format($order->first_payment_amount, 2) }} SYP</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="order-actions">
-                                        @if($order->status == 'rejected')
-                                            <div class="text-muted">
-                                                <i class="fas fa-info-circle"></i>
-                                                This order has been rejected. Contact support for details.
-                                            </div>
-                                        @elseif($order->status == 'pending')
-                                            <div class="text-muted mb-4">
-                                                <i class="fas fa-info-circle"></i>
-                                                Your order is being processed. We'll notify you of updates.
-                                            </div>
-
-                                            <form action="{{ route('cancelOrder',$order->id) }}" method="POST"
-                                                  onsubmit="return confirm('Are you sure you want to cancel this order?');"
-                                                  class="cancel-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="order-btn btn btn-danger">
-                                                    <i class="fas fa-times"></i> Cancel Order
-                                                </button>
-                                            </form>
-                                        @elseif($order->status == 'payment_pending')
-                                            @if($order->contract_file)
-                                                <a href="#"
-                                                   class="order-btn btn-view-contract view-contract-btn"
-                                                   data-contract-url="{{ $order->contract_file }}">
-                                                    <i class="fas fa-file-contract"></i> View Contract
-                                                </a>
-                                            @endif
-
-                                            <a href="{{ route('pay', ['bookId' => $order->bookId]) }}" class="order-btn btn-pay-now">
-                                                <i class="fas fa-credit-card"></i> Pay Now
-                                            </a>
-                                        @elseif($order->status == 'payment_completed')
-                                            <a href="#" class="order-btn btn-sign-contract">
-                                                <i class="fas fa-signature"></i> Sign Contract
-                                            </a>
-                                        @elseif($order->status == 'contract_signed')
-                                            <a href="#" class="order-btn btn-download-contract">
-                                                <i class="fas fa-download"></i> Download Contract
-                                            </a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="row">
-                    <div class="col-md-12">
-                        {{ $orders->links() }}
-                    </div>
-                </div>
+            @foreach($orders as $order)
+            @if($order->client_signed_at !=null)
+            <a href="{{ route('contracts.verify.show', $order->id) }}" class="order-btn btn-view-contract">
+                <i class="fas fa-file-contract"></i> View Contract
+            </a>
             @endif
+            @endforeach
         </div>
+
+
     </div>
+</div>
+
+<!-- content begin -->
+<div id="content">
+    <div class="container">
+        @if($orders->isEmpty())
+        <div class="no-orders">
+            <i class="far fa-folder-open"></i>
+            <h3>No Orders Found</h3>
+            <p>You don't have any orders yet. Start by exploring our available units.</p>
+            <a href="{{ route('unitsSales') }}" class="btn btn-primary">Browse Properties</a>
+        </div>
+        @else
+        <div class="row">
+            <div class="col-md-12">
+                @foreach($orders as $order)
+                <div class="order-card">
+                    <div class="order-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+
+                    <div class="order-content">
+                        <div class="order-header">
+                            <a href="{{ route('bookDetails',$order->bookId) }}" class="order-title">
+                                <i class="fas fa-building"></i>
+                                {{ $order->main_title }}
+                            </a>
+                            <span class="status-badge status-{{ $order->status }}">
+                                {{ str_replace('_', ' ', $order->status) }}
+                            </span>
+                        </div>
+
+                        <div class="order-details">
+                            <div class="detail-item">
+                                <i class="fas fa-hashtag"></i>
+                                <span class="detail-label">Priority:</span>
+                                <span class="detail-value">{{ $order->priority_number }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="detail-label">Location:</span>
+                                <span class="detail-value">{{ $order->address }}</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fas fa-tag"></i>
+                                <span class="detail-label">Price:</span>
+                                <span class="detail-value price-highlight">{{ number_format($order->price, 2) }} SYP</span>
+                            </div>
+
+                            <div class="detail-item">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span class="detail-label">First Payment:</span>
+                                <span class="detail-value">{{ number_format($order->first_payment_amount, 2) }} SYP</span>
+                            </div>
+                        </div>
+
+                        <div class="order-actions">
+                            @if($order->status == 'rejected')
+                            <div class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                This order has been rejected. Contact support for details.
+                            </div>
+                            @elseif($order->status == 'pending')
+                            <div class="text-muted mb-4">
+                                <i class="fas fa-info-circle"></i>
+                                Your order is being processed. We'll notify you of updates.
+                            </div>
+
+                            <form action="{{ route('cancelOrder',$order->id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure you want to cancel this order?');"
+                                class="cancel-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="order-btn btn btn-danger">
+                                    <i class="fas fa-times"></i> Cancel Order
+                                </button>
+                            </form>
+                            @elseif($order->status == 'payment_pending')
+                            @if($order->contract_file)
+                            <a href="#"
+                                class="order-btn btn-view-contract view-contract-btn"
+                                data-contract-url="{{ $order->contract_file }}">
+                                <i class="fas fa-file-contract"></i> View Contract
+                            </a>
+                            @endif
+
+                            <a href="{{ route('pay', ['bookId' => $order->bookId]) }}" class="order-btn btn-pay-now">
+                                <i class="fas fa-credit-card"></i> Pay Now
+                            </a>
+                            @elseif($order->status == 'payment_completed')
+                            <a href="#" class="order-btn btn-sign-contract">
+                                <i class="fas fa-signature"></i> Sign Contract
+                            </a>
+                            @elseif($order->status == 'contract_signed')
+                            <a href="#" class="order-btn btn-download-contract">
+                                <i class="fas fa-download"></i> Download Contract
+                            </a>
+                            @endif
+
+                            @if($order->status == 'contract_signed')
+                            <a href="{{ route('contracts.verify.show', $order->id) }}" class="order-btn btn-view-contract">
+                                <i class="fas fa-check-circle"></i> Verify Contract
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="row">
+            <div class="col-md-12">
+                {{ $orders->links() }}
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
 @endsection
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get modal elements
-            const modal = document.getElementById('contractModal');
-            const closeBtn = document.querySelector('.close-modal');
-            const closeModalBtn = document.getElementById('closeModal');
-            const pdfViewer = document.getElementById('pdfViewer');
-            const downloadBtn = document.getElementById('downloadContract');
-            const viewContractBtns = document.querySelectorAll('.view-contract-btn');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get modal elements
+        const modal = document.getElementById('contractModal');
+        const closeBtn = document.querySelector('.close-modal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const downloadBtn = document.getElementById('downloadContract');
+        const viewContractBtns = document.querySelectorAll('.view-contract-btn');
 
-            let currentContractUrl = '';
+        let currentContractUrl = '';
 
-            // Open modal when view contract button is clicked
-            viewContractBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentContractUrl = this.getAttribute('data-contract-url');
-                    pdfViewer.src = currentContractUrl;
-                    modal.style.display = 'block';
-                    document.body.style.overflow = 'hidden'; // Prevent scrolling
-                });
-            });
-
-            // Close modal when X is clicked
-            closeBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-
-            // Close modal when close button is clicked
-            closeModalBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-
-            // Close modal when clicking outside the modal content
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-
-            // Download contract functionality
-            downloadBtn.addEventListener('click', function() {
-                if (currentContractUrl) {
-                    const a = document.createElement('a');
-                    a.href = currentContractUrl;
-                    a.download = 'contract_' + new Date().toISOString().slice(0, 10) + '.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }
+        // Open modal when view contract button is clicked
+        viewContractBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentContractUrl = this.getAttribute('data-contract-url');
+                pdfViewer.src = currentContractUrl;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
             });
         });
-    </script>
+
+        // Close modal when X is clicked
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when close button is clicked
+        closeModalBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Download contract functionality
+        downloadBtn.addEventListener('click', function() {
+            if (currentContractUrl) {
+                const a = document.createElement('a');
+                a.href = currentContractUrl;
+                a.download = 'contract_' + new Date().toISOString().slice(0, 10) + '.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+    });
+</script>
