@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Application\DTO\PropertyUnitDTO\PropertyUnitDTO;
+use App\Domain\Services\Contracts\PropertyBookServiceInterface;
 use App\Domain\Services\Contracts\PropertyUnitServiceInterface;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
@@ -13,24 +14,25 @@ use Illuminate\Http\Request;
 
 class PropertyUnitController extends Controller
 {
-    protected $propertyUnitService;
+    protected $propertyUnitService , $propertyBookService;
 
-    public function __construct(PropertyUnitServiceInterface $propertyUnitService)
+    public function __construct(PropertyUnitServiceInterface $propertyUnitService, PropertyBookServiceInterface $propertyBookService)
     {
         $this->propertyUnitService = $propertyUnitService;
+        $this->propertyBookService = $propertyBookService;
     }
 
-    public function index($propertyBookId)
+    public function getPropertyUnitOfBook($bookId)
     {
-        $propertyUnits = $this->propertyUnitService->paginate($propertyBookId);
+        $propertyUnits = $this->propertyBookService->getPropertyUnits($bookId);
         return ApiResponse::success(PropertyUnitResource::collection($propertyUnits));
     }
 
-    public function getAll($propertyBookId)
-    {
-        $propertyUnits = $this->propertyUnitService->getAll($propertyBookId);
-        return ApiResponse::success(PropertyUnitResource::collection($propertyUnits));
-    }
+//    public function getAll($bookId)
+//    {
+//        $propertyUnits = $this->propertyBookService->getAll($bookId);
+//        return ApiResponse::success(PropertyUnitResource::collection($propertyUnits));
+//    }
 
     public function show($id)
     {

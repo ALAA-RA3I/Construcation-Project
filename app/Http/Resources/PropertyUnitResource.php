@@ -16,13 +16,9 @@ class PropertyUnitResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'property_book_id' => $this->property_book_id,
-            'unit_number' => $this->unit_number,
-            'floor' => $this->floor,
+            'first_payment_date'=> $this->first_payment_date,
+            'client' =>  new ClientResource($this->whenLoaded('client')),
             'client_id' => $this->client_id,
-            'property_book' => new PropertyBookResource($this->whenLoaded('propertyBook')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
         ];
     }
 }

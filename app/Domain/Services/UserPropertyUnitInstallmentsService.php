@@ -3,6 +3,8 @@
 namespace App\Domain\Services;
 
 use App\Criteria\AdvancedDynamicFilterSearchCriteria;
+use App\Criteria\WhereCriteria;
+use App\Criteria\WithRelationsCriteria;
 use App\Infrastructure\Repositories\Contracts\UserPropertyUnitInstallmentsRepositoryInterface;
 use App\Domain\Services\Contracts\UserPropertyUnitInstallmentsServiceInterface;
 // use Illuminate\Fa\Attributes\Auth;
@@ -61,6 +63,20 @@ class UserPropertyUnitInstallmentsService implements UserPropertyUnitInstallment
                 ->where('is_paid', $isPaid)
                 ->with(['propertyBookBill', 'propertyUnit']);
         })->all();
+    }
+    public function getClientInstallments($propertyUnitId, $clientId)
+    {
+        $this->userPropertyUnitInstallmentsRepo->pushCriteria(
+            new WhereCriteria('property_unit_id', $propertyUnitId)
+        );
+        $this->userPropertyUnitInstallmentsRepo->pushCriteria(
+            new WhereCriteria('client_id', $clientId)
+        );
+        $this->userPropertyUnitInstallmentsRepo->pushCriteria(
+            new WithRelationsCriteria(['client', 'propertyUnit', 'propertyBookBill'])
+        );
+
+        return $this->userPropertyUnitInstallmentsRepo->all();
     }
 
 }

@@ -13,4 +13,5 @@ interface UserPropertyUnitInstallmentsServiceInterface
     public function update($id, array $data);
     public function delete($id);
     public function getBillsByStatus($propertyUnitId, $isPaid);
+    public function getClientInstallments($propertyUnitId, $clientId);
 }
