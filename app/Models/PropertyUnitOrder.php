@@ -31,6 +31,7 @@ class PropertyUnitOrder extends BaseModel
         'activation_token',
         'activation_token_sent_at',
         'account_activated_at',
+        'contract_signed_id'
     ];
 
     protected $casts = [
