@@ -15,9 +15,15 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('role_has_permissions')->truncate();
+        DB::table('model_has_roles')->truncate();
+        DB::table('model_has_permissions')->truncate();
+        Role::truncate();
+        Permission::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         // الصلاحيات المتاحة
         $permissions = [
-
             /////////////// statistics /////////////
             'view statistics',
 
@@ -98,6 +104,7 @@ class RoleSeeder extends Seeder
 
             ////////// diagrams ///////////////
             'view diagrams',
+            'download diagrams',
             'upload diagrams',
             'update diagrams',
             'delete diagrams',
