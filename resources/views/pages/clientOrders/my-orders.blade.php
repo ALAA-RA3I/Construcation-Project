@@ -484,7 +484,7 @@
                             </a>
                             @endif
 
-                            <a href="{{ route('pay', ['bookId' => $order->bookId]) }}" class="order-btn btn-pay-now">
+                            <a href="{{ route('pay', ['orderId' => $order->id]) }}" class="order-btn btn-pay-now">
                                 <i class="fas fa-credit-card"></i> Pay Now
                             </a>
                             @elseif($order->status == 'payment_completed')

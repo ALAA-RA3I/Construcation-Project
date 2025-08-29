@@ -21,13 +21,15 @@ Route::post('logout', [ClientWebController::class, 'logout'])->name('client.logo
 
 // Route::get('/testPayment/{bookId}',[stripeController::class,'doFirstPayment'])->name('client.pay');
 
-Route::get('/pay/{bookId}', function ($bookId) {
-    return view('stripeTest', ['bookId' => $bookId]);
+Route::get('/pay/{orderId}', function ($orderId) {
+    return view('stripeTest', ['orderId' => $orderId]);
 })->name('pay');
 
 
 Route::middleware(['auth:client'])->group(
-    function () {}
+    function () {
+
+}
 );
 
 Route::get('/', [WebSitePagesController::class, 'homePage'])->name('home');

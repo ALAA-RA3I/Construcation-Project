@@ -40,7 +40,7 @@ Route::get('login', function () {
     return view('login-static');
 });
 
-Route::post('/testPayment/{bookId}', [StripeController::class, 'doFirstPayment'])->name('api.pay');
+Route::post('/testPayment/{orderId}', [StripeController::class, 'doFirstPayment'])->name('api.pay');
 Route::prefix('specializations')->group(function () {
     Route::get('/', [EngineerSpecializationController::class, 'index']);
 });

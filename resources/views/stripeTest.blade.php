@@ -36,13 +36,13 @@
         const stripe = Stripe("{{ config('stripe.stripe_publishable') }}");
 
         // The book ID that is passed from the route
-        const bookId = {{ $bookId }}; // You need to get this dynamically from your route
+        const orderId = {{ $orderId }}; // You need to get this dynamically from your route
 
         // Initialize the embedded checkout form
         async function initialize() {
             // Function to fetch the client secret from our Laravel backend
             const fetchClientSecret = async () => {
-                const response = await fetch(`/api/testPayment/${bookId}`, {
+                const response = await fetch(`/api/testPayment/${orderId}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

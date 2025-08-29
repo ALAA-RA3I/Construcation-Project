@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Stripe\Charge;
 use Stripe\Stripe;
 use App\Domain\Enums\PropertUnitOrderStatusEnum;
+use App\Models\PropertyBook;
 
 class StripeService implements StripeServiceInterface
 {
@@ -23,16 +24,17 @@ class StripeService implements StripeServiceInterface
     protected $propertyBookRepo;
     protected $propertyUnitOrder;
 
-    public function __construct(UserPropertyUnitInstallmentsRepositoryInterface $installmentsRepo,
-                                PropertyBookRepositoryInterface $propertyBookRepo,
-                                PropertyUnitOrderRepositoryInterface $propertyUnitOrder)
-    {
+    public function __construct(
+        UserPropertyUnitInstallmentsRepositoryInterface $installmentsRepo,
+        PropertyBookRepositoryInterface $propertyBookRepo,
+        PropertyUnitOrderRepositoryInterface $propertyUnitOrder
+    ) {
         $this->installmentsRepo = $installmentsRepo;
         $this->propertyBookRepo = $propertyBookRepo;
         $this->propertyUnitOrder = $propertyUnitOrder;
     }
 
-    public function doPayment(array $data,$billId)
+    public function doPayment(array $data, $billId)
     {
         $client = Auth::guard('api-client')->user()->id;
         Stripe::setApiKey(config('stripe.stripe-secret'));
@@ -48,54 +50,59 @@ class StripeService implements StripeServiceInterface
                 'message' => 'Payment failed, The bill already paid',
             ];
         }
-        try{
+        try {
             $charge = Charge::create([
-                'amount' => $billAmount *100,
+                'amount' => $billAmount * 100,
                 'currency' => 'usd',
                 'source' => $data['stripe_token'],
                 // 'source'=>'tok_visa',
                 'description' => 'bill payement successfully done :)',
-                    'metadata' => [
-                        'user_id' => $client,
-                        'bill_id' => $billDetail->id,
-                    ]
+                'metadata' => [
+                    'user_id' => $client,
+                    'bill_id' => $billDetail->id,
+                ]
             ]);
 
-        if ($charge->status !== 'succeeded') {
+            if ($charge->status !== 'succeeded') {
+                return [
+                    'success' => false,
+                    'message' => 'Payment failed',
+                    'charge' => $charge
+                ];
+            }
+            $updatedData = [
+                'is_paid' => true,
+            ];
+
+            $this->installmentsRepo->update($updatedData, $billId);
+
+            return [
+                'success' => true,
+                'message' => 'Payment done successfully',
+                'charge' => 1
+            ];
+        } catch (Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Payment failed',
-                'charge' => $charge
+                'message' => $e->getMessage()
             ];
-        }
-        $updatedData = [
-            'is_paid' => true,
-        ];
-
-        $this->installmentsRepo->update($updatedData,$billId);
-
-        return [
-            'success' => true,
-            'message' => 'Payment done successfully',
-            'charge' => 1
-        ];
-
-        }catch(Exception $e){
-            return [
-            'success' => false,
-            'message' => $e->getMessage()
-            ];        
         }
     }
 
-    public function doFirstPayment($bookId) {
+    public function doFirstPayment($orderId)
+    {
         $stripeSecretKey = config('stripe.stripe-secret');
         $stripe = new \Stripe\StripeClient($stripeSecretKey);
-        $firstPayment = $this->propertyBookRepo->findOrFail($bookId);
-        $amount = $firstPayment->first_payment_amount;
-        $clinetId = Auth::guard('api-client')->user()->id;
+        $firstPayment = $this->propertyUnitOrder->findOrFail($orderId);
+        Log::info($firstPayment);
+        $propertyBook = PropertyBook::where('id', $firstPayment->property_book_id)->first();
+        Log::info($propertyBook);
+        Log::info($firstPayment->property_book_id);
 
-        try{
+        $amount = $propertyBook->first_payment_amount;
+        // $clinetId = Auth::guard('api-client')->user()->id;
+
+        try {
             $checkout_session = $stripe->checkout->sessions->create([
                 'ui_mode' => 'embedded',
                 'line_items' => [[
@@ -113,8 +120,8 @@ class StripeService implements StripeServiceInterface
                 'mode' => 'payment',
                 'return_url' => route('myOrders'),
                 'metadata' => [
-                    'property_book_id' => $bookId, 
-                ], 
+                    'order_id' => $orderId,
+                ],
             ]);
 
             $updatedData = [
@@ -122,15 +129,15 @@ class StripeService implements StripeServiceInterface
                 'payment_completed_at' => now(),
                 'status' => PropertUnitOrderStatusEnum::PaymentCompleted
             ];
-            Log::info($bookId);
+            Log::info($orderId);
             $unitId = $this->propertyUnitOrder->findWhere([
-                'property_book_id' => $bookId,
-                'client_id' => $clinetId
+                'id' => $orderId,
+                // 'client_id' => $clinetId
             ])->first();
             Log::info($unitId);
-            $this->propertyUnitOrder->update($updatedData,$unitId->id);
-        return ['clientSecret' => $checkout_session->client_secret];
-        }catch(Exception $e) {
+            $this->propertyUnitOrder->update($updatedData, $unitId->id);
+            return ['clientSecret' => $checkout_session->client_secret];
+        } catch (Exception $e) {
             Log::info($e->getMessage());
             return ['error' => $e->getMessage()];
         }
