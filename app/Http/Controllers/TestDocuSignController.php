@@ -15,15 +15,14 @@ class TestDocuSignController extends Controller
         $this->eSignDoc = $eSignDoc;
     }
 
-    public function testDocuSign()
+    public function testDocuSign($orderId)
     {
-        $unitOrderId = 20; // أو أي رقم تعريف (ID) آخر لطلب الوحدة لديك
-    $result = $this->eSignDoc->signContractByClient($unitOrderId);
+         $response  = $this->eSignDoc->signContractByClient($orderId);
 
-    return response()->json($result);  
+        return redirect()->away($response['signingUrl']);
     }
 
-    public function downloadSignedDoc(int $unitOrder)
+    public function downloadSignedDoc(int $unitOrder,Request $request)
     {
         try {
             // We use the ID from the database to find the document
@@ -31,7 +30,7 @@ class TestDocuSignController extends Controller
             $envelopeId = $docuSignEnvelope->contract_signed_id;
             // dd($envelopeId);
 
-            $signedDocPath = $this->eSignDoc->getSignedDocument($envelopeId);
+            $signedDocPath = $this->eSignDoc->getSignedDocument($request,$envelopeId,$unitOrder);
             return response()->download($signedDocPath);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
