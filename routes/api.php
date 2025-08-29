@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\PropertyBookController;
 use App\Http\Controllers\Api\PropertyBookBillController;
 use App\Http\Controllers\Api\ProjectNewsController;
 use App\Http\Controllers\Api\ProjectMediaController;
+use App\Http\Controllers\Api\UserInstallmentsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PropertyUnitController;
 use App\Http\Controllers\Api\PropertyUnitOrderController;
@@ -246,13 +247,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('delete/{id}', [ProjectMediaController::class, 'delete']);
     });
     Route::prefix('propertyUnit')->group(function () {
-        Route::get('/all/{propertyBookId}', [PropertyUnitController::class, 'getAll']);
-        Route::get('/{propertyBookId}', [PropertyUnitController::class, 'index']);
-        Route::get('/getOne/{propertyBookId}', [PropertyUnitController::class, 'show']);
-        Route::post('/create', [PropertyUnitController::class, 'create']);
-        Route::put('update/{id}', [PropertyUnitController::class, 'update']);
-        Route::delete('delete/{id}', [PropertyUnitController::class, 'delete']);
+        Route::get('/all/{bookId}', [PropertyUnitController::class, 'getPropertyUnitOfBook']);
     });
+    Route::prefix('installments')->group(function () {
+        Route::get('/{propertyUnitId}/{clientId}', [UserInstallmentsController::class, 'getClientInstallments']);
+    });
+
+
     Route::prefix('propertyUnitOrder')->group(function () {
         Route::get('/all/{bookId?}', [PropertyUnitOrderController::class, 'getAll']);
         Route::get('/{bookId?}', [PropertyUnitOrderController::class, 'index']);
@@ -273,7 +274,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{orderId}/generate-contract', [ContractFlowController::class, 'generateContract']);
         Route::post('/{orderId}/send-signature-code', [ContractFlowController::class, 'sendSignatureCode']);
         Route::put('/{orderId}/sign-by-company', [ContractFlowController::class, 'signContractByCompany']);
-        
+
 
         // مسارات العميل
         Route::post('/{orderId}/create-payment-intent', [ContractFlowController::class, 'createPaymentIntent']);
