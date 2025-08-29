@@ -4,14 +4,21 @@ namespace App\Domain\Services;
 
 use App\Domain\Services\Contracts\ContractServiceServiceInterface;
 use App\Domain\Services\IPFSServiceService;
+use App\Models\PropertyBook;
+use App\Models\PropertyBookBill;
+use App\Models\PropertyUnit;
 use App\Models\PropertyUnitOrder;
+use App\Models\UserPropertyUnitInstallments;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Carbon\Month;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ContractServiceService implements ContractServiceServiceInterface
 {
+
     protected $ipfsService;
 
     public function __construct(IPFSServiceService $ipfsService = null)
@@ -274,6 +281,47 @@ class ContractServiceService implements ContractServiceServiceInterface
                 'contract_file' => $finalFileName,
                 'contract_hash' => $cid,
             ]);
+            $propertyUnit = PropertyUnit::create([
+                'property_book_id'    => $order->property_book_id,
+                'client_id'           => $order->client_id,
+                'first_payment_date'  => $order->payment_completed_at,
+            ]);
+
+            $propertyBookBills   = PropertyBookBill::where('property_book_id', $order->property_book_id)->get();
+            $paymentCompletedAt  = Carbon::parse($order->payment_completed_at);
+
+            $previousDueDate = null;
+
+            foreach ($propertyBookBills as $i => $propertyBookBill) {
+                if ($i === 0) {
+                    $userInstallment = UserPropertyUnitInstallments::create([
+                        'client_id'             => $order->client_id,
+                         'property_book_bill_id' => $propertyBookBill->id,
+                        'is_paid'               => false,
+                        'due_date'              => $paymentCompletedAt->copy()->addMonth(),
+                        'property_unit_id' => $propertyUnit->id
+
+                    ]);
+                    $previousDueDate = Carbon::parse($userInstallment->due_date);
+                } else {
+
+                    $userInstallment = UserPropertyUnitInstallments::where('property_unit_id', $propertyUnit->id)->orderBy('due_date', 'desc')
+                        ->first();
+                    $previousDueDate = Carbon::parse($userInstallment->due_date);
+
+                    $nextDueDate = $previousDueDate->copy()->addMonth();
+
+                    $userInstallment = UserPropertyUnitInstallments::create([
+                        'client_id'             => $order->client_id,
+                         'property_book_bill_id' => $propertyBookBill->id,
+                        'is_paid'               => false,
+                        'due_date'              => $nextDueDate,
+                        'property_unit_id' => $propertyUnit->id
+                    ]);
+
+                    $previousDueDate = $nextDueDate;
+                }
+            }
 
             Log::info('Final PDF with blockchain link generated and saved', ['order_id' => $order->id, 'file' => $finalFileName]);
 

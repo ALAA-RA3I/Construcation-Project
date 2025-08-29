@@ -3,7 +3,7 @@
 namespace App\Application\DTO\ClientsDTO;
 
 
-class changePasswordDTO {
+class ChangePasswordDTO {
 
     public static function fromChangeRequest(array $data) {
         return [

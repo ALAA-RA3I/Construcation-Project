@@ -13,7 +13,7 @@ class PropertyUnit extends BaseModel
         'first_payment_date'
 
     ];
-
+    
     /**
      * العلاقة مع نموذج الشقة (property_book)
      */
