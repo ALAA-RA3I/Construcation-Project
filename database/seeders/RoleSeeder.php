@@ -66,19 +66,11 @@ class RoleSeeder extends Seeder
             'create projects',
             'edit projects',
             'details projects',
-            'assign project engineers',
-            'view project department studies',
-            'view project department execution',
-            'view project resources management',
 
-            ////////// projects resource management ///////////////
-            'view reports resource management',
-            'export reports resource management',
-            'view project container',
-            'add project container items',
-            'view financial payments',
-            'view details payments',
-            'add financial payments',
+            ////////// team ///////////////
+            'assign project participant',
+            'delete project participant',
+
 
             ////////// stages ///////////////
             'view stages',
@@ -87,13 +79,22 @@ class RoleSeeder extends Seeder
             'delete stages',
 
             ////////// tasks ///////////////
-            'view tasks',
             'create tasks',
             'edit tasks',
             'delete tasks',
-            'done tasks',
-            'accept tasks',
-            'reject tasks',
+            'details tasks',
+            'add item to task container',
+            'delete item to task container',
+            'change tasks status',
+
+            ////////// projects resource management ///////////////
+            'view reports resource management',
+            'view project inventory',
+            'add item to inventory',
+            'view financial payments',
+            'view details payments',
+            'add financial payments',
+
 
             ////////// diagrams ///////////////
             'view diagrams',

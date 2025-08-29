@@ -460,6 +460,11 @@
                                 <i class="fas fa-info-circle"></i>
                                 This order has been rejected. Contact support for details.
                             </div>
+                            @elseif($order->status == 'contract_canceled')
+                                    <div class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        This order has been cancelled From Company.
+                                    </div>
                             @elseif($order->status == 'pending')
                             <div class="text-muted mb-4">
                                 <i class="fas fa-info-circle"></i>
