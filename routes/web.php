@@ -8,7 +8,13 @@ use App\Http\Controllers\View\ProjectSalesDetailsBladeController;
 use App\Http\Controllers\View\PropertyBookBladeController;
 use App\Http\Controllers\View\WebSitePagesController;
 use Illuminate\Support\Facades\Route;
- 
+
+Route::get('testo',function (){
+    return view('test');
+});
+
+
+
 Route::get('test-confirm',function (){
     return view('pages.clientOrders.confirm-sign');
 });

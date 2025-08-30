@@ -97,14 +97,24 @@ class ContractServiceService implements ContractServiceServiceInterface
 
             // توليد PDF
             $pdf = Pdf::loadView('contracts.pdf', $viewData);
+ 
+            $CompanySignedpdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('contracts.signed_contract', $viewData);
+            // $signedFileName = 'contracts/signed_contract_' . $order->id . '_' . time() . '.pdf';
+            // \Illuminate\Support\Facades\Storage::disk('public')->put($signedFileName, $pdf->output());
+            // $order->update(['contract_file' => $signedFileName]);
+
 
             // اسم ملف العقد
             $contractFileName = 'contracts/contract_' . $order->id . '_' . time() . '.pdf';
+            $contractSignedFileName = 'contracts/contract_Company' . $order->id . '_' . time() . '.pdf';
+
             Storage::disk('public')->put($contractFileName, $pdf->output());
+            Storage::disk('public')->put($contractSignedFileName, $CompanySignedpdf->output());
 
             // تحديث order بمسار العقد
             $order->update([
                 'contract_file' => $contractFileName,
+                'contract_company_sign'=> $contractSignedFileName
             ]);
 
             Log::info('Contract generated', ['order_id' => $order->id, 'file' => $contractFileName]);

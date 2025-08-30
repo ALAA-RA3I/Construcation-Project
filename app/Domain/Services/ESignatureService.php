@@ -97,7 +97,7 @@ class ESignatureService implements ESignatureServiceInterface
         $documentPath =  PropertyUnitOrder::where([
             'id' => $unitOrder,
             'client_id' => $order->client_id
-        ])->value('contract_file');
+        ])->value('contract_company_sign');
 
         // dd($documentPath);
         $fullDocumentPath = storage_path('app/public/' . $documentPath);
