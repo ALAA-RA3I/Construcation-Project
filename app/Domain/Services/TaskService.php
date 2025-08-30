@@ -80,7 +80,6 @@ class TaskService implements TaskServiceInterface
             $task = $data['task'];
             $user = $data['user'];
             $newStatus = $data['status'];
-            $ticketDescription = $data['ticket_description'];
 
             $role = $user->getRoleNames()->first(); // assume you use spatie
 
@@ -98,20 +97,6 @@ class TaskService implements TaskServiceInterface
 
             } elseif ($role === 'consultingEngineer') {
                 if ($currentStatus === TaskStatusEnum::PendingApproval && $newStatus === TaskStatusEnum::Done) {
-                    $task->status = $newStatus;
-                    $task->actual_date_of_closed = now();
-                }
-                elseif ($currentStatus === TaskStatusEnum::PendingApproval && $newStatus === TaskStatusEnum::WaitingTicket) {
-                    $task->status = $newStatus;
-
-                    $this->ticketRepo->create([
-                        'description' => $ticketDescription,
-                        'status' => TicketStatusEnum::Open,
-                        'task_id' => $task->id,
-                        'created_by' => $user->id,
-                    ]);
-                }
-                elseif ($currentStatus === TaskStatusEnum::WaitingTicket && $newStatus === TaskStatusEnum::Done) {
                     $task->status = $newStatus;
                     $task->actual_date_of_closed = now();
                 }

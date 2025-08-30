@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
 use App\Http\Controllers\FirebaseNotificationController;
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\TestDocuSignController;
 use App\Http\Controllers\View\ClientOrderController;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -290,3 +291,5 @@ Route::prefix('contract-flow')->group(function () {
 
 Route::post('/send-notification', [FirebaseNotificationController::class, 'send']);
 Route::post('verify-my-contract/{orderId}', [ClientOrderController::class, 'verifyMyContract'])->name('verify-my-contract');
+
+Route::post('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');

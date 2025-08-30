@@ -1,20 +1,28 @@
 <?php
 
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\TestDocuSignController;
 use App\Http\Controllers\View\ClientOrderController;
 use App\Http\Controllers\View\ClientWebController;
 use App\Http\Controllers\View\ProjectSalesDetailsBladeController;
 use App\Http\Controllers\View\PropertyBookBladeController;
 use App\Http\Controllers\View\WebSitePagesController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestDocuSignController;
+
+Route::get('testo',function (){
+    return view('test');
+});
 
 
+
+Route::get('test-confirm',function (){
+    return view('pages.clientOrders.confirm-sign');
+});
 Route::get('login', [ClientWebController::class, 'showLoginForm'])->name('client.login');
 Route::post('login', [ClientWebController::class, 'login'])->name('client.login');
 
-Route::get('/testAccessToken',[TestDocuSignController::class,'testDocuSign'])->name('test');
-Route::get('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');
+Route::get('/testAccessToken/{orderId}',[TestDocuSignController::class,'testDocuSign'])->name('test');
+// Route::post('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');
 
 
 // Registration Routes

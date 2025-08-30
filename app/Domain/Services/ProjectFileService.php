@@ -22,7 +22,7 @@ class ProjectFileService implements ProjectFileServiceInterface
         // return $this->projectFileRepo->all();
     }
 
-    public function getAllProjectFiles($id) 
+    public function getAllProjectFiles($id)
     {
         return $this->projectFileRepo->findWhere(['project_id' => $id]);
     }
@@ -46,7 +46,7 @@ class ProjectFileService implements ProjectFileServiceInterface
         $data['file_path'] = $storedPath;
         $data['project_id'] = $id;
         $data['file_path'] = $storedPath;
-        $data['project_participant_id'] = 1; 
+        $data['project_participant_id'] = 1;
 
         return $this->projectFileRepo->create($data);
     }

@@ -45,7 +45,7 @@ class TaskDTO
         return [
             'task' => $task,
             'status' => $data['status'],
-            'ticket_description' => $data['ticket_description'] ?? null,
+//            'ticket_description' => $data['ticket_description'] ?? null,
             'user' => auth()->user(), // مهم لتحديد الدور
         ];
     }
