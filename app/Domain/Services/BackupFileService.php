@@ -24,11 +24,11 @@ class BackupFileService implements BackupFileServiceInterface
         $this->projectFileRepo = $projectFileRepo;
     }
 
-    public function getAll($projectId)
+    public function getAll($projectFileId)
     {
         return $this->backupFileRepo->query()
-            ->whereHas('projectFile', function ($query) use ($projectId) {
-                $query->where('project_id', $projectId);
+            ->whereHas('projectFile', function ($query) use ($projectFileId) {
+                $query->where('project_file_id', $projectFileId);
             })
             ->get();
     }
@@ -39,42 +39,48 @@ class BackupFileService implements BackupFileServiceInterface
         return $this->backupFileRepo->paginate();
     }
 
-    public function create(BackupfileDTO $dto,$id)
+    public function create(BackupfileDTO $dto, $id)
     {
         return DB::transaction(function () use ($dto, $id) {
-        $fileSelected =$this->projectFileRepo->find($id);
+            $fileSelected = $this->projectFileRepo->find($id);
 
-        if (!$fileSelected) {
-            throw new \Exception("Project file not found.");
-        }
+            if (!$fileSelected) {
+                throw new \Exception("Project file not found.");
+            }
 
-        $oldFilePath = $fileSelected->file_path;
+            $oldFilePath = $fileSelected->file_path;
 
-        $newFilePath = $this->updateFileWithBackup(
-            $dto->file,      
-            $oldFilePath,     
-            'uploads',       
-            'public',         
-            'backups'         
-        );
+            $newFilePath = $this->updateFileWithBackup(
+                $dto->file,
+                $oldFilePath,
+                'uploads',
+                'public',
+                'backups'
+            );
 
-        $this->backupFileRepo->create([
-            'project_file_id' =>  $fileSelected->id,
-            'path' => $fileSelected->file_path,
-            'version' => $dto->version
-        ]);
+            $this->backupFileRepo->create([
+                'project_file_id' =>  $fileSelected->id,
+                'path' => $oldFilePath, // هنا يجب استخدام المسار القديم
+                'version' => $dto->version
+            ]);
 
-         $updatedData = [
-            'file_path' => $newFilePath 
-        ];
+            $updatedData = [
+                'file_path' => $newFilePath // هنا يتم تحديث مسار الملف الأصلي بالمسار الجديد
+            ];
 
-        $fileSelected->update($updatedData);
+            $fileSelected->update($updatedData);
+            return $this->backupFileRepo->query()->where('path', $oldFilePath)->first();
         });
     }
 
     public function show($id)
     {
-        return $this->backupFileRepo->find($id);
+        $backupFile = $this->backupFileRepo->find($id);
+        if ($backupFile) {
+            // استخدام دالة getStorageFileUrl من الـ trait
+            $backupFile->url = $this->getStorageFileUrl($backupFile->path);
+        }
+        return $backupFile;
     }
 
     public function update($id, array $data)

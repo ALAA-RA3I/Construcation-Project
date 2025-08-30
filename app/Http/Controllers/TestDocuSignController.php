@@ -31,7 +31,7 @@ class TestDocuSignController extends Controller
             // dd($envelopeId);
 
             $signedDocPath = $this->eSignDoc->getSignedDocument($request,$envelopeId,$unitOrder);
-            return response()->download($signedDocPath);
+        return redirect()->route('myOrders', ['unitOrder' => $unitOrder]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

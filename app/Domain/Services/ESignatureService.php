@@ -148,7 +148,7 @@ class ESignatureService implements ESignatureServiceInterface
                 'authentication_method' => 'none',
                 'client_user_id' => '12345',
                 'recipient_id' => '1',
-                'return_url' => route('myOrders'),
+                'return_url' => route('afterSigning'),
                 'user_name' => $clientName,
                 'email' => $clientEmail
             ]);
@@ -340,6 +340,11 @@ class ESignatureService implements ESignatureServiceInterface
             $blockchainLink = $cid ? ("https://gateway.pinata.cloud/ipfs/" . $cid) : null;
 
             Log::info('Contract uploaded to IPFS', ['order_id' => $order->id, 'cid' => $cid, 'blockchain_link' => $blockchainLink]);
+            PropertyUnitOrder::where([
+                'id' => $order->id
+            ])->update([
+                'blockChain_link' => $blockchainLink,
+            ]);
 
             // $DATA = [
             //     'order' => $order,

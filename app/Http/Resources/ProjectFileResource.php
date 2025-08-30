@@ -18,10 +18,13 @@ class ProjectFileResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'file_path' => $this->getStorageFileUrl($this->file_path),
+            'file_path' => $this->getAssetFileUrl($this->file_path),
             'description' => $this->description,
-            'project_id' => 1,
-            'project_participant_id' => 1,
-        ];
+            'project_id' => $this->project_id,
+            'project_participant' => $this->whenLoaded('projectParticipant', function () {
+    return new ProjectParticipantResource($this->projectParticipant);
+}),      
+             'creator' => $this->creator
+];
     }
 }

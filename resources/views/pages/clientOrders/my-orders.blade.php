@@ -498,8 +498,8 @@
                             </a>
 
                             @elseif($order->status == 'contract_signed')
-                            <a href="#" class="order-btn btn-download-contract">
-                                <i class="fas fa-download"></i> Download Contract
+                            <a href="{{ $order->blockChain_link }}" class="order-btn btn-download-contract">
+                                <i class="fas fa-download"></i> Contract link
                             </a>
                             @endif
 
