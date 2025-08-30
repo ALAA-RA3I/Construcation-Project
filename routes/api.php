@@ -179,18 +179,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}', [BackupFilesController::class, 'show']);
         Route::post('/create/{id}', [BackupFilesController::class, 'create']);
     });
-    Route::prefix('projectFiles')->group(function () {
-        Route::get('/{id}/all', [ProjectFilesController::class, 'getAllProjectFiles']);
-        Route::get('/paginated/{id}', [ProjectFilesController::class, 'paginate']);
-        Route::get('/{id}', [ProjectFilesController::class, 'show']);
-        Route::post('/{id}/create', [ProjectFilesController::class, 'create']);
-        Route::delete('delete/{id}', [ProjectFilesController::class, 'delete']);
-    });
-    Route::prefix('BackupFiles')->group(function () {
-        Route::get('{id}/all', [BackupFilesController::class, 'getAll']);
-        Route::get('{id}', [BackupFilesController::class, 'show']);
-        Route::post('/create/{id}', [BackupFilesController::class, 'create']);
-    });
+
     Route::prefix('projectContainer')->group(function () {
         Route::post('/createNewItems/{id}', [ProjectContainerController::class, 'createIfNotExisit']);
         Route::post('/create/{id}', [ProjectContainerController::class, 'createIfExisit']);

@@ -290,7 +290,7 @@ class RoleSeeder extends Seeder
                 'view projects',
 //                'create projects',
 //                'edit projects',
-//                'details projects',
+                'details projects',
 
                 ////////// team ///////////////
 //                'assign project participant',
@@ -308,8 +308,8 @@ class RoleSeeder extends Seeder
 //                'edit tasks',
 //                'delete tasks',
                 'details tasks',
-//                'add item to task container',
-//                'delete item to task container',
+                'add item to task container',
+                'delete item to task container',
                 'change tasks status',
 
                 ////////// projects resource management ///////////////
@@ -342,7 +342,7 @@ class RoleSeeder extends Seeder
                 'view projects',
 //                'create projects',
 //                'edit projects',
-//                'details projects',
+                'details projects',
 
                 ////////// team ///////////////
 //                'assign project participant',
@@ -410,7 +410,7 @@ class RoleSeeder extends Seeder
 //                'create tasks',
 //                'edit tasks',
 //                'delete tasks',
-                'details tasks',
+//                'details tasks',
 //                'add item to task container',
 //                'delete item to task container',
 //                'change tasks status',
