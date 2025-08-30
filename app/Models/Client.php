@@ -47,4 +47,8 @@ class Client extends Authenticatable
     {
         return $this->hasMany(PropertyUnitOrder::class);
     }
+    public function notifications()
+    {
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable');
+    }
 }

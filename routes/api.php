@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\PropertyUnitOrderController;
 use App\Http\Controllers\Api\ContractFlowController;
 use App\Http\Controllers\FirebaseNotificationController;
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\InstallmentNotificationController;
 use App\Http\Controllers\NewTicketController;
 use App\Http\Controllers\TestDocuSignController;
 use App\Http\Controllers\View\ClientOrderController;
@@ -303,3 +304,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tickets/assigned', [NewTicketController::class, 'assignedTickets']);
     Route::patch('/tickets/{ticketId}/{status}', [NewTicketController::class, 'updateStatus']);
 });
+
+Route::get('/send-installment-notifications', [InstallmentNotificationController::class, 'sendNotifications']);
