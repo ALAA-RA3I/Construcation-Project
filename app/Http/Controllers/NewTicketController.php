@@ -17,20 +17,63 @@ class NewTicketController extends Controller
     {
         $request->validate([
             'description'   => 'required|string|max:500',
-            'assigned_to'   => 'required|exists:project_participants,id',
+            'assigned_to'   => 'required|exists:users,id',
         ]);
+        $user = User::find($request->assigned_to);
+        if ($user->engineer()->where('user_id',   $user->id)->exists()) {
+            $user_id = $user->engineer()->where('user_id', $user->id)->first()->id;
+            $ticket = Ticket::create([
+                'description' => $request->description,
+                'status'      => 'Open',
+                'created_by'  => Auth::id(),
+                'assigned_to' =>  $user_id,
+            ]);
+            return response()->json([
+                'message' => 'Ticket created successfully',
+                'data'    => $ticket->load('assignedParticipant.participant'),
+            ], 201);
+        } elseif ($user->realEstateManager()->where('user_id', $user->id)->exists()) {
+            $user_id = $user->realEstateManager()->where('user_id', $user->id)->first()->id;
+            $ticket = Ticket::create([
+                'description' => $request->description,
+                'status'      => 'Open',
+                'created_by'  => Auth::id(),
+                'assigned_to' =>  $user_id,
+            ]);
+            return response()->json([
+                'message' => 'Ticket created successfully',
+                'data'    => $ticket->load('assignedParticipant.participant'),
+            ], 201);
+        } elseif ($user->consulting_engineers()->where('user_id', $user->id)->exists()) {
+            $user_id = $user->consulting_engineers()->where('user_id', $user->id)->first()->id;
+            $ticket = Ticket::create([
+                'description' => $request->description,
+                'status'      => 'Open',
+                'created_by'  => Auth::id(),
+                'assigned_to' =>  $user_id,
+            ]);
+            return response()->json([
+                'message' => 'Ticket created successfully',
+                'data'    => $ticket->load('assignedParticipant.participant'),
+            ], 201);
+        } elseif ($user->projectManager()->where('user_id', $user->id)->exists()) {
+            $user_id = $user->projectManager()->where('user_id', $user->id)->first()->id;
+            $ticket = Ticket::create([
+                'description' => $request->description,
+                'status'      => 'Open',
+                'created_by'  => Auth::id(),
+                'assigned_to' =>  $user_id,
+            ]);
+            return response()->json([
+                'message' => 'Ticket created successfully',
+                'data'    => $ticket->load('assignedParticipant.participant'),
+            ], 201);
+        }
 
-        $ticket = Ticket::create([
-            'description' => $request->description,
-            'status'      => 'Open',
-            'created_by'  => Auth::id(),
-            'assigned_to' => $request->assigned_to,
-        ]);
-
-        return response()->json([
-            'message' => 'Ticket created successfully',
-            'data'    => $ticket->load('assignedParticipant.participant'),
-        ], 201);
+        // return response()->json([
+        //     'message' => 'Ticket created successfully',
+        //     'data'    => $ticket->load('assignedParticipant.participant'),
+        // ], 201);
     }
 
     /**
@@ -81,15 +124,14 @@ class NewTicketController extends Controller
         } elseif ($user->projectManager()->where('user_id', $authId)->exists()) {
             $user_id = $user->projectManager()->where('user_id', $authId)->first()->id;
         }
-         // 3. إذا وجدنا participant_id
+        // 3. إذا وجدنا participant_id
         if ($user_id) {
             $participantIds = ProjectParticipant::where('participant_id', $user_id)
-                 ->pluck('id');
+                ->pluck('id');
 
             $tickets = Ticket::whereIn('assigned_to', $participantIds)->get();
 
-        return response()->json(['data' => $tickets], 200);
-
+            return response()->json(['data' => $tickets], 200);
         }
 
         // 4. إذا ما وجد participant_id
@@ -100,15 +142,15 @@ class NewTicketController extends Controller
     /**
      * Update ticket status (open/close)
      */
-    public function updateStatus( $ticketId, $status)
+    public function updateStatus($ticketId, $status)
     {
-         
+
         $ticket = Ticket::with('assignedParticipant')->findOrFail($ticketId);
 
         // // Only creator or assigned participant can update
         // $isCreator = $ticket->created_by === Auth::id();
         // $isAssigned = $ticket->assignedParticipant &&
-            $ticket->assignedParticipant->participant_id === Auth::id();
+        $ticket->assignedParticipant->participant_id === Auth::id();
 
         // if (!($isCreator || $isAssigned)) {
         //     return response()->json(['message' => 'Unauthorized'], 403);
