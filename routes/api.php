@@ -294,7 +294,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects/{projectId}/participants', [NewTicketController::class, 'getParticipants']);
     Route::get('/tickets/my', [NewTicketController::class, 'myTickets']);
     Route::get('/tickets/assigned', [NewTicketController::class, 'assignedTickets']);
-    Route::patch('/tickets/{ticketId}/{status}', [NewTicketController::class, 'updateStatus']);
+    Route::put('/tickets/{ticketId}/{status}', [NewTicketController::class, 'updateStatus']);
 });
 
 Route::get('/send-installment-notifications', [InstallmentNotificationController::class, 'sendNotifications']);
