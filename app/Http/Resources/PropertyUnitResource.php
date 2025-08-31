@@ -19,6 +19,8 @@ class PropertyUnitResource extends JsonResource
             'first_payment_date'=> $this->first_payment_date,
             'client' =>  new ClientResource($this->whenLoaded('client')),
             'client_id' => $this->client_id,
+            'blocChainLink' => $this->blockChain_link, // now filled correctly
+
         ];
     }
 }

@@ -13,7 +13,7 @@ class PropertyUnit extends BaseModel
         'first_payment_date'
 
     ];
-    
+
     /**
      * العلاقة مع نموذج الشقة (property_book)
      */
@@ -21,7 +21,11 @@ class PropertyUnit extends BaseModel
     {
         return $this->belongsTo(PropertyBook::class);
     }
-
+    public function order()
+    {
+        return $this->hasOne(PropertyUnitOrder::class, 'property_book_id', 'property_book_id')
+            ->where('client_id', $this->client_id);
+    }
     /**
      * العلاقة مع العميل (Client)
      */

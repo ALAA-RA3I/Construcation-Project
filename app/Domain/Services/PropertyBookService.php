@@ -132,6 +132,23 @@ class PropertyBookService implements PropertyBookServiceInterface
 
         $book = $this->propertyBookRepo->first();
 
-        return $book ? $book->propertyUnits : collect([]);
+        if (! $book) {
+            return collect([]);
+        }
+
+        $propertyUnits = $book->propertyUnits;
+
+        // attach priority_number manually
+        $propertyUnits->map(function ($unit) {
+            $order = \App\Models\PropertyUnitOrder::where('property_book_id', $unit->property_book_id)
+                ->where('client_id', $unit->client_id)
+                ->first();
+
+            $unit->blockChain_link = $order ? $order->blockChain_link : null;
+
+            return $unit;
+        });
+
+        return $propertyUnits;
     }
 }
