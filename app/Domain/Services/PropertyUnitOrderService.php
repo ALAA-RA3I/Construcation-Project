@@ -143,6 +143,7 @@ class PropertyUnitOrderService implements PropertyUnitOrderServiceInterface
                 'property_books.id as bookId',
                 'property_unit_orders.id',
                 'property_unit_orders.priority_number',
+                'property_unit_orders.blockChain_link',
                 'property_unit_orders.status',
                 'property_unit_orders.contract_file',
                 'property_books.price',

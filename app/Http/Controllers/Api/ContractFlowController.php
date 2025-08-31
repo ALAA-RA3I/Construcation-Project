@@ -102,8 +102,8 @@ class ContractFlowController extends Controller
         }
 
         // الحالات التي لا يمكن إلغاء الطلب فيها
-        if (in_array($order->status, ['pending', 'rejected','contract_canceled'])) {
-            return ApiResponse::error('Order status '. $order->status . ' cannot be cancelled', 400);
+        if (in_array($order->status, ['pending', 'rejected', 'contract_canceled'])) {
+            return ApiResponse::error('Order status ' . $order->status . ' cannot be cancelled', 400);
         }
 
         // الحالات التي يمكن إلغاء الطلب فيها

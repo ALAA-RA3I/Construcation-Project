@@ -4,47 +4,50 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
- 
-class notification extends Notification
+use Illuminate\Notifications\Notification as BaseNotification;
+
+class UserInstallmentNotification extends BaseNotification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    public string $title;
+    public string $body;
+
+    public function __construct(string $title, string $body)
     {
-        //
+        $this->title = $title;
+        $this->body  = $body;
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
+     * قنوات الإرسال
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        // نخزن بالداتابيز + نبعت فايربيز
+        return ['database', 'fcm'];
     }
 
     /**
-     * Get the mail representation of the notification.
+     * البيانات يلي تنخزن بالداتابيز
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)->markdown('mail');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toDatabase(object $notifiable): array
     {
         return [
-            //
+            'title' => $this->title,
+            'body'  => $this->body,
+        ];
+    }
+
+    /**
+     * قنوات فايربيز (custom channel)
+     */
+    public function toFcm(object $notifiable): array
+    {
+        return [
+            'title' => $this->title,
+            'body'  => $this->body,
+            'token' => $notifiable->fcm_token, // لازم يكون موجود بجدول clients
         ];
     }
 }

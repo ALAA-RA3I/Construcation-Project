@@ -46,4 +46,8 @@ class ProjectParticipant extends BaseModel
     {
         return $this->hasMany(Task::class, 'supervisor_id');
     }
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
 }

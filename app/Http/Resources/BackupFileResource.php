@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\HasFileHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BackupFileResource extends JsonResource
 {
+        use HasFileHandler;
     /**
      * Transform the resource into an array.
      *
@@ -17,8 +19,9 @@ class BackupFileResource extends JsonResource
         return [
             'id'=> $this->id,
             'project_file_id' => $this->project_file_id,
-            'path' => $this->path,
+            'path' => $this->getAssetFileUrl( $this->path),
             'version' => $this->version,
+        'url' => $this->url, 
         ];
     }
 }

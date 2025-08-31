@@ -1,13 +1,20 @@
 <?php
 
 use App\Http\Controllers\Clients\stripeController;
+use App\Http\Controllers\TestDocuSignController;
 use App\Http\Controllers\View\ClientOrderController;
 use App\Http\Controllers\View\ClientWebController;
 use App\Http\Controllers\View\ProjectSalesDetailsBladeController;
 use App\Http\Controllers\View\PropertyBookBladeController;
 use App\Http\Controllers\View\WebSitePagesController;
+use App\Models\PropertyUnitOrder;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestDocuSignController;
+
+Route::get('testo',function (){
+    return view('test');
+});
+
+
 
 Route::get('test-confirm',function (){
     return view('pages.clientOrders.confirm-sign');
@@ -15,8 +22,8 @@ Route::get('test-confirm',function (){
 Route::get('login', [ClientWebController::class, 'showLoginForm'])->name('client.login');
 Route::post('login', [ClientWebController::class, 'login'])->name('client.login');
 
-Route::get('/testAccessToken',[TestDocuSignController::class,'testDocuSign'])->name('test');
-Route::get('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');
+Route::get('/testAccessToken/{orderId}',[TestDocuSignController::class,'testDocuSign'])->name('test');
+// Route::post('/testGetSignedFile/{id}',[TestDocuSignController::class,'downloadSignedDoc'])->name('download');
 
 
 // Registration Routes
@@ -32,6 +39,28 @@ Route::get('/pay/{orderId}', function ($orderId) {
     return view('stripeTest', ['orderId' => $orderId]);
 })->name('pay');
 
+
+Route::get('/afterSigning', function () {
+    // جلب اليوزر الحالي
+    $user = auth('client')->user();
+
+    // لو ما في يوزر عامل تسجيل دخول رجّعو عالـ login
+    // if (!$user) {
+    //     return redirect()->route('client.login');
+    // }
+
+    // جلب أحدث order لهالعميــل
+    $latestOrder = PropertyUnitOrder::where('client_id', $user->id)
+        ->latest('updated_at')
+        ->first();
+
+    // dd($latestOrder->id);
+
+    return view('pages.clientOrders.confirm-sign', [
+    'user' => $user,
+    'latestOrderId' => $latestOrder->id
+    ]);
+})->name('afterSigning');
 
 Route::middleware(['auth:client'])->group(
     function () {

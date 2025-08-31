@@ -461,10 +461,10 @@
                                 This order has been rejected. Contact support for details.
                             </div>
                             @elseif($order->status == 'contract_canceled')
-                                    <div class="text-muted">
-                                        <i class="fas fa-info-circle"></i>
-                                        This order has been cancelled From Company.
-                                    </div>
+                            <div class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                This order has been cancelled From Company.
+                            </div>
                             @elseif($order->status == 'pending')
                             <div class="text-muted mb-4">
                                 <i class="fas fa-info-circle"></i>
@@ -493,12 +493,13 @@
                                 <i class="fas fa-credit-card"></i> Pay Now
                             </a>
                             @elseif($order->status == 'payment_completed')
-                            <a href="#" class="order-btn btn-sign-contract">
+                            <a href="{{ route('test', ['orderId' => $order->id]) }}" class="order-btn btn-sign-contract">
                                 <i class="fas fa-signature"></i> Sign Contract
                             </a>
+
                             @elseif($order->status == 'contract_signed')
-                            <a href="#" class="order-btn btn-download-contract">
-                                <i class="fas fa-download"></i> Download Contract
+                            <a href="{{ $order->blockChain_link }}" class="order-btn btn-download-contract">
+                                <i class="fas fa-download"></i> Contract link
                             </a>
                             @endif
 

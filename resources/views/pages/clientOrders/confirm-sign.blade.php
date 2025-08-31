@@ -92,7 +92,7 @@
     <p>Thank you for completing the process. Your contract has been signed and recorded correctly.</p>
 
     {{-- Back Button --}}
-    <a href="{{ route('home') }}" class="btn">Confirm & Complete Process</a>
+<a href="{{ route('download', ['id' => $latestOrderId]) }}" class="btn">Confirm & Complete Process</a>
 </div>
 
 </body>

@@ -24,7 +24,8 @@ class ProjectFileService implements ProjectFileServiceInterface
 
     public function getAllProjectFiles($id)
     {
-        return $this->projectFileRepo->findWhere(['project_id' => $id]);
+        $files = $this->projectFileRepo->findWhere(['project_id' => $id]);
+        return $files->load('projectParticipant'); 
     }
 
     public function paginate($id)

@@ -60,6 +60,7 @@ class ClientOrderController extends Controller
             return $item;
         });
 
+        // return $orders;
         return view('pages.clientOrders.my-orders', compact('orders'));
     }
     public function verifyMyContract(Request $request, $id)

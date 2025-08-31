@@ -16,4 +16,5 @@ class ProjectNews extends BaseModel
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+ 
 }
