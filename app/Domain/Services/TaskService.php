@@ -81,10 +81,8 @@ class TaskService implements TaskServiceInterface
             $user = $data['user'];
             $newStatus = $data['status'];
 
-            $role = $user->getRoleNames()->first(); // assume you use spatie
-
+            $role = $user->getRoleNames()->first();
             $currentStatus = $task->status;
-
 
             if ($role === 'engineer') {
                 if ($currentStatus === TaskStatusEnum::ToDo && $newStatus === TaskStatusEnum::Doing) {
@@ -99,8 +97,28 @@ class TaskService implements TaskServiceInterface
                 if ($currentStatus === TaskStatusEnum::PendingApproval && $newStatus === TaskStatusEnum::Done) {
                     $task->status = $newStatus;
                     $task->actual_date_of_closed = now();
-                }
-                else {
+
+                    // 🔥 Update project container quantities
+                    foreach ($task->taskContainer as $taskContainer) {
+                        $projectContainer = \App\Models\ProjectContainer::where('project_id', $task->stage->project_id) // assume stage belongsTo project
+                        ->where('items_id', $taskContainer->items_id)
+                            ->lockForUpdate() // prevent race conditions
+                            ->first();
+
+                        if ($projectContainer) {
+                            $projectContainer->quantity_available -= $taskContainer->quantity;
+                            $projectContainer->consumed_quantity += $taskContainer->quantity;
+
+                            if ($projectContainer->quantity_available < 0) {
+                                throw new \Exception('Not enough quantity available for item ID: ' . $taskContainer->items_id);
+                            }
+
+                            $projectContainer->save();
+                        } else {
+                            throw new \Exception('No project container found for item ID: ' . $taskContainer->items_id);
+                        }
+                    }
+                } else {
                     throw new \Exception('Consultant not allowed to perform this transition');
                 }
 
@@ -110,10 +128,9 @@ class TaskService implements TaskServiceInterface
 
             $task->save();
 
-            return $task->fresh(['employeeAssigned', 'supervisor','ticket']);
+            return $task->fresh(['employeeAssigned', 'supervisor', 'ticket', 'taskContainer']);
         });
     }
-
 //    public function markTaskAsDone($id) {
 //        $task = $this->taskRepo->findOrFail($id);
 //        if (!$task) {

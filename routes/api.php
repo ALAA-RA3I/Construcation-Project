@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\ProjectManagerController;
 use App\Http\Controllers\Api\ProjectStageController;
 use App\Http\Controllers\Api\ProjectParticipantController;
 use App\Http\Controllers\Api\RealStateManagerController;
+use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\TaskContainerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TicketController;
@@ -47,6 +48,8 @@ Route::prefix('specializations')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     ///// my-permissions api /////
+Route::get('card-count',[ReportsController::class,'getCounts']);
+
 
     Route::get('my-permissions', [AuthController::class, 'myPermissions']);
     ///// activation api /////

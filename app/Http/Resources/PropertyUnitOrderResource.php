@@ -45,6 +45,8 @@ class PropertyUnitOrderResource extends JsonResource
             'is_payment_completed' => $this->resource instanceof \App\Models\PropertyUnitOrder ? $this->resource->isPaymentCompleted() : null,
             'contract_file_url' => $this->contract_file_url,
 
+            'blockChain_link' => $this->blockChain_link,
+
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

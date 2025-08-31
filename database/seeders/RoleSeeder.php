@@ -117,6 +117,11 @@ class RoleSeeder extends Seeder
             'delete expected items',
             /////////////// Real State Permissions ///////////////
             'view sales project',
+
+
+            'view ticket',
+            'create ticket',
+            'change ticket status'
         ];
 
         // إنشاء الصلاحيات إذا لم تكن موجودة
@@ -223,6 +228,7 @@ class RoleSeeder extends Seeder
                 'delete expected items',
                 /////////////// Real State Permissions ///////////////
                 'view sales project',
+
             ],
             'projectManager' => [
                 /////////////// statistics /////////////
@@ -284,6 +290,10 @@ class RoleSeeder extends Seeder
                 /////////////// Real State Permissions ///////////////
 //                'view sales project',
 
+                'view ticket',
+                'create ticket',
+                'change ticket status'
+
             ],
             'engineer' => [
                 ////////// projects ///////////////
@@ -336,6 +346,11 @@ class RoleSeeder extends Seeder
 //                'delete expected items',
                 /////////////// Real State Permissions ///////////////
 //                'view sales project',
+
+
+                'view ticket',
+                'create ticket',
+                'change ticket status'
             ],
             'consultingEngineer' => [
                 ////////// projects ///////////////
@@ -387,6 +402,10 @@ class RoleSeeder extends Seeder
                 'delete expected items',
                 /////////////// Real State Permissions ///////////////
 //                'view sales project',
+
+                'view ticket',
+                'create ticket',
+                'change ticket status'
             ],
             'owner' => [
                 ////////// projects ///////////////
