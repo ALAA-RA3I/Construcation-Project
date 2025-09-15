@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Criteria\AdvancedDynamicFilterSearchCriteria;
+use App\Criteria\WhereCriteria;
 use App\Criteria\WithRelationsCriteria;
 use App\Exceptions\EntityNotFoundException;
 use App\Infrastructure\Repositories\Contracts\ConsultingEngineerRepositoryInterface;
@@ -30,9 +31,14 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
         return $this->consultingEngineerRepo->all();
     }
 
-    public function paginate()
+    public function paginate(array $filters = [])
     {
         $this->consultingEngineerRepo->pushCriteria(new WithRelationsCriteria(['user', 'specialization', 'consultingCompany']));
+
+        if (!empty($filters['consulting_company_id'])) {
+            $this->consultingEngineerRepo->pushCriteria(new WhereCriteria('consulting_company_id', $filters['consulting_company_id']));
+        }
+
         return $this->consultingEngineerRepo->paginate();
     }
 
@@ -111,5 +117,16 @@ class ConsultingEngineerService implements ConsultingEngineerServiceInterface
 
             return true;
         });
+    }
+    public function getEngineersByCompany($companyId)
+    {
+        $engineers = $this->consultingEngineerRepo
+            ->findByField('consulting_company_id', $companyId);
+
+        if ($engineers->isEmpty()) {
+            throw new EntityNotFoundException('No engineers found for this company.');
+        }
+
+        return $engineers;
     }
 }

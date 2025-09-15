@@ -40,7 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'client' => [ // للويب
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
+        'api-client' => [
+            'driver' => 'sanctum',
+            'provider' => 'clients',
+            'hash' => false,
+        ],
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +74,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Client::class,
         ],
 
         // 'users' => [

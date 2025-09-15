@@ -5,9 +5,11 @@ namespace App\Models;
 use App\Domain\Enums\ProgressStatusEnum;
 use App\Domain\Enums\PropertyTypeEnum;
 use App\Domain\Enums\StatusOfSaleEnum;
+use App\Domain\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Project extends BaseModel
 {
@@ -37,42 +39,73 @@ class Project extends BaseModel
     }
     public function owners(): BelongsTo
     {
-        return $this->belongsTo(Owner::class,'owner_id');
+        return $this->belongsTo(Owner::class, 'owner_id');
     }
 
     public function consultingCompany(): BelongsTo
     {
-        return $this->belongsTo(ConsultingCompany::class,'consulting_company_id');
+        return $this->belongsTo(ConsultingCompany::class, 'consulting_company_id');
     }
 
-    public function projectStage() : HasMany
+    public function projectStage(): HasMany
     {
-        return $this->hasMany(ProjectStage::class,'project_id');
+        return $this->hasMany(ProjectStage::class, 'project_id');
     }
-
-    public function projectBills() : HasMany
+    public function projectFiles(): HasMany
     {
-        return $this->hasMany(ProjectBill::class,'project_id');
+        return $this->hasMany(ProjectFile::class, 'project_id');
     }
 
-    public function projectFiles() : HasMany
+    public function projectContainer(): HasMany
     {
-        return $this->hasMany(ProjectFile::class,'project_id');
+        return $this->hasMany(ProjectContainer::class, 'project_id');
     }
-
-    public function projectContainer() : HasMany
+    public function salesDetails() : HasOne
     {
-        return $this->hasMany(ProjectContainer::class,'project_id');
+        return $this->hasOne(ProjectSalesDetails::class,'project_id');
     }
-
-    public function media() : HasMany
+    public function media(): HasMany
     {
-        return $this->hasMany(Media::class,'project_id');
+        return $this->hasMany(Media::class, 'project_id');
     }
 
-    public function propertyBook() : HasMany
+    public function projectParticipant(): HasMany
     {
-        return $this->hasMany(PropertyBook::class,'project_id');
+        return $this->hasMany(ProjectParticipant::class, 'project_id');
     }
 
+    public function propertyBook(): HasMany
+    {
+        return $this->hasMany(PropertyBook::class, 'project_id');
+    }
+    public function projectMedia() : HasMany
+    {
+        return $this->hasMany(ProjectMedia::class,'project_id');
+    }
+    public function projectNews() : HasMany
+    {
+        return $this->hasMany(ProjectNews::class,'project_id');
+    }
+    public function projectBills(): HasMany
+    {
+        return $this->hasMany(ProjectBill::class, 'project_id');
+    }
+    public function getTotalCostAttribute()
+    {
+        return $this->projectBills->flatMap->billsDetails->sum('cost');
+    }
+    public function getProgressPercentageAttribute()
+    {
+        $totalTasks = $this->projectStage()->withCount('task')->get()->sum('task_count');
+
+        if ($totalTasks == 0) {
+            return 0;
+        }
+
+        $completedTasks = \App\Models\Task::whereIn('stage_id', $this->projectStage()->pluck('id'))
+            ->where('status', TaskStatusEnum::Done) // أو 'done' حسب enum
+            ->count();
+
+        return round(($completedTasks / $totalTasks) * 100, 2); // مثلاً 75.00
+    }
 }

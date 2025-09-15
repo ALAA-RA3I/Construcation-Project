@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProjectBill extends BaseModel
 {
     protected $fillable = [
-        'cost',
+        'description',
         'date_of_payment',
         'project_id',
     ];
@@ -19,8 +19,12 @@ class ProjectBill extends BaseModel
         return $this->belongsTo(Project::class,'project_id');
     }
 
-    public function projectBillsDetails() : HasMany
+    public function billsDetails() : HasMany
     {
-        return $this->hasMany(ProjectBillDetail::class,'project-bills-id');
+        return $this->hasMany(ProjectBillDetail::class,'project_bill_id');
+    }
+    public function getTotalCostAttribute()
+    {
+        return $this->billsDetails->sum('cost');
     }
 }

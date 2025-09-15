@@ -21,8 +21,6 @@ class EngineerController extends Controller
     }
     public function index()
     {
-//        $data =  getRequestFilters($request);
-//        $engineers = $this->engineerService->paginate($data['filters'], $data['search'],$data['perPage']);
         $engineers = $this->engineerService->paginate();
         return ApiResponse::success(EngineerResource::collection($engineers));
     }

@@ -6,13 +6,23 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
+        // web: __DIR__.'/../routes/web.php',
+        // api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
-        health: '/up',
+        using:function() {
+            Route::middleware('api')
+                    ->prefix('client')
+                    ->group(base_path('routes/clients.php'));
+            Route::middleware('api')
+                    ->prefix('api')
+                    ->group(base_path('routes/api.php'));
+             Route::middleware('web')
+                    ->group(base_path('routes/web.php'));
+        }
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
@@ -29,10 +39,11 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         // Validation Errors (optional: these are already nicely formatted by Laravel)
-        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e, Request $request) {
-            return ApiResponse::error('Validation failed.', $e->errors(), 422);
-        });
-
+//        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e, Request $request) {
+//            return ApiResponse::error('Validation failed.', $e->errors(), 422);
+//        });
+//
+//
         // Authentication failure
         $exceptions->renderable(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
             return ApiResponse::error('Unauthenticated.', [], 401);
@@ -45,6 +56,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Fallback for unexpected exceptions
         $exceptions->renderable(function (\Throwable $e, Request $request) {
-            return ApiResponse::error($e->getMessage(), [], 500);
+            if ($request->expectsJson()) {
+                return ApiResponse::error($e->getMessage(), [], 500);
+            }
         });
     })->create();

@@ -13,14 +13,17 @@ class ProjectStage extends BaseModel
         'description',
         'expected_closed_date',
         'project_id',
+        'priority',
+        'start_date'
     ];
 
-    public function project() : BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
-    public function task() : HasMany {
-        return $this->hasMany(Task::class,'stage_id');
+    public function task(): HasMany
+    {
+        return $this->hasMany(Task::class, 'stage_id');
     }
 }

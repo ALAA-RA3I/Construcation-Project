@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('id')->autoIncrement();
             $table->string('name');
             $table->string('category');
-            $table->integer('price');
             $this->addBaseColumns($table);
         });
     }

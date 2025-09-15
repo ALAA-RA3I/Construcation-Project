@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Domain\Enums\UserStatusEnum;
 use App\Models\ConsultingEngineer;
 use App\Models\Engineer;
+use App\Models\Owner;
+use App\Models\ProjectManager;
+use App\Models\RealStateManager;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -72,6 +75,65 @@ class UserSeeder extends Seeder
                 [
                     'consulting_company_id' => rand(1, 2),
                     'engineer_specialization_id' => 1,
+                ]
+            );
+        }
+
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::updateOrCreate(
+                ['email' => "realstatemanager{$i}@example.com"],
+                [
+                    'first_name' => "RealStateManager{$i}",
+                    'last_name' => "Lastname{$i}",
+                    'password' => Hash::make('password'),
+                    'phone_number' => '050000002' . $i,
+                    'is_active' => 1,
+                ]
+            );
+            $user->assignRole('realStateManager');
+
+            RealStateManager::updateOrCreate(
+                ['user_id' => $user->id]
+            );
+        }
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::updateOrCreate(
+                ['email' => "projectManager{$i}@example.com"],
+                [
+                    'first_name' => "projectManager{$i}",
+                    'last_name' => "Lastname{$i}",
+                    'password' => Hash::make('password'),
+                    'phone_number' => '050000002' . $i,
+                    'is_active' => 1,
+                ]
+            );
+            $user->assignRole('projectManager');
+
+
+            ProjectManager::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'years_of_experience' => rand(1, 10),
+                    'bio' => "bio{$i}",
+                ]
+            );
+        }
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::updateOrCreate(
+                ['email' => "owner{$i}@example.com"],
+                [
+                    'first_name' => "owner{$i}",
+                    'last_name' => "Lastname{$i}",
+                    'password' => Hash::make('password'),
+                    'phone_number' => '050000002' . $i,
+                    'is_active' => 1,
+                ]
+            );
+            Owner::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'national_id' => rand(10000, 20000),
+                    'address' => "bio{$i}",
                 ]
             );
         }

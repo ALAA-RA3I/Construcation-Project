@@ -16,12 +16,13 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
+            // $table->date('start_date');added in new migration
+            // $table->integer('priority'); added in new migration
             $table->date('dead_line');
             $table->enum('status', TaskStatusEnum::getValues())->default(TaskStatusEnum::ToDo);
-            $table->boolean('status_of_approval');
             $table->string('type_of_task');
             $table->string('note');
-            $table->date('actual_date_of_closed');
+            $table->date('actual_date_of_closed'); //nullable
             $table->integer('stage_id');
             $table->foreign('stage_id')->references('id')->on('project_stages')->cascadeOnDelete();
             $table->integer('employee_assigned');

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Requests\Task;
+
+use App\Domain\Enums\ApproveTaskEnum;
+use App\Domain\Enums\TaskStatusEnum;
+use BenSampo\Enum\Rules\Enum;
+use BenSampo\Enum\Rules\EnumValue;
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateTaskRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'dead_line' => ['required', 'date'],
+            'status' => ['required', new EnumValue(TaskStatusEnum::class)],
+            'status_of_approval' => ['required'],
+            'type_of_task' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'note' => ['required', 'string'],
+            'actual_date_of_closed' => ['nullable', 'date'],
+            'description' => ['nullable', 'string'],
+            'stage_id' => ['required', 'integer', 'exists:project_stages,id'],
+            'employee_assigned' => ['required', 'integer', 'exists:project_participants,id'],
+            'supervisor_id' => ['required', 'integer', 'exists:project_participants,id'],
+            'start_date' => ['required', 'date'],
+            'priority' => ['required', 'integer'],
+
+        ];
+    }
+}

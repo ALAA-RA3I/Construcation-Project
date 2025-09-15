@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Domain\Enums\ProjectRoleEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,11 +15,16 @@ class ProjectParticipant extends BaseModel
         'project_id',
         'participant_id',
         'participant_type',
+        'role',
     ];
 
-    public function project() : BelongsTo
+    protected $casts = [
+        'role' => ProjectRoleEnum::class,
+    ];
+
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class,'project_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function participant(): MorphTo
@@ -26,18 +32,18 @@ class ProjectParticipant extends BaseModel
         return $this->morphTo();
     }
 
-    public function projectFiles() : HasMany
+    public function projectFiles(): HasMany
     {
-        return $this->hasMany(ProjectFile::class,'project_participant_id');
+        return $this->hasMany(ProjectFile::class, 'project_participant_id');
     }
 
-    public function task() : HasMany
+    public function task(): HasMany
     {
-        return $this->hasMany(Task::class,'employee_assignded');
+        return $this->hasMany(Task::class, 'employee_assigned');
     }
 
-    public function taskSupervisor() : HasMany
+    public function taskSupervisor(): HasMany
     {
-        return $this->hasMany(Task::class,'supervisor_id');
+        return $this->hasMany(Task::class, 'supervisor_id');
     }
 }

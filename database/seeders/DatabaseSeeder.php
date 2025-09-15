@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             EngineerSpecializationSeeder::class,
             ConsultingCompanySeeder::class,
             UserSeeder::class,
+            ClientSeeder::class
         ]);
     }
 }
